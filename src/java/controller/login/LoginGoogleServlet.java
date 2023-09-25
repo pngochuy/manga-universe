@@ -55,15 +55,15 @@ public class LoginGoogleServlet extends HttpServlet {
         } else {
             String accessToken = GoogleUtils.getToken(code);
             UserGoogleDTO userGoogleDTO = GoogleUtils.getUserInfo(accessToken);
-            request.setAttribute("id", userGoogleDTO.getId());
-            request.setAttribute("email", userGoogleDTO.getEmail());
+            request.setAttribute("id", userGoogleDTO.getId()); // password
+            request.setAttribute("email", userGoogleDTO.getEmail()); // == username
             request.setAttribute("verified_email", userGoogleDTO.isVerified_email());
             request.setAttribute("name", userGoogleDTO.getName());
             request.setAttribute("given_name", userGoogleDTO.getGiven_name());
             request.setAttribute("family_name", userGoogleDTO.getFamily_name());
             request.setAttribute("link", userGoogleDTO.getLink());
             request.setAttribute("picture", userGoogleDTO.getPicture());
-            request.getRequestDispatcher("demo.jsp").forward(request, response);
+            request.getRequestDispatcher("userInfo.jsp").forward(request, response);
         }
     }
 

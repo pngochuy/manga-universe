@@ -74,7 +74,7 @@ public class LoginServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         HttpSession session = request.getSession();
-
+        
         boolean checkLoginValid = true;
 
         if (username == null || username.equals("")) {
@@ -118,11 +118,11 @@ public class LoginServlet extends HttpServlet {
 
                 if (checkLogin) {
                     // Login success thi nen setTimeout trc khi toi trang nhap thong tin ca nhan
-//                    session.setMaxInactiveInterval(30); // 30s  
-//                    session.setAttribute("user", session.getAttribute("user"));
+
                     request.setAttribute("valueUsername", "");
                     request.setAttribute("valuePassword", "");
                     request.setAttribute("status", "success");
+                    request.getRequestDispatcher("userInfo.jsp").forward(request, response);
                 }
 
             }

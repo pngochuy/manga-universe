@@ -17,12 +17,7 @@
         <link rel="stylesheet" href="css/style.css">
     </head>
     <body>
-        <p style="color: white">
-            User after 30s: ${sessionScope.user}
-        </p>
-
         <input type="hidden" id="status" value="<%= request.getAttribute("status")%>">
-
 
 
         <div class="main">
@@ -33,7 +28,7 @@
                     <div class="signin-content">
                         <div class="signin-image">
                             <figure>
-                                <img src="images/signin-image.jpg" alt="sing up image">
+                                <img src="images/signin-image-luffy.png" alt="sing up image">
                             </figure>
                             <a href="registration.jsp" class="signup-image-link">Create an
                                 account</a>
@@ -42,19 +37,6 @@
 
                         <div class="signin-form">
                             <h2 class="form-title">Sign in</h2>
-                            <%
-                                String status = request.getParameter("status");
-                                if (status != null && status.equals("success")) {%>
-                            <span class="">
-                                <input type="checkbox" class="alertCheckbox" autocomplete="off" />
-                                <div class="alert warning">
-                                    <span class="alertClose">X</span>
-                                    <span class="alertText">Please enter personal information to verify your account within 15 minutes
-                                        <br class="clear"/></span>
-                                </div>
-                            </span>
-                            <%}%>
-                            ${checkLoginValid}
                             <form method="POST" action="LoginServlet" class="register-form"
                                   id="login-form">
                                 <div class="form-group">
@@ -90,8 +72,8 @@
                             <div class="social-login">
                                 <span class="social-label">Or login with</span>
                                 <ul class="socials">
-                                    <li><a href="#"><i
-                                                class="display-flex-center zmdi zmdi-facebook"></i></a></li>
+<!--                                    <li><a href="#"><i
+                                                class="display-flex-center zmdi zmdi-facebook"></i></a></li>-->
                                     <!--                                    <li><a href="#"><i
                                                                                     class="display-flex-center zmdi zmdi-twitter"></i></a></li>-->
                                     <!--                                    <li><a href="https://accounts.google.com/o/oauth2/auth?scope=profile email https://www.googleapis.com/auth/user.phonenumbers.read&redirect_uri=http://localhost:8080/MangaUniverse/LoginGoogleServlet&response_type=code&client_id=727306614937-6mj4mhufjq06aqns6el83e2fnegocjbn.apps.googleusercontent.com&approval_prompt=force"><i class="display-flex-center zmdi zmdi-google"></i></a>
