@@ -4,18 +4,28 @@
  */
 package controller.login;
 
-import dal.UserDemoDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.SecureRandom;
+import java.util.Properties;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import model.UserDemo;
+import model.User;
+import model.UserRegister;
 
 /**
  *
@@ -74,7 +84,7 @@ public class RegistrationServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String name = request.getParameter("name");
+        String username = request.getParameter("name");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String phone = request.getParameter("contact");
@@ -92,11 +102,11 @@ public class RegistrationServlet extends HttpServlet {
         } else if (checkLength("Username", minName, maxName) > maxName) {
             request.setAttribute("errName", "Username must be less than " + maxName + " characters");
             checkRegister = false;
-        } else if (name.isEmpty()) {
+        } else if (username.isEmpty()) {
             request.setAttribute("errName", "Username is not valid");
             checkRegister = false;
         } else {
-            request.setAttribute("valueName", name);
+            request.setAttribute("valueName", username);
             checkRegister = true;
         }
 
@@ -150,15 +160,12 @@ public class RegistrationServlet extends HttpServlet {
             checkRegister = false;
         }
 
-        UserDemo user = new UserDemo(name, password, email, phone);
-
         if (checkRegister) {
-            UserDemoDAO userDemoDAO = new UserDemoDAO();
 
-            HttpSession session = request.getSession();
-            session.setAttribute("user", user);
-            
-            request.setAttribute("status", "success");
+            HttpSession mySession = request.getSession();
+            UserRegister userRegister = new UserRegister(username, email, password, phone);
+            mySession.setAttribute("userRegister", userRegister);
+
 
             // reset inputs
             request.setAttribute("valueName", "");
@@ -166,7 +173,11 @@ public class RegistrationServlet extends HttpServlet {
             request.setAttribute("valuePass", "");
             request.setAttribute("valueRePass", "");
             request.setAttribute("valuePhone", "");
-//            response.sendRedirect("login.jsp?status=success");
+
+            verifyEmail(email, request, response);
+            request.setAttribute("messageVerify", "success");
+            request.setAttribute("status", "success");
+
             request.getRequestDispatcher("registration.jsp").forward(request, response);
             return;
         } else {
@@ -174,7 +185,70 @@ public class RegistrationServlet extends HttpServlet {
         }
         request.getRequestDispatcher("registration.jsp").forward(request, response);
         return;
-    }   
+    }
+
+    public void verifyEmail(String email, HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+//        String email = request.getParameter("email");
+        RequestDispatcher dispatcher = null;
+        String linkVerify = "";
+        String tokenVerify = "";
+        HttpSession mySession = request.getSession();
+
+        if (email != null || !email.equals("")) {
+            // sending link verify to login page
+            tokenVerify = generateToken();
+            linkVerify = "http://localhost:8080/MangaUniverse/registration.jsp?tokenVerifyEmail=" + tokenVerify;
+            mySession.setAttribute("tokenVerify", tokenVerify);
+            
+            String to = email;// change accordingly
+            
+            // Get the session object
+            Properties props = new Properties();
+            props.put("mail.smtp.host", "smtp.gmail.com");
+            props.put("mail.smtp.socketFactory.port", "465");
+            props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+            props.put("mail.smtp.auth", "true");
+            props.put("mail.smtp.port", "465");
+            Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication("noreply.and.subscribe999@gmail.com",
+                            "pnwf gcay jams atwz");
+                    // Put your email id and
+                    // password (from App passwords) here
+                }
+            });
+            // compose message
+            try {
+                MimeMessage message = new MimeMessage(session);
+                message.setFrom(new InternetAddress(email));// change accordingly
+                message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+                message.setSubject("Verify Email in MangaUniverse");
+                message.setText("Click link to verify email: " + linkVerify);
+                // send message
+                Transport.send(message);
+                System.out.println("message sent successfully");
+            } catch (MessagingException e) {
+                throw new RuntimeException(e);
+            }
+
+        }
+    }
+
+    public static String generateToken() {
+        final String CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        final int TOKEN_LENGTH = 6; // Độ dài của token
+        StringBuilder token = new StringBuilder();
+
+        SecureRandom random = new SecureRandom();
+        for (int i = 0; i < TOKEN_LENGTH; i++) {
+            int index = random.nextInt(CHARACTERS.length());
+            char randomChar = CHARACTERS.charAt(index);
+            token.append(randomChar);
+        }
+
+        return token.toString();
+    }
 
     public int checkLength(String input, int min, int max) {
         if (input.length() < min) {
@@ -210,7 +284,7 @@ public class RegistrationServlet extends HttpServlet {
 
         0912345678
         0849123456
-        Ví dụ về số điện thoại không hợp lệ:
+        Ví dụ về số điện thoại không hợp lệ:    
 
         0123456789 (Số 0 ở đầu không hợp lệ)
         84123456789 (Số điện thoại quốc tế có quá nhiều chữ số)

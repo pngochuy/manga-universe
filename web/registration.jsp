@@ -1,6 +1,15 @@
-<%@page import="model.UserDemo"%>
+<%@page import="model.User"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@page import="model.UserRegister"%>
+<%
+    String tokenVerifyEmail = request.getParameter("tokenVerifyEmail");
+    String tokenVerify = (String) session.getAttribute("tokenVerify");
+    if (tokenVerifyEmail != null && tokenVerifyEmail.equals(tokenVerify)) {
+//        response.sendRedirect("userProfile.jsp");
+        response.sendRedirect("/MangaUniverse/UserProfileServlet");
+    }
 
+%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -8,17 +17,28 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>Sign Up</title>
-
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.min.js" integrity="sha512-WW8/jxkELe2CAiE4LvQfwm1rajOS8PHasCCx+knHG0gBHt8EXxS6T6tJRTGuDQVnluuAvMxWF4j8SNFDKceLFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <!-- Font Icon -->
         <link rel="stylesheet"
               href="fonts/material-icon/css/material-design-iconic-font.min.css">
 
         <!-- Main css -->
         <link rel="stylesheet" href="css/style.css">
+
+        <!-- Vendor CSS Files -->
+        <link href="assetsUser/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="assetsUser/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+        <link href="assetsUser/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+        <link href="assetsUser/vendor/quill/quill.snow.css" rel="stylesheet">
+        <link href="assetsUser/vendor/quill/quill.bubble.css" rel="stylesheet">
+        <link href="assetsUser/vendor/remixicon/remixicon.css" rel="stylesheet">
+        <link href="assetsUser/vendor/simple-datatables/style.css" rel="stylesheet">
+
     </head>
     <body>
 
         <input type="hidden" id="status" value="<%= request.getAttribute("status")%>">
+
 
         <% boolean redirect = true;%>
         <div class="main">
@@ -29,7 +49,20 @@
                     <div class="signup-content">
                         <div class="signup-form">
                             <h2 class="form-title">Sign up</h2>
-
+                            <c:if test="${messageVerify != null}">
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    <i class="bi bi-check-circle me-1"></i>
+                                    Please check your email to verify!
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            </c:if>
+                            <c:if test="${verifyEmail == 'failed'}">
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <i class="bi bi-exclamation-octagon me-1"></i>
+                                    Verify email is error!
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            </c:if>
                             <form method="POST" action="RegistrationServlet" class="register-form"
                                   id="register-form">
                                 <div class="form-group">

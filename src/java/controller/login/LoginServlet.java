@@ -11,7 +11,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import model.UserDemo;
+import model.User;
+import model.UserRegister;
 
 /**
  *
@@ -94,35 +95,37 @@ public class LoginServlet extends HttpServlet {
 
         if (checkLoginValid) {
 
-            UserDemo user = (UserDemo) session.getAttribute("user");
+            UserRegister userRegister = (UserRegister) session.getAttribute("userRegister");
             boolean checkLogin = true;
             PrintWriter out = response.getWriter();
-            if (user != null) {
+            if (userRegister != null) {
 
                 // CODE: for loop in DB to check username and passwod...
-                if (user.getUsername().equals(username) == false) {
+                
+                if (userRegister.getUsername().equals(username) == false) {
                     request.setAttribute("status", "failedUsername");
                     checkLogin = false;
                     request.setAttribute("valueUsername", "");
                     request.setAttribute("valuePassword", "");
-                    request.getRequestDispatcher("login.jsp").forward(request, response);
+//                    request.getRequestDispatcher("login.jsp").forward(request, response);
+//                    return;   
                 } else {
                     request.setAttribute("valueUsername", username);
                 }
 
-                if (user.getPassword().equals(password) == false) {
+                if (userRegister.getPassword().equals(password) == false) {
                     request.setAttribute("status", "failedPassword");
                     request.setAttribute("valuePassword", "");
                     checkLogin = false;
                 }
 
                 if (checkLogin) {
-                    // Login success thi nen setTimeout trc khi toi trang nhap thong tin ca nhan
 
                     request.setAttribute("valueUsername", "");
                     request.setAttribute("valuePassword", "");
                     request.setAttribute("status", "success");
-                    request.getRequestDispatcher("userInfo.jsp").forward(request, response);
+                    request.getRequestDispatcher("userProfile.jsp").forward(request, response);
+                    return;
                 }
 
             }

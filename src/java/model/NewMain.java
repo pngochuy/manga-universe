@@ -4,6 +4,8 @@
  */
 package model;
 
+import java.time.format.DateTimeFormatter;
+
 
 /**
  *
@@ -15,7 +17,10 @@ public class NewMain {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+//        User user = new User("huyngoc", "123", "Pham Ngoc Huy", "huy@gmail.com", "0935950665", 
+//                true, "Free", 0);
+//        
+//        System.out.println(user.getCreateAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
     }
     
 }

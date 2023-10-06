@@ -29,8 +29,12 @@
         <servlet-class>controller.login.LoginFacebookServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>UserInfomationServlet</servlet-name>
-        <servlet-class>controller.user.UserInfomationServlet</servlet-class>
+        <servlet-name>UserProfileServlet</servlet-name>
+        <servlet-class>controller.user.UserProfileServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LogoutServlet</servlet-name>
+        <servlet-class>controller.login.LogoutServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
@@ -65,8 +69,12 @@
         <url-pattern>/LoginFacebookServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>UserInfomationServlet</servlet-name>
-        <url-pattern>/UserInfomationServlet</url-pattern>
+        <servlet-name>UserProfileServlet</servlet-name>
+        <url-pattern>/UserProfileServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LogoutServlet</servlet-name>
+        <url-pattern>/LogoutServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
@@ -77,4 +85,7 @@
             <url-pattern>/RegistrationServlet</url-pattern>
         </servlet-mapping>
     </session-config>
+    <welcome-file-list>
+        <welcome-file>home.jsp</welcome-file>
+    </welcome-file-list>
 </web-app>

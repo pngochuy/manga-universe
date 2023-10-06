@@ -1,4 +1,3 @@
-<%@page import="model.UserDemo"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!DOCTYPE html>
@@ -18,7 +17,7 @@
     </head>
     <body>
         <input type="hidden" id="status" value="<%= request.getAttribute("status")%>">
-
+        
 
         <div class="main">
 
@@ -32,11 +31,11 @@
                             </figure>
                             <a href="registration.jsp" class="signup-image-link">Create an
                                 account</a>
-
                         </div>
 
                         <div class="signin-form">
                             <h2 class="form-title">Sign in</h2>
+                            ${sessionScope.userRegister}
                             <form method="POST" action="LoginServlet" class="register-form"
                                   id="login-form">
                                 <div class="form-group">

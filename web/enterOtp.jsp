@@ -1,4 +1,4 @@
-
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -53,7 +53,7 @@
                                                 <span class="input-group-addon"><i
                                                         class="glyphicon glyphicon-envelope color-blue"></i></span> <input
                                                     id="opt" name="otp" placeholder="Enter OTP"
-                                                    class="form-control" type="text" required="required">
+                                                    class="form-control" type="number" required="required">
                                             </div>
                                         </div>
                                         <div class="form-group">
