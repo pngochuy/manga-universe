@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,6 +21,8 @@ import model.UserRegister;
  *
  * @author PC
  */
+@MultipartConfig
+
 public class UserProfileServlet extends HttpServlet {
 
     /**
@@ -89,7 +93,9 @@ public class UserProfileServlet extends HttpServlet {
         String phone = request.getParameter("phone"); // check 
         String genderStr = request.getParameter("gender"); // check 
         String role = request.getParameter("role");
-        
+        String avatarUrl = request.getParameter("avatarUrl");
+//        out.println("username: "+username);
+//        out.println("profileImageUrl: "+avatarUrl);
 //        if (u != null) {
 //            if (u.getEmail().equals(email)) {
 //                response.sendRedirect("userProfile.jsp");
@@ -98,6 +104,17 @@ public class UserProfileServlet extends HttpServlet {
         
          
         boolean checkEdit = true;
+        if (!avatarUrl.isEmpty()) {
+            
+            request.setAttribute("valueAvatarUrl", avatarUrl);
+        }
+//        if (avatarUrl.isEmpty()) {
+//            request.setAttribute("errAvatarUrl", "Avatar url is not valid");
+//            checkEdit = false;
+//        } else {
+//            request.setAttribute("valueAvatarUrl", avatarUrl);
+//        }
+        
         if (username.isEmpty()) {
             request.setAttribute("errUsername", "Username is not valid");
             checkEdit = false;
@@ -145,6 +162,7 @@ public class UserProfileServlet extends HttpServlet {
             request.setAttribute("valueGender", genderStr);
         }
         
+        
         if (checkEdit) {
             LocalDateTime dateCreated = LocalDateTime.now();
             LocalDateTime expiredTime = dateCreated;
@@ -157,11 +175,11 @@ public class UserProfileServlet extends HttpServlet {
             } else if (genderStr.equals("false")) {
                 gender = false;
             }
-            User userSession = new User(username, password, name,
+            User userSession = new User(avatarUrl, username, password, name,
                     email, phone, gender, role, expiredTime, coinQuantity, createAt);
-
-//            mySession.removeAttribute("userRegister");
             mySession.removeAttribute("tokenVerify");
+//            mySession.removeAttribute("userRegister");
+            
             mySession.setAttribute("userSession", userSession);
             
             // no error message

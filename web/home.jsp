@@ -156,14 +156,16 @@
 
                         <c:if test="${userSession != null}">
                             <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-                                <img src="assetsMain/img/b91392ef3b4ad7849c8d8cdbe713872a1969caa8r1-496-537v2_uhq.jpg"
-                                     alt="Profile" class="rounded-circle">
-                                <c:if test="${sessionScope.userSession != null}">
-                                    <span class="d-none d-md-block dropdown-toggle ps-2" style="color: white">${sessionScope.userSession.getUsername()}</span>
-                                </c:if>
-                                <c:if test="${sessionScope.userSession == null}">
-                                    <span class="d-none d-md-block dropdown-toggle ps-2" style="color: white">${sessionScope.userRegister.getUsername()}</span>
-                                </c:if>
+                                <% User u2 = (User) session.getAttribute("userSession");%>
+                                <% if (!u2.getAvatarUrl().isEmpty()) {%>
+                                <img  src="<%= u2.getAvatarUrl()%>"
+                                      alt="Profile" class="img-fluid rounded-circle">
+                                <% } else {%>
+                                <i class="bi bi-person-circle" style="font-size: 30px; color: white"></i>
+                                <% }%>
+
+                                <span class="d-none d-md-block dropdown-toggle ps-2">${sessionScope.userSession.getUsername()}</span>
+
                             </a><!-- End Profile Iamge Icon -->
                             <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                                 <li class="dropdown-header">
@@ -178,10 +180,10 @@
                                             <% } else if (u.getRole().equalsIgnoreCase("Author")) {%>   
                                         <span style="color: black;">${sessionScope.userSession.getRole()} <i class="bi bi-star-fill" style="color: greenyellow;"></i></span>
                                             <% }%>
-                                    </c:if>
-                                    <c:if test="${sessionScope.userSession == null}">
+                                        </c:if>
+                                        <c:if test="${sessionScope.userSession == null}">
                                         <h6>${sessionScope.userRegister.getUsername()}</h6>
-                                        <span style="color: black;">Free Account</span>
+                                        <span style="color: black;">Free</span>
                                     </c:if>
                                 </li>
                                 <li>
@@ -197,6 +199,32 @@
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
+
+                                <c:if test="${sessionScope.userSession != null}">
+                                    <%User u3 = (User) session.getAttribute("userSession");%>
+                                    <% if (u3.getRole().equalsIgnoreCase("Free")) {%>
+                                    <li>
+                                        <a class="dropdown-item d-flex align-items-center" href="userProfile.jsp">
+                                            <i class="bi bi-stars"></i>
+                                            <span style="color: black;">Upgrade Premium</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <% }%>
+                                </c:if>
+                                <c:if test="${sessionScope.userSession == null}">
+                                    <li>
+                                        <a class="dropdown-item d-flex align-items-center" href="userProfile.jsp">
+                                            <i class="bi bi-stars"></i>
+                                            <span style="color: black;">Upgrade Premium</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                </c:if>
 
                                 <li>
                                     <a class="dropdown-item d-flex align-items-center" href="userProfile.jsp">
@@ -219,7 +247,7 @@
                                 </li>
 
                                 <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <a class="dropdown-item d-flex align-items-center" href="LogoutServlet">
                                         <i class="bi bi-box-arrow-right"></i>
                                         <span style="color: black;">Sign Out</span>
                                     </a>
@@ -376,7 +404,7 @@
 
                 </li><!-- End Components Nav -->
                 <p style="color: white;">v2023.9.20<br />
-                    © MangaUniverse 2023</p>
+                    &COPY; MangaUniverse 2023</p>
 
 
         </aside><!-- End Sidebar-->
@@ -755,11 +783,11 @@
                             </div>
                         </div>
                     </div>
-                    <div id="content">
+<!--                    <div id="content">
                         <div class="container">
                             <div class="click-me"><a href="#">Click Me</a></div>
                         </div>
-                    </div>
+                    </div>-->
                     <!-- Start popup code -->
 
                     <div id="ad_position_box">
@@ -865,6 +893,26 @@
             });
 
 
+//            document.addEventListener("DOMContentLoaded", function () {
+//                var adPositionBox = document.getElementById("ad_position_box");
+//
+//                adPositionBox.classList.add("active");
+//
+//                setTimeout(function () {
+//                    adPositionBox.classList.remove("active");
+//                }, 5000);
+//            });
+
+            $("#ad_position_box").addClass("active");
+            $("#carousel div").attr("style", "z-index: 0;");
+//            $(".click-me a").click(function () {
+//                $("#ad_position_box").addClass("active");
+//                $("#carousel div").attr("style", "z-index: 0;");
+//            });
+            $(".skip").click(function () {
+                $("#ad_position_box").removeClass("active");
+                $("#carousel div").removeAttr("style");
+            });
         </script>
 
     </body>

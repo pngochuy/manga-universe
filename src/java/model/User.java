@@ -12,7 +12,8 @@ import java.time.format.DateTimeFormatter;
  * @author PC
  */
 public class User {
-
+    
+    private String avatarUrl;
     private String username; // 1
     private String password; // 2
     private String name;
@@ -20,7 +21,6 @@ public class User {
     private String phone;    // 4 
     private boolean gender;
     private String role;
-    
     private LocalDateTime expiredTime;
     private int coinQuantity;
     private LocalDateTime createAt;
@@ -32,22 +32,9 @@ public class User {
     String formattedDateTime = now.format(formatter);
     LocalDateTime dateCreated = LocalDateTime.parse(formattedDateTime, formatter);
 
-//    public User(String username, String password, String name, String email, String phone,
-//            boolean gender, String role, int coinQuantity) {
-//
-//        this.username = username;
-//        this.password = password;
-//        this.name = name;
-//        this.email = email;
-//        this.phone = phone;
-//        this.gender = gender;
-//        this.role = role;
-//        this.expiredTime = dateCreated;
-//        this.coinQuantity = coinQuantity;
-//        this.createAt = dateCreated;
-//    }
 
-    public User(String username, String password, String name, String email, String phone, boolean gender, String role, LocalDateTime expiredTime, int coinQuantity, LocalDateTime createAt) {
+    public User(String avatarUrl, String username, String password, String name, String email, String phone, boolean gender, String role, LocalDateTime expiredTime, int coinQuantity, LocalDateTime createAt) {
+        this.avatarUrl = avatarUrl;
         this.username = username;
         this.password = password;
         this.name = name;
@@ -58,6 +45,14 @@ public class User {
         this.expiredTime = expiredTime;
         this.coinQuantity = coinQuantity;
         this.createAt = createAt;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 
     public String getUsername() {
@@ -158,7 +153,9 @@ public class User {
 
     @Override
     public String toString() {
-        return "Users{" + "username=" + username + ", password=" + password + ", name=" + name + ", email=" + email + ", phone=" + phone + ", gender=" + gender + ", role=" + role + ", expiredTime=" + expiredTime + ", coinQuantity=" + coinQuantity + ", createAt=" + createAt + '}';
+        return "User{" + "avatarUrl=" + avatarUrl + ", username=" + username + ", password=" + password + ", name=" + name + ", email=" + email + ", phone=" + phone + ", gender=" + gender + ", role=" + role + ", expiredTime=" + expiredTime + ", coinQuantity=" + coinQuantity + ", createAt=" + createAt + ", now=" + now + ", formatter=" + formatter + ", formattedDateTime=" + formattedDateTime + ", dateCreated=" + dateCreated + '}';
     }
+
+    
 
 }

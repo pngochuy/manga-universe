@@ -16,7 +16,7 @@ import model.User;
  *
  * @author PC
  */
-public class UsersDAO extends DBContext {
+public class UserDAO extends DBContext {
 
     // get User
     public User getUsers(String username, String password) {
@@ -42,13 +42,13 @@ public class UsersDAO extends DBContext {
             }
 
         } catch (SQLException ex) {
-            Logger.getLogger(UsersDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 ps.close();
                 rs.close();
             } catch (SQLException ex) {
-                Logger.getLogger(UsersDAO.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
@@ -56,38 +56,34 @@ public class UsersDAO extends DBContext {
     }
 
     // create User
-    public int createUsers(User userDemo) {
-        
+    public void create(User user) {
+
         try {
-            String sql = "INSERT INTO Users (username, password, email, phone)\n"
-                    + "VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO User (avatarUrl, username, password, role, expiredTime, coinQuantity, createAt, name, email, phoneNumber, gender)\n"
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            
+//            ([avatarUrl]
+//           ,[username]
+//           ,[password]
+//           ,[role]
+//           ,[expiredTime]
+//           ,[coinQuantity]
+//           ,[createAt]
+//           ,[name]
+//           ,[email]
+//           ,[phoneNumber]
+//           ,[gender])
             PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setString(1, userDemo.getUsername().trim());
-            ps.setString(2, userDemo.getPassword().trim());
-            ps.setString(3, userDemo.getEmail().trim());
+            ps.setString(1, user.getUsername().trim());
+            ps.setString(2, user.getPassword().trim());
+            ps.setString(3, user.getEmail().trim());
 
             int rowCount = ps.executeUpdate();
             ps.close();
-            return rowCount;
 
         } catch (SQLException ex) {
-            Logger.getLogger(UsersDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } 
-//        finally {
-//            try {
-//                ps.close();
-//            } catch (SQLException ex) {
-//                Logger.getLogger(UsersDAO.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//        } 
-//        finally {
-//            try {
-//                ps.close();
-//            } catch (SQLException ex) {
-//                Logger.getLogger(UsersDAO.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//        }
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
-        return -1;
     }
 }
