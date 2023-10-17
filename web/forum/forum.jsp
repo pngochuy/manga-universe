@@ -1,5 +1,6 @@
 <%@page import="model.User"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -143,142 +144,131 @@
 
                     <li class="nav-item dropdown pe-3">
 
-                    <c:if test="${userSession != null}">
-                        <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-                            <% User u2 = (User) session.getAttribute("userSession");%>
-                            <% if (!u2.getAvatarUrl().isEmpty()) {%>
-                            <img  src="<%= u2.getAvatarUrl()%>"
-                                  alt="Profile" class="img-fluid rounded-circle">
-                            <% } else {%>
-                            <i class="bi bi-person-circle" style="font-size: 30px; color: white"></i>
-                            <% }%>
-
-                            <span class="d-none d-md-block dropdown-toggle ps-2">${sessionScope.userSession.getUsername()}</span>
-                        </a><!-- End Profile Iamge Icon -->
-                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-                            <li class="dropdown-header">
-
-                            <c:if test="${sessionScope.userSession != null}">
-                                <% User u = (User) session.getAttribute("userSession");%>
-                                <h6>${sessionScope.userSession.getUsername()}</h6>
-                                <% if (u.getRole().equalsIgnoreCase("Free")) {%>
-                                <span style="color: black;">${sessionScope.userSession.getRole()}</span>
-                                <% } else if (u.getRole().equalsIgnoreCase("Premium")) {%>
-                                <span style="color: black;">${sessionScope.userSession.getRole()} <i class="bi bi-star-fill" style="color: gold;"></i></span>
-                                    <% } else if (u.getRole().equalsIgnoreCase("Author")) {%>   
-                                <span style="color: black;">${sessionScope.userSession.getRole()} <i class="bi bi-star-fill" style="color: greenyellow;"></i></span>
-                                    <% }%>
-                            </c:if>
-                            <c:if test="${sessionScope.userSession == null}">
-                                <h6>${sessionScope.userRegister.getUsername()}</h6>
-                                <span style="color: black;">Free Account</span>
-                            </c:if>
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-
-                            <li>
-                                <a class="dropdown-item d-flex align-items-center" href="userProfile.jsp">
-                                    <i class="bi bi-person"></i>
-                                    <span style="color: black;">My Profile</span>
-                                </a>
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-
-                            <c:if test="${sessionScope.userSession != null}">
-                                <%User u3 = (User) session.getAttribute("userSession");%>
-                                <% if (u3.getRole().equalsIgnoreCase("Free")) {%>
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="userProfile.jsp">
-                                        <i class="bi bi-stars"></i>
-                                        <span style="color: black;">Upgrade Premium</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
+                        <c:if test="${userSession != null}">
+                            <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+                                <% User u2 = (User) session.getAttribute("userSession");%>
+                                <% if (!u2.getAvatarUrl().isEmpty()) {%>
+                                <img  src="<%= u2.getAvatarUrl()%>"
+                                      alt="Profile" class="img-fluid rounded-circle">
+                                <% } else {%>
+                                <i class="bi bi-person-circle" style="font-size: 30px; color: white"></i>
                                 <% }%>
-                            </c:if>
-                            <c:if test="${sessionScope.userSession == null}">
+
+                                <span class="d-none d-md-block dropdown-toggle ps-2">${sessionScope.userSession.getUsername()}</span>
+                            </a><!-- End Profile Iamge Icon -->
+                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                                <li class="dropdown-header">
+
+                                    <c:if test="${sessionScope.userSession != null}">
+                                        <% User u = (User) session.getAttribute("userSession");%>
+                                        <h6>${sessionScope.userSession.getUsername()}</h6>
+                                        <% if (u.getRole().equalsIgnoreCase("Free")) {%>
+                                        <span style="color: black;">${sessionScope.userSession.getRole()}</span>
+                                        <% } else if (u.getRole().equalsIgnoreCase("Premium")) {%>
+                                        <span style="color: black;">${sessionScope.userSession.getRole()} <i class="bi bi-star-fill" style="color: gold;"></i></span>
+                                            <% } else if (u.getRole().equalsIgnoreCase("Author")) {%>   
+                                        <span style="color: black;">${sessionScope.userSession.getRole()} <i class="bi bi-star-fill" style="color: greenyellow;"></i></span>
+                                            <% }%>
+                                        </c:if>
+                                        <c:if test="${sessionScope.userSession == null}">
+                                        <h6>${sessionScope.userRegister.getUsername()}</h6>
+                                        <span style="color: black;">Free Account</span>
+                                    </c:if>
+                                </li>
                                 <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="userProfile.jsp">
-                                        <i class="bi bi-stars"></i>
-                                        <span style="color: black;">Upgrade Premium</span>
+                                    <hr class="dropdown-divider">
+                                </li>
+
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center" href="../userProfile.jsp">
+                                        <i class="bi bi-person"></i>
+                                        <span style="color: black;">My Profile</span>
                                     </a>
                                 </li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
-                            </c:if>
 
-                            <li>
-                                <a class="dropdown-item d-flex align-items-center" href="userProfile.jsp">
-                                    <i class="bi bi-gear"></i>
-                                    <span style="color: black;">Account Settings</span>
-                                </a>
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
+                                <c:if test="${sessionScope.userSession != null}">
+                                    <%User u3 = (User) session.getAttribute("userSession");%>
+                                    <% if (u3.getRole().equalsIgnoreCase("Free")) {%>
+                                    <li>
+                                        <a class="dropdown-item d-flex align-items-center" href="../upgradePremium.jsp">
+                                            <i class="bi bi-stars"></i>
+                                            <span style="color: black;">Upgrade Premium</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <% }%>
+                                </c:if>
 
-                            <li>
-                                <a class="dropdown-item d-flex align-items-center" href="pages-faq.jsp">
-                                    <i class="bi bi-question-circle"></i>
-                                    <span style="color: black;">Need Help?</span>
-                                </a>
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center" href="../userProfile.jsp">
+                                        <i class="bi bi-gear"></i>
+                                        <span style="color: black;">Account Settings</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
 
-                            <li>
-                                <a class="dropdown-item d-flex align-items-center" href="LogoutServlet">
-                                    <i class="bi bi-box-arrow-right"></i>
-                                    <span style="color: black;">Sign Out</span>
-                                </a>
-                            </li>
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center" href="../needHelp.jsp">
+                                        <i class="bi bi-question-circle"></i>
+                                        <span style="color: black;">Need Help?</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
 
-                        </ul><!-- End Profile Dropdown Items -->
-                    </c:if>
-                    <c:if test="${userSession == null}">
-                        <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-                            <i class="bi bi-person-circle" style="font-size: 30px; color: white"></i>
-                        </a><!-- End Profile Iamge Icon -->
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center" href="LogoutServlet">
+                                        <i class="bi bi-box-arrow-right"></i>
+                                        <span style="color: black;">Sign Out</span>
+                                    </a>
+                                </li>
 
-                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-                            <li class="dropdown-header">
-                                <h6>Guest</h6>
-                            </li>
+                            </ul><!-- End Profile Dropdown Items -->
+                        </c:if>
+                        <c:if test="${userSession == null}">
+                            <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+                                <i class="bi bi-person-circle" style="font-size: 30px; color: white"></i>
+                            </a><!-- End Profile Iamge Icon -->
 
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
+                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                                <li class="dropdown-header">
+                                    <h6>Guest</h6>
+                                </li>
 
-                            <li>
-                                <a class="dropdown-item d-flex align-items-center" href="pages-faq.jsp">
-                                    <i class="bi bi-question-circle"></i>
-                                    <span style="color: black;">Need Help?</span>
-                                </a>
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
 
-                            <li>
-                                <a class="dropdown-item d-flex align-items-center" href="login.jsp">
-                                    <i class="bi bi-box-arrow-left"></i>
-                                    <span style="color: black; font-weight: bold">Sign In</span>
-                                </a>
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>   
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center" href="../needHelp.jsp">
+                                        <i class="bi bi-question-circle"></i>
+                                        <span style="color: black;">Need Help?</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
 
-                        </ul><!-- End Profile Dropdown Items -->
-                    </c:if>
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center" href="login.jsp">
+                                        <i class="bi bi-box-arrow-left"></i>
+                                        <span style="color: black; font-weight: bold">Sign In</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>   
+
+                            </ul><!-- End Profile Dropdown Items -->
+                        </c:if>
                     </li><!-- End Profile Nav -->
 
                 </ul>
@@ -392,7 +382,7 @@
 
                 </li><!-- End Components Nav -->
                 <p style="color: white;">v2023.9.20<br />
-                    � MangaUniverse 2023</p>
+                    © MangaUniverse 2023</p>
 
 
         </aside><!-- End Sidebar-->
@@ -410,7 +400,7 @@
                                 <div class="col-lg-8">
                                     <div class="row">
                                         <div class="col-lg-6 col-md-6col-12 mb-4">
-                                            <a href="./blog-detail.jsp" class="inner-box">
+                                            <a href="./blogDetail.jsp" class="inner-box">
                                                 <div class="image-box">
                                                     <img src="https://uiparadox.co.uk/templates/animeloop/demo/assets/media/blog/blog-img-1.png"
                                                          alt="" class="w-100 attachment-full size-full">
@@ -420,17 +410,17 @@
                                                         <p>28 NOV 2022</p>
                                                         <p>Anime</p>
                                                     </div>
-                                                    <h4>Why One piece’s 948th Episode </h4>
+                                                    <h4>Why One pieceâs 948th Episode </h4>
                                                     <div class="d-flex align-items-center">
                                                         <img src="https://uiparadox.co.uk/templates/animeloop/demo/assets/media/comment/comment-img.png"
                                                              class="w-auto" alt="">
-                                                        <h5>Author’s Name</h5>
+                                                        <h5>Authorâs Name</h5>
                                                     </div>
                                                 </div>
                                             </a>
                                         </div>
                                         <div class="col-lg-6 col-md-6col-12 mb-4">
-                                            <a href="./blog-detail.jsp" class="inner-box">
+                                            <a href="./blogDetail.jsp" class="inner-box">
                                                 <div class="image-box">
                                                     <img src="https://uiparadox.co.uk/templates/animeloop/demo/assets/media/blog/blog-img-2.png"
                                                          alt="" class="attachment-full size-full w-100">
@@ -444,13 +434,13 @@
                                                     <div class="d-flex align-items-center">
                                                         <img src="https://uiparadox.co.uk/templates/animeloop/demo/assets/media/comment/comment-img-6.png"
                                                              class="w-auto" alt="">
-                                                        <h5>Author’s Name</h5>
+                                                        <h5>Authorâs Name</h5>
                                                     </div>
                                                 </div>
                                             </a>
                                         </div>
                                         <div class="col-lg-6 col-md-6col-12 mb-4">
-                                            <a href="./blog-detail.jsp" class="inner-box">
+                                            <a href="./blogDetail.jsp" class="inner-box">
                                                 <div class="image-box">
                                                     <img src="https://uiparadox.co.uk/templates/animeloop/demo/assets/media/blog/blog-img-3.png"
                                                          alt="" class="attachment-full size-full w-100">
@@ -464,13 +454,13 @@
                                                     <div class="d-flex align-items-center">
                                                         <img src="https://uiparadox.co.uk/templates/animeloop/demo/assets/media/comment/comment-img-2.png"
                                                              class="w-auto" alt="">
-                                                        <h5>Author’s Name</h5>
+                                                        <h5>Authorâs Name</h5>
                                                     </div>
                                                 </div>
                                             </a>
                                         </div>
                                         <div class="col-lg-6 col-md-6col-12 mb-4">
-                                            <a href="./blog-detail.jsp" class="inner-box">
+                                            <a href="./blogDetail.jsp" class="inner-box">
                                                 <div class="image-box">
                                                     <img src="https://uiparadox.co.uk/templates/animeloop/demo/assets/media/blog/blog-img-2.png"
                                                          alt="" class="attachment-full size-full w-100">
@@ -484,13 +474,13 @@
                                                     <div class="d-flex align-items-center">
                                                         <img src="https://uiparadox.co.uk/templates/animeloop/demo/assets/media/comment/comment-img-3.png"
                                                              class="w-auto" alt="">
-                                                        <h5>Author’s Name</h5>
+                                                        <h5>Authorâs Name</h5>
                                                     </div>
                                                 </div>
                                             </a>
                                         </div>
                                         <div class="col-lg-6 col-md-6col-12 mb-4">
-                                            <a href="./blog-detail.jsp" class="inner-box">
+                                            <a href="./blogDetail.jsp" class="inner-box">
                                                 <div class="image-box">
                                                     <img src="https://uiparadox.co.uk/templates/animeloop/demo/assets/media/blog/blog-img-1.png"
                                                          alt="" class="attachment-full size-full w-100">
@@ -500,11 +490,11 @@
                                                         <p>28 NOV 2022</p>
                                                         <p>Community</p>
                                                     </div>
-                                                    <h4>Why One piece’s 948th Episode </h4>
+                                                    <h4>Why One pieceâs 948th Episode </h4>
                                                     <div class="d-flex align-items-center">
                                                         <img src="https://uiparadox.co.uk/templates/animeloop/demo/assets/media/comment/comment-img-4.png"
                                                              class="w-auto" alt="">
-                                                        <h5>Author’s Name</h5>
+                                                        <h5>Authorâs Name</h5>
                                                     </div>
                                                 </div>
                                             </a>
@@ -513,28 +503,63 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
-                                    <div class="blog-search bg-color-black">
-                                        <form action="blog.jsp">
-                                            <div class="input-group form-group">
-                                                <input class="form-control" type="text" name="query" placeholder="Search">
-                                                <button class="input-group-text anime-btn" type="submit"><i
-                                                        class="bi bi-search" style="color: white;"></i></button>
-                                            </div>
-                                        </form>
-                                        <h5 class="mb-3 mt-4">Tags</h5>
-                                        <ul class="tags">
-                                            <li><a href="">Anime</a></li>
-                                            <li><a href="">Shounen</a></li>
-                                            <li><a href="">Super Hero</a></li>
-                                            <li><a href="">Fantasy</a></li>
-                                        </ul>
-                                        <h5 class="mb-3 mt-4">Categories</h5>
-                                        <ul class="categories list-style">
-                                            <li><a href="">Anime</a></li>
-                                            <li><a href="">Manga</a></li>
-                                            <li><a href="">Cosplay</a></li>
-                                            <li><a href="">Light Novel</a></li>
-                                        </ul>
+                                    <div class="card blog-sidebar">
+                                        <div class="card-body bg-color-black">
+                                            <form method="get" action="blogs.html">
+                                                <div class="input-group form-group mb-4">
+                                                    <input class="form-control" name="query" placeholder="Search">
+                                                    <button class="input-group-text anime-btn" type="submit"><i
+                                                            class="bi bi-search" style="color: white;"></i></button>
+                                                </div>
+                                            </form>
+
+                                            <h5 class="mb-2 mt-4">Popular Blogs</h5>
+                                            <ul class="popular-blogs">
+                                                <li>
+                                                    <a href="">
+                                                        <div class="row align-items-center">
+                                                            <div class="col-5">
+                                                                <img alt=""
+                                                                     src="https://uiparadox.co.uk/templates/animeloop/demo/assets/media/blog-detail/blog-img-4.jpg">
+                                                            </div>
+                                                            <div class="col-7 ps-0">
+                                                                <p class="date">10 Nov 2023</p>
+                                                                <h6 class="mb-0">Transparent Fashion Making Ways</h6>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="">
+                                                        <div class="row align-items-center">
+                                                            <div class="col-5">
+                                                                <img alt=""
+                                                                     src="https://uiparadox.co.uk/templates/animeloop/demo/assets/media/blog-detail/blog-img-5.png">
+                                                            </div>
+                                                            <div class="col-7 ps-0">
+                                                                <p class="date">10 Nov 2023</p>
+                                                                <h6 class="mb-0">New Wave of Fashion Trends</h6>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="">
+                                                        <div class="row align-items-center">
+                                                            <div class="col-5">
+                                                                <img alt=""
+                                                                     src="https://uiparadox.co.uk/templates/animeloop/demo/assets/media/blog-detail/blog-img-6.png">
+                                                            </div>
+                                                            <div class="col-7 ps-0">
+                                                                <p class="date">10 Nov 2023</p>
+                                                                <h6 class="mb-0">Sports Trends that are Making Waves</h6>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                            </ul>
+
+                                        </div>
                                     </div>
                                 </div>
                             </div>

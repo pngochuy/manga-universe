@@ -4,9 +4,11 @@
  */
 package controller.login;
 
+import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.security.SecureRandom;
+import java.time.LocalDateTime;
 import java.util.Properties;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -25,7 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import model.User;
-import model.UserRegister;
+import ultils.EncryptPassword;
 
 /**
  *
@@ -81,9 +83,14 @@ public class RegistrationServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    LocalDateTime dateCreated = LocalDateTime.now();
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        UserDAO userDAO = new UserDAO();
+
         String username = request.getParameter("name");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
@@ -91,9 +98,9 @@ public class RegistrationServlet extends HttpServlet {
         String rePassword = request.getParameter("re_password");
         String agreeTerm = request.getParameter("agree-term"); // on - NULL
 
-        boolean checkRegister = false;
+        boolean checkRegister = true;
 
-        // check input Username Length
+        // check input Username
         int maxName = 15;
         int minName = 3;
         if (checkLength("Username", minName, maxName) < minName) {
@@ -106,8 +113,14 @@ public class RegistrationServlet extends HttpServlet {
             request.setAttribute("errName", "Username is not valid");
             checkRegister = false;
         } else {
-            request.setAttribute("valueName", username);
-            checkRegister = true;
+            if (userDAO.isUsernameExists(username)) {
+                request.setAttribute("errName", "Username is exists! Choose another username!");
+                checkRegister = false;
+                request.setAttribute("valueName", username);
+            } else {
+                request.setAttribute("valueName", username);
+            }
+
         }
 
         // check email is valid
@@ -115,8 +128,13 @@ public class RegistrationServlet extends HttpServlet {
             request.setAttribute("errEmail", "Email is not valid");
             checkRegister = false;
         } else {
-            request.setAttribute("valueEmail", email);
-            checkRegister = true;
+            if (userDAO.isEmailExists(email)) {
+                request.setAttribute("errEmail", "Email is exists! Choose another email!");
+                checkRegister = false;
+                request.setAttribute("valueEmail", email);
+            } else {
+                request.setAttribute("valueEmail", email);
+            }
         }
 
         // check input Password Length
@@ -141,8 +159,14 @@ public class RegistrationServlet extends HttpServlet {
             request.setAttribute("errPhone", "Phone number is invalid");
             checkRegister = false;
         } else {
-            request.setAttribute("valuePhone", phone);
-            checkRegister = true;
+            if (userDAO.isPhoneExists(phone)) {
+                request.setAttribute("errPhone", "Phone number is exists! Choose another phone number!");
+                checkRegister = false;
+                request.setAttribute("valuePhone", phone);
+            } else {
+                request.setAttribute("valuePhone", phone);
+            }
+
         }
 
         // check passwords match
@@ -163,8 +187,6 @@ public class RegistrationServlet extends HttpServlet {
         if (checkRegister) {
 
             HttpSession mySession = request.getSession();
-            UserRegister userRegister = new UserRegister(username, email, password, phone);
-            mySession.setAttribute("userRegister", userRegister);
 
             // reset inputs
             request.setAttribute("valueName", "");
@@ -173,9 +195,18 @@ public class RegistrationServlet extends HttpServlet {
             request.setAttribute("valueRePass", "");
             request.setAttribute("valuePhone", "");
 
-            verifyEmail(email, request, response);
+            boolean isSent = verifyEmail(email, request, response);
+            if (isSent) {
+                // CODE: for loop in DB to check username and passwod...
+                EncryptPassword encryptPassword = new EncryptPassword();
+                password = encryptPassword.toSHA1(password);
+                User user = new User("", username, password, "", email, phone,
+                        true, "Free", dateCreated, 0, dateCreated);
+                userDAO.create(user);
+            }
+
             request.setAttribute("messageVerify", "success");
-            request.setAttribute("status", "success");
+            mySession.setAttribute("status", "success");
 
             request.getRequestDispatcher("registration.jsp").forward(request, response);
             return;
@@ -186,7 +217,7 @@ public class RegistrationServlet extends HttpServlet {
         return;
     }
 
-    public void verifyEmail(String email, HttpServletRequest request, HttpServletResponse response)
+    public boolean verifyEmail(String email, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 //        String email = request.getParameter("email");
         RequestDispatcher dispatcher = null;
@@ -234,11 +265,15 @@ public class RegistrationServlet extends HttpServlet {
                 // send message
                 Transport.send(message);
                 System.out.println("message sent successfully");
+
+                return true;
             } catch (MessagingException e) {
                 throw new RuntimeException(e);
             }
 
         }
+
+        return false;
     }
 
     public static String generateToken() {

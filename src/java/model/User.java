@@ -27,11 +27,10 @@ public class User {
 
     public User() {
     }
-    LocalDateTime now = LocalDateTime.now();
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
-    String formattedDateTime = now.format(formatter);
-    LocalDateTime dateCreated = LocalDateTime.parse(formattedDateTime, formatter);
-
+//    LocalDateTime now = LocalDateTime.now();
+//    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
+//    String formattedDateTime = now.format(formatter);
+//    LocalDateTime dateCreated = LocalDateTime.parse(formattedDateTime, formatter);
 
     public User(String avatarUrl, String username, String password, String name, String email, String phone, boolean gender, String role, LocalDateTime expiredTime, int coinQuantity, LocalDateTime createAt) {
         this.avatarUrl = avatarUrl;
@@ -47,6 +46,7 @@ public class User {
         this.createAt = createAt;
     }
 
+  
     public String getAvatarUrl() {
         return avatarUrl;
     }
@@ -153,9 +153,10 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" + "avatarUrl=" + avatarUrl + ", username=" + username + ", password=" + password + ", name=" + name + ", email=" + email + ", phone=" + phone + ", gender=" + gender + ", role=" + role + ", expiredTime=" + expiredTime + ", coinQuantity=" + coinQuantity + ", createAt=" + createAt + ", now=" + now + ", formatter=" + formatter + ", formattedDateTime=" + formattedDateTime + ", dateCreated=" + dateCreated + '}';
+        return "User{" + "avatarUrl=" + avatarUrl + ", username=" + username + ", password=" + password + ", name=" + name + ", email=" + email + ", phone=" + phone + ", gender=" + gender + ", role=" + role + ", expiredTime=" + expiredTime + ", coinQuantity=" + coinQuantity + ", createAt=" + createAt + '}';
     }
 
     
+   
 
 }

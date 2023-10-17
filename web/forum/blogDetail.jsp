@@ -49,13 +49,6 @@
                 <i class="bi bi-list toggle-sidebar-btn" style="color: white"></i>
             </div><!-- End Logo -->
 
-            <div class="search-bar">
-                <form class="search-form d-flex align-items-center" method="POST" action="#">
-                    <input type="text" name="query" placeholder="Search" title="Enter search keyword">
-                    <button type="submit" title="Search"><i class="bi bi-search"></i></button>
-                </form>
-            </div><!-- End Search Bar -->
-
             <nav class="header-nav ms-auto">
                 <ul class="d-flex align-items-center">
 
@@ -390,10 +383,90 @@
         <main id="main" class="main">
             <section class="section profile">
                 <div class="row">
-                    <h2 class="fw-bold">Site Rules</h2>
-                    <p>Only titles that are in the comic styles of Japanese, Korean, Chinese or of similar Asian origin are
-                        allowed. Exceptions can be made for self-published comics in a similar style originally created in
-                        other languages if you contact MangaDex staff beforehand.</p>
+                    <!-- >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+                                        Blog part start
+            >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+                    <h2 class="fw-bold">Blog Detail</h2>
+                    <section class="blog-detail sec-mar">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-9" style="margin: 0 auto">
+                                    <img alt=""
+                                         src="https://uiparadox.co.uk/templates/animeloop/demo/assets/media/blog-detail/blog-img-1.jpg">
+                                    <div class="text-details">
+                                        <p class="text-end author pt-3"><b>Manga -</b> 16 Oct 2023</p>
+                                        <h4>One piece’s 948th Episode </h4>
+                                        <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis
+                                            praesentium
+                                            voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint
+                                            occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt
+                                            mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis
+                                            est et
+                                            expedita distinctio. </p>
+                                        <p class="mb-4">
+                                            Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo
+                                            minus
+                                            id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis
+                                            dolor
+                                            repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum
+                                            necessitatibus
+                                            saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae.
+                                            Itaque
+                                            earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus
+                                            maiores
+                                            alias consequatur aut perferendis doloribus asperiores repellat.
+                                        </p>
+                                        <div class="text-box mb-4 text-center">
+                                            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis <br>
+                                            praesentium voluptatum deleniti atque corrupti quos dolores et quas.
+                                        </div>
+                                        <p class="m-0">At vero eos et accusamus et iusto odio dignissimos ducimus qui
+                                            blanditiis
+                                            praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias
+                                            excepturi
+                                            sint occaecati cupiditate non provident, similique sunt in culpa qui officia
+                                            deserunt
+                                            mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis
+                                            est et
+                                            expedita distinctio. </p>
+                                        <div class="row">
+                                            <div class="col-lg-6 col-12">
+                                                <img src="https://uiparadox.co.uk/templates/animeloop/demo/assets/media/blog-detail/blog-img-2.png"
+                                                     class="blog-detail-img" alt="">
+                                            </div>
+                                            <div class="col-lg-6 col-12">
+                                                <img src="https://uiparadox.co.uk/templates/animeloop/demo/assets/media/blog-detail/blog-img-3.png"
+                                                     class="blog-detail-img" alt="">
+                                            </div>
+                                        </div>
+                                        <p>Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo
+                                            minus id
+                                            quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor
+                                            repellendus. </p>
+                                        <p>Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe
+                                            eveniet
+                                            ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum
+                                            rerum hic
+                                            tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias
+                                            consequatur
+                                            aut perferendis doloribus asperiores repellat.</p>
+                                        <p class="m-0">Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil
+                                            impedit
+                                            quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est,
+                                            omnis
+                                            dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum
+                                            necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non
+                                            recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut
+                                            reiciendis
+                                            voluptatibus maiores alias consequatur aut perferendis doloribus asperiores
+                                            repellat.
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </section>
                 </div>
             </section>
         </main>

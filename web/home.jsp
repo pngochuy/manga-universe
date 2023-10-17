@@ -1,5 +1,6 @@
 <%@page import="model.User"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%
     // session.removeAttribute("tokenVerify");
@@ -237,7 +238,7 @@
                                 </li>
 
                                 <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="pages-faq.jsp">
+                                    <a class="dropdown-item d-flex align-items-center" href="needHelp.jsp">
                                         <i class="bi bi-question-circle"></i>
                                         <span style="color: black;">Need Help?</span>
                                     </a>
@@ -270,7 +271,7 @@
                                 </li>
 
                                 <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="pages-faq.jsp">
+                                    <a class="dropdown-item d-flex align-items-center" href="needHelp.jsp">
                                         <i class="bi bi-question-circle"></i>
                                         <span style="color: black;">Need Help?</span>
                                     </a>

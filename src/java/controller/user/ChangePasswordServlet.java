@@ -4,6 +4,7 @@
  */
 package controller.user;
 
+import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import model.User;
+import ultils.EncryptPassword;
 
 /**
  *
@@ -70,38 +72,61 @@ public class ChangePasswordServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+PrintWriter out = response.getWriter();
+        HttpSession mySession = request.getSession();
+        UserDAO userDAO = new UserDAO();
         String password = request.getParameter("password");
         String newpassword = request.getParameter("newpassword");
+        String renewpassword = request.getParameter("renewpassword");
 
         boolean checkInput = true;
 
         if (password.isEmpty() || password == null) {
-            request.setAttribute("errPassword", "Password is invalid!");
+            mySession.setAttribute("errPassword", "Please enter your password!");
             checkInput = false;
-        } else {
-            request.setAttribute("valuePassword", password);
         }
+
         if (newpassword.isEmpty() || newpassword == null) {
-            request.setAttribute("errNewpassword", "Newpassword is invalid!");
+            mySession.setAttribute("errNewPassword", "Please enter your new password!");
             checkInput = false;
-        } else {
-            request.setAttribute("valueNewpassword", newpassword);
         }
-        
+
+        if (renewpassword.isEmpty() || renewpassword == null) {
+            mySession.setAttribute("errReNewPassword", "Please enter your re-new password!");
+            checkInput = false;
+        } else if (newpassword.equals(renewpassword) == false) {
+            mySession.setAttribute("errReNewPassword", "Re-new password doesn't match!");
+            checkInput = false;
+        }
+
         if (checkInput) {
-            HttpSession mySession = request.getSession();
+
             User userSession = (User) mySession.getAttribute("userSession");
-            
+            EncryptPassword encryptPassword = new EncryptPassword();
+            password = encryptPassword.toSHA1(password); // entered
+
+//            out.println("user pass: " + userSession.getPassword());
+//            out.println("pass: " + password);
+//            out.println("new pass: " + newpassword);
             if (userSession.getPassword().equals(password) == false) {
+
                 request.setAttribute("errPassword", "Wrong Password!");
                 request.getRequestDispatcher("userProfile.jsp").forward(request, response);
                 return;
             } else {
+                request.setAttribute("messageChangePassword", "Change password successfully!");
+                newpassword = encryptPassword.toSHA1(newpassword); // entered
+
+                int userId = userDAO.getUserId(userSession.getUsername(), userSession.getPassword(),
+                        userSession.getEmail());
+                
                 userSession.setPassword(newpassword);
+                userDAO.update(userSession, userId);
             }
-            
-            
+
         }
+
+        request.setAttribute("pageChangePassword", ". active .show");
         request.getRequestDispatcher("userProfile.jsp").forward(request, response);
     }
 

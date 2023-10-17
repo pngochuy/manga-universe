@@ -1,5 +1,6 @@
 <%@page import="model.User"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -179,7 +180,7 @@
                                 </li>
 
                                 <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="userProfile.jsp">
+                                    <a class="dropdown-item d-flex align-items-center" href="../userProfile.jsp">
                                         <i class="bi bi-person"></i>
                                         <span style="color: black;">My Profile</span>
                                     </a>
@@ -192,7 +193,7 @@
                                     <%User u3 = (User) session.getAttribute("userSession");%>
                                     <% if (u3.getRole().equalsIgnoreCase("Free")) {%>
                                     <li>
-                                        <a class="dropdown-item d-flex align-items-center" href="userProfile.jsp">
+                                        <a class="dropdown-item d-flex align-items-center" href="../upgradePremium.jsp">
                                             <i class="bi bi-stars"></i>
                                             <span style="color: black;">Upgrade Premium</span>
                                         </a>
@@ -202,20 +203,9 @@
                                     </li>
                                     <% }%>
                                 </c:if>
-                                <c:if test="${sessionScope.userSession == null}">
-                                    <li>
-                                        <a class="dropdown-item d-flex align-items-center" href="userProfile.jsp">
-                                            <i class="bi bi-stars"></i>
-                                            <span style="color: black;">Upgrade Premium</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
-                                </c:if>
 
                                 <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="userProfile.jsp">
+                                    <a class="dropdown-item d-flex align-items-center" href="../userProfile.jsp">
                                         <i class="bi bi-gear"></i>
                                         <span style="color: black;">Account Settings</span>
                                     </a>
@@ -225,7 +215,7 @@
                                 </li>
 
                                 <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="pages-faq.jsp">
+                                    <a class="dropdown-item d-flex align-items-center" href="../needHelp.jsp">
                                         <i class="bi bi-question-circle"></i>
                                         <span style="color: black;">Need Help?</span>
                                     </a>
@@ -258,7 +248,7 @@
                                 </li>
 
                                 <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="pages-faq.jsp">
+                                    <a class="dropdown-item d-flex align-items-center" href="../needHelp.jsp">
                                         <i class="bi bi-question-circle"></i>
                                         <span style="color: black;">Need Help?</span>
                                     </a>
@@ -392,7 +382,7 @@
 
                 </li><!-- End Components Nav -->
                 <p style="color: white;">v2023.9.20<br />
-                    © MangaUniverse 2023</p>
+                    Â© MangaUniverse 2023</p>
 
 
         </aside><!-- End Sidebar-->

@@ -1,5 +1,7 @@
 <%@page import="model.User"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -149,8 +151,15 @@
                                       alt="Profile" class="img-fluid rounded-circle">
                             </c:if>
                             <c:if test="${userSession == null}">
-                                <img src="${valueAvatarUrl != null ? valueAvatarUrl : 'assetsUser/img/user_image_default.png'}"
-                                     alt="Profile" class="img-fluid rounded-circle">
+                                <c:if test="${sessionScope.userGooglePicture != null}">
+                                    <img src="${sessionScope.userGooglePicture}"
+                                         alt="Profile" class="img-fluid rounded-circle">
+                                </c:if>
+                                <c:if test="${sessionScope.userGooglePicture == null}">
+                                    <img src="${valueAvatarUrl != null ? valueAvatarUrl : 'assetsUser/img/user_image_default.png'}"
+                                         alt="Profile" class="img-fluid rounded-circle">
+                                </c:if>
+
                             </c:if>
 
                             <c:if test="${sessionScope.userSession != null}">
@@ -200,7 +209,7 @@
                                 <%User u = (User) session.getAttribute("userSession");%>
                                 <% if (u.getRole().equalsIgnoreCase("Free")) {%>
                                 <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="userProfile.jsp">
+                                    <a class="dropdown-item d-flex align-items-center" href="upgradePremium.jsp">
                                         <i class="bi bi-stars"></i>
                                         <span>Upgrade Premium</span>
                                     </a>
@@ -212,7 +221,7 @@
                             </c:if>
                             <c:if test="${sessionScope.userSession == null}">
                                 <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="userProfile.jsp">
+                                    <a class="dropdown-item d-flex align-items-center" href="upgradePremium.jsp">
                                         <i class="bi bi-stars"></i>
                                         <span>Upgrade Premium</span>
                                     </a>
@@ -233,7 +242,7 @@
                             </li>
 
                             <li>
-                                <a class="dropdown-item d-flex align-items-center" href="pages-faq.jsp">
+                                <a class="dropdown-item d-flex align-items-center" href="needHelp.jsp">
                                     <i class="bi bi-question-circle"></i>
                                     <span>Need Help?</span>
                                 </a>
@@ -272,32 +281,58 @@
                     <a class="nav-link collapsed" href="userProfile.jsp">
                         <i class="bi bi-layout-text-window-reverse"></i><span>My Profile </span><i class="bi"></i>
                     </a>
-
                 </li>
 
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="addManga.jsp">
-                        <i class="bi bi-grid"></i>
-                        <span>Add Manga</span>
-                    </a>
+                <c:if test="${sessionScope.userSession != null}">
+                    <% User uCheckType = (User) session.getAttribute("userSession"); %>
+                    <% if (uCheckType.getRole().equalsIgnoreCase("Free") || uCheckType.getRole().equalsIgnoreCase("Premium")) {%>
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="registerAuthor.jsp">
+                            <i class="bi bi-person-workspace"></i>
+                            <span>Become an author</span>
+                        </a>
 
-                </li>
-                <li class="nav-item">
+                    </li>
+                    <% } else if (uCheckType.getRole().equalsIgnoreCase("Author")) {%>   
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="addManga.jsp">
+                            <i class="bi bi-grid"></i>
+                            <span>Add Manga</span>
+                        </a>
 
-                    <a class="nav-link collapsed"  href="#">
-                        <i class="bi bi-menu-button-wide"></i><span>Manage Chapter</span><i class="bi bi-chevron-down ms-auto"></i>
-                    </a>
-                    <ul id="components-nav" class="nav-content">
+                    </li>
+                    <li class="nav-item">
 
-                        <li>
-                            <a href="viewMangaList.jsp">
-                                <i class="bi bi-circle"></i><span>Chapter List</span>
-                            </a>
-                        </li>
+                        <a class="nav-link collapsed"  href="#">
+                            <i class="bi bi-menu-button-wide"></i><span>Manage Chapter</span><i class="bi bi-chevron-down ms-auto"></i>
+                        </a>
+                        <ul id="components-nav" class="nav-content">
 
-                    </ul>
+                            <li>
+                                <a href="viewMangaList.jsp">
+                                    <i class="bi bi-circle"></i><span>View Chapter List</span>
+                                </a>
+                            </li>
 
-                </li>
+                        </ul>
+
+                    </li>
+
+                    <% }%>
+                </c:if>
+                <c:if test="${sessionScope.userSession == null}">
+
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="addManga.jsp">
+                            <i class="bi bi-person-workspace"></i>
+                            <span>Become an author</span>
+                        </a>
+
+                    </li>
+
+                </c:if>
+
+
 
                 <!-- End Components Nav -->
 
@@ -310,7 +345,8 @@
                 <nav>
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="home.jsp">Home</a></li>
-                        <li class="breadcrumb-item active">Manga List</li>
+                        <li class="breadcrumb-item">User</li>
+                        <li class="breadcrumb-item active">View Manga List</li>
                     </ol>
                 </nav>
             </div><!-- End Page Title -->
@@ -333,29 +369,11 @@
                                     <% User u2 = (User) session.getAttribute("userSession");%>
                                     <% if (u2.getRole().equalsIgnoreCase("Free") || u2.getRole().equalsIgnoreCase("Premium")) {%>
                                     <div class="alert alert-warning bg-warning border-0 alert-dismissible fade show" role="alert">
-                                        You have no permission to add Manga! If you want to be an Author, please register the form below!
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        You have no permission to View Manga List! If you want to be an Author, please click <a href="registerAuthor.jsp">here</a> to register
+                                        an author!
+                                        <!--<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>-->
                                     </div>
-                                    <form>
-                                        <div class="row mb-3">
-                                            <label for="inputNumber" class="col-sm-2 col-form-label">Author certificate</label>
-                                            <div class="col-sm-10">
-                                                <input class="form-control" type="file" id="formFile">
-                                            </div>
-                                        </div>
-                                        <div class="row mb-3">
-                                            <label for="inputPassword" class="col-sm-2 col-form-label">Introduction</label>
-                                            <div class="col-sm-10">
-                                                <textarea class="form-control" style="height: 100px" placeholder="Don't hesitate to introduce yourself and explain why you want to become an author!"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-3">
-                                            <label class="col-sm-2 col-form-label"></label>
-                                            <div class="col-sm-10">
-                                                <button type="submit" class="btn btn-primary">Submit Form</button>
-                                            </div>
-                                        </div>
-                                    </form>
+                                    
                                     <% }%>
                                     <% if (u2.getRole().equalsIgnoreCase("Author")) {%>
 

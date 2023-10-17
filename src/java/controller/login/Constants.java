@@ -17,8 +17,10 @@ public class Constants {
     // enter your secret key
     public static String GOOGLE_CLIENT_SECRET = "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";
 
-    // enter your redirect uri (if no, error 400)
-    public static String GOOGLE_REDIRECT_URI = "http://localhost:8080/MangaUniverse/LoginGoogleServlet";
+    // enter your redirect uri (if no, error 400) -> for Login page
+    public static String GOOGLE_REDIRECT_URI_LOGIN = "http://localhost:8080/MangaUniverse/LoginGoogleServlet";
+    // enter your redirect uri (if no, error 400) -> for Register page
+    public static String GOOGLE_REDIRECT_URI_REGISTER = "http://localhost:8080/MangaUniverse/RegisterGoogleServlet";
 
     public static String GOOGLE_LINK_GET_TOKEN = "https://accounts.google.com/o/oauth2/token";
 

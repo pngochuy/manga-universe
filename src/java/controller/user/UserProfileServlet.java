@@ -4,6 +4,7 @@
  */
 package controller.user;
 
+import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
@@ -15,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import model.User;
-import model.UserRegister;
 
 /**
  *
@@ -75,18 +75,23 @@ public class UserProfileServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    LocalDateTime dateCreated = LocalDateTime.now();
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8"); // works fine
+        // phạm ngọc huy
 
         // check duplicate when reload page using DB ...
         PrintWriter out = response.getWriter();
         HttpSession mySession = request.getSession();
-        UserRegister userRegister = (UserRegister) mySession.getAttribute("userRegister");
-        User u = (User) mySession.getAttribute("userSession");
+        UserDAO userDAO = new UserDAO();
+        User userSession = (User) mySession.getAttribute("userSession");
+        String userGooglePicture = (String) mySession.getAttribute("userGooglePicture");
 
         String username = request.getParameter("username"); // check
-//        String password = request.getParameter("password");
         String password = "";
         String name = request.getParameter("name"); // check 
         String email = request.getParameter("email"); // check 
@@ -94,94 +99,78 @@ public class UserProfileServlet extends HttpServlet {
         String genderStr = request.getParameter("gender"); // check 
         String role = request.getParameter("role");
         String avatarUrl = request.getParameter("avatarUrl");
-//        out.println("username: "+username);
-//        out.println("profileImageUrl: "+avatarUrl);
-//        if (u != null) {
-//            if (u.getEmail().equals(email)) {
-//                response.sendRedirect("userProfile.jsp");
-//            }  
-//        }
-        
-         
+
         boolean checkEdit = true;
-        if (!avatarUrl.isEmpty()) {
-            
+
+        /* Validate Avatar */
+        if (avatarUrl == null) {
+            avatarUrl = userGooglePicture;
+        } else if (!avatarUrl.isEmpty()) {
             request.setAttribute("valueAvatarUrl", avatarUrl);
         }
-//        if (avatarUrl.isEmpty()) {
-//            request.setAttribute("errAvatarUrl", "Avatar url is not valid");
-//            checkEdit = false;
-//        } else {
+
+//        if (!avatarUrl.isEmpty()) {
 //            request.setAttribute("valueAvatarUrl", avatarUrl);
 //        }
-        
+
+        /* Validate Username */
         if (username.isEmpty()) {
             request.setAttribute("errUsername", "Username is not valid");
             checkEdit = false;
         } else {
-            request.setAttribute("valueUsername", username);
+            request.setAttribute("valueUserName", username);
         }
-        
-        if (userRegister != null) {
-            password = userRegister.getPassword();
-        } else {
-            
-            if (u != null) {
-                password = u.getPassword();
-            } else {
-                password = "";
-            }
-            
-        }
-        
+
+        /* Validate Name */
         if (name.isEmpty()) {
+            name = "";
             request.setAttribute("errName", "Name is not valid");
-            checkEdit = false;
+//            checkEdit = false;
         } else {
             request.setAttribute("valueName", name);
         }
-        
-        if (email.isEmpty()) {
-            request.setAttribute("errEmail", "Email is not valid");
-            checkEdit = false;
-        } else {
-            request.setAttribute("valueEmail", email);
-        }
-        
+
+        /* Validate Phone */
         if (phone.isEmpty()) {
+            phone = "";
             request.setAttribute("errPhone", "Phone is not valid");
-            checkEdit = false;
+//            checkEdit = false;
         } else {
             request.setAttribute("valuePhone", phone);
         }
-//        out.println(genderStr);
+
+        boolean gender = true;
         if (genderStr == null) {
+            genderStr = "";
             request.setAttribute("errGender", "Choose your gender");
-            checkEdit = false;
+//            checkEdit = false;
         } else {
             request.setAttribute("valueGender", genderStr);
-        }
-        
-        
-        if (checkEdit) {
-            LocalDateTime dateCreated = LocalDateTime.now();
-            LocalDateTime expiredTime = dateCreated;
-            int coinQuantity = 0;
-            LocalDateTime createAt = dateCreated;
 
-            boolean gender = true;
             if (genderStr.equals("true")) {
                 gender = true;
             } else if (genderStr.equals("false")) {
                 gender = false;
             }
-            User userSession = new User(avatarUrl, username, password, name,
-                    email, phone, gender, role, expiredTime, coinQuantity, createAt);
-            mySession.removeAttribute("tokenVerify");
-//            mySession.removeAttribute("userRegister");
+        }
+
+        if (checkEdit) {
+
+//            User userSession = new User(avatarUrl, username, password, name,
+//                    email, phone, gender, role, expiredTime, coinQuantity, createAt);
+            User user = new User(avatarUrl, username, userSession.getPassword(), name, 
+                    userSession.getEmail(), phone, gender, userSession.getRole(), 
+                    userSession.getExpiredTime(), userSession.getCoinQuantity(), 
+                    userSession.getCreateAt());
             
-            mySession.setAttribute("userSession", userSession);
+            int userId = userDAO.getUserId(userSession.getUsername(), userSession.getPassword(), 
+                    userSession.getEmail());
+            userDAO.update(user, userId);
             
+            mySession.setAttribute("userSession", user);
+            
+            mySession.removeAttribute("userGooglePicture");
+
             // no error message
             request.setAttribute("errUsername", "");
             request.setAttribute("errName", "");
@@ -194,10 +183,8 @@ public class UserProfileServlet extends HttpServlet {
             request.setAttribute("valueEmail", "");
             request.setAttribute("valuePhone", "");
             request.setAttribute("valueGender", "");
-            
+
             request.setAttribute("messageSave", "Save successfully");
-//            request.getRequestDispatcher("home.jsp").forward(request, response);
-//            return;
         }
         request.getRequestDispatcher("userProfile.jsp").forward(request, response);
     }

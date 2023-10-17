@@ -1,4 +1,6 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -16,8 +18,14 @@
         <link rel="stylesheet" href="css/style.css">
     </head>
     <body>
-        <input type="hidden" id="status" value="<%= request.getAttribute("status")%>">
-        
+
+        <c:if test="${status != null}">
+            <input type="hidden" id="status" value="${status}">
+            <%
+                session.removeAttribute("status");
+            %>
+        </c:if>
+
 
         <div class="main">
 
@@ -35,7 +43,7 @@
 
                         <div class="signin-form">
                             <h2 class="form-title">Sign in</h2>
-                            ${sessionScope.userRegister}
+
                             <form method="POST" action="LoginServlet" class="register-form"
                                   id="login-form">
                                 <div class="form-group">
@@ -69,10 +77,11 @@
                                 </div>
                             </form>
                             <div class="social-login">
+
                                 <span class="social-label">Or login with</span>
                                 <ul class="socials">
-<!--                                    <li><a href="#"><i
-                                                class="display-flex-center zmdi zmdi-facebook"></i></a></li>-->
+                                    <!--                                    <li><a href="#"><i
+                                                                                    class="display-flex-center zmdi zmdi-facebook"></i></a></li>-->
                                     <!--                                    <li><a href="#"><i
                                                                                     class="display-flex-center zmdi zmdi-twitter"></i></a></li>-->
                                     <!--                                    <li><a href="https://accounts.google.com/o/oauth2/auth?scope=profile email https://www.googleapis.com/auth/user.phonenumbers.read&redirect_uri=http://localhost:8080/MangaUniverse/LoginGoogleServlet&response_type=code&client_id=727306614937-6mj4mhufjq06aqns6el83e2fnegocjbn.apps.googleusercontent.com&approval_prompt=force"><i class="display-flex-center zmdi zmdi-google"></i></a>
@@ -108,6 +117,9 @@
             }
             if (status == "failedPassword") {
                 swal("Sorry", "Wrong Password", "error");
+            }
+            if (status == "failedLoginGoogle") {
+                swal("Sorry", "Your email is not register!", "error");
             }
             if (status == "success") {
                 swal("Congrats", "Login Successfully", "success");

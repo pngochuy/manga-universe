@@ -1,10 +1,23 @@
+<%@page import="java.time.LocalDateTime"%>
 <%@page import="model.UserRegister"%>
 <%@page import="model.User"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
+<%
+    //response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+    //response.setHeader("Pragma", "no-cache"); // HTTP 1.0
+    //response.setHeader("Expires", "0"); // Proxies
+
+    if (session.getAttribute("userRegister") == null && session.getAttribute("userSession") == null) {
+        response.sendRedirect("login.jsp");
+    }
+
+%>
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
     <head>
         <meta charset="utf-8">
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -37,132 +50,10 @@
         <!-- Template Main CSS File -->
         <link href="assetsUser/css/style.css" rel="stylesheet">
 
-        <style>
-            section {
-                width: 100%;
-                height: 100vh;
-                box-sizing: border-box;
-                /*padding: 140px 0;*/
-
-            }
-
-            .card {
-                position: relative;
-                min-width: 300px;
-                height: auto;
-                overflow: hidden;
-                border-radius: 15px;
-                margin: 0 auto;
-                padding: 40px 20px;
-                box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
-                transition: .5s;
-            }
-
-            .card:hover {
-                transform: scale(1.1);
-            }
-
-            .card_red,
-            .card_red .title .fa {
-                background: linear-gradient(-45deg, #ffec61, #f321d7);
-            }
-
-            .card_violet,
-            .card_violet .title .fa {
-                background: linear-gradient(-45deg, #f403d1, #64b5f6);
-            }
-
-            .card_three,
-            .card_three .title .fa {
-                background: linear-gradient(-45deg, #24ff72, #9a4eff);
-            }
-
-            .card:before {
-                content: '';
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                width: 100%;
-                height: 40%;
-                background: rgba(255, 255, 255, .1);
-                z-index: 1;
-                transform: skewY(-5deg) scale(1.5);
-            }
-
-            .title .fa {
-                color: #fff;
-                font-size: 60px;
-                width: 100px;
-                height: 100px;
-                border-radius: 50%;
-                text-align: center;
-                line-height: 100px;
-                box-shadow: 0 10px 10px rgba(0, 0, 0, .1);
-            }
-
-            .title h2 {
-                position: relative;
-                margin: 20px 0 0;
-                padding: 0;
-                color: #fff;
-                font-size: 28px;
-                z-index: 2;
-            }
-
-            .price {
-                position: relative;
-                z-index: 2;
-            }
-
-            .price h4 {
-                margin: 0;
-                padding: 20px 0;
-                color: #fff;
-                font-size: 60px;
-            }
-
-            .option {
-                position: relative;
-                z-index: 2;
-            }
-
-            .option ul {
-                margin: 0;
-                padding: 0;
-            }
-
-            .option ul li {
-                margin: 0 0 10px;
-                padding: 0;
-                list-style: none;
-                color: #fff;
-                font-size: 16px;
-            }
-
-            .card a {
-                display: block;
-                position: relative;
-                z-index: 2;
-                background-color: #fff;
-                /* color: #262ff; */
-                width: 150px;
-                height: 40px;
-                text-align: center;
-                margin: 20px auto 0;
-                line-height: 40px;
-                border-radius: 40px;
-                font-size: 16px;
-                cursor: pointer;
-                text-decoration: none;
-                box-shadow: 0 5px 10px rgba(0, 0, 0, .1);
-            }
-
-            .card a:hover {
-            }
-        </style>
-
     </head>
+
     <body>
+
         <!-- ======= Header ======= -->
         <header id="header" class="header fixed-top d-flex align-items-center">
 
@@ -464,91 +355,72 @@
 
         <main id="main" class="main">
 
-            <!--            <div class="pagetitle">
-                            <h1>Profile</h1>
-                            <nav>
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="home.jsp">Home</a></li>
-                                    <li class="breadcrumb-item">User</li>
-                                    <li class="breadcrumb-item active">Profile</li>
-                                </ol>
-                            </nav>
-                        </div>-->
-            <!-- End Page Title -->
+            <div class="pagetitle">
+                <h1>Profile</h1>
+                <nav>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="home.jsp">Home</a></li>
+                        <li class="breadcrumb-item">User</li>
+                        <li class="breadcrumb-item active">Register Author</li>
+                    </ol>
+                </nav>
+            </div><!-- End Page Title -->
 
-            <section>
-                <div class="container-fluid">
-                    <div class="container">
-                        <div class="row" style="display: flex;
-                             align-items: center;
-                             justify-content: center;">
-                            <div class="col-sm-4">
-                                <div class="card card_red text-center">
-                                    <div class="title">
-                                        <i class="fa fa-paper-plane" aria-hidden="true"></i>
-                                        <h2>Free</h2>
+            <section class="section profile">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                        <div class="card">
+
+                            <div class="card-body card-title">
+                                <h5 class="card-title">Register Author</h5>
+                                <hr>
+                                <c:if test="${sessionScope.userSession == null}">   
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <i class="bi bi-exclamation-octagon me-1"></i>
+                                        Please fill in your personal information to access features!
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                     </div>
-                                    <div class="price">
-                                        <h4><sup>$</sup>0</h4>
+                                </c:if> 
+                                <c:if test="${sessionScope.userSession != null}">
+                                    <% User u2 = (User) session.getAttribute("userSession");%>
+                                    <% if (u2.getRole().equalsIgnoreCase("Free") || u2.getRole().equalsIgnoreCase("Premium")) {%>
+                                    <div class="alert alert-warning bg-warning border-0 alert-dismissible fade show" role="alert">
+                                        If you want to be an Author, please register the form below!
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                     </div>
-                                    <div class="option">
-                                        <ul>
-                                            <li><i class="fa fa-check" aria-hidden="true"></i>Browse and search for comic series</li>
-                                            <li><i class="fa fa-check" aria-hidden="true"></i>Track reading progress</li>
-                                            <li><i class="fa fa-times" aria-hidden="true"></i>Display ads</li>
-                                            <li><i class="fa fa-times" aria-hidden="true"></i>Limited image quality</li>
-                                            <li><i class="fa fa-times" aria-hidden="true"></i>Limited access to special features</li>
-                                        </ul>
-                                    </div>
-                                    <a href="userProfile.jsp">Continue</a>
-                                </div>
+                                    <form>
+                                        <div class="row mb-3">
+                                            <label for="inputNumber" class="col-sm-2 col-form-label">Author certificate</label>
+                                            <div class="col-sm-10">
+                                                <input class="form-control" type="file" id="formFile">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <label for="inputPassword" class="col-sm-2 col-form-label">Introduction</label>
+                                            <div class="col-sm-10">
+                                                <textarea class="form-control" style="height: 100px" placeholder="Don't hesitate to introduce yourself and explain why you want to become an author!"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <label class="col-sm-2 col-form-label"></label>
+                                            <div class="col-sm-10">
+                                                <button type="submit" class="btn btn-primary">Submit Form</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <% }%>
+                                    
+                                </c:if>
+
+
                             </div>
-                            <div class="col-sm-4">
-                                <div class="card card_violet text-center">
-                                    <div class="title">
-                                        <i class="fa fa-plane" aria-hidden="true"></i>
-                                        <h2>Premium</h2>
-                                    </div>
-                                    <div class="price">
-                                        <h4><sup>$</sup>25</h4>
-                                    </div>
-                                    <div class="option">
-                                        <ul>
-                                            <li><i class="fa fa-check" aria-hidden="true"></i>Ad-free comic reading</li>
-                                            <li><i class="fa fa-check" aria-hidden="true"></i>Access to new and popular comic series (exclusive)</li>
-                                            <li><i class="fa fa-check" aria-hidden="true"></i>Higher image quality and download options</li>
-                                            <li><i class="fa fa-check" aria-hidden="true"></i>24/7 customer support</li>
-                                        </ul>
-                                    </div>
-                                    <a href="checkout.jsp">Subscribe Now</a>
-                                </div>
-                            </div>
-                            <!--                            <div class="col-sm-4">
-                                                            <div class="card card_three text-center">
-                                                                <div class="title">
-                                                                    <i class="fa fa-rocket" aria-hidden="true"></i>
-                                                                    <h2>Standart</h2>
-                                                                </div>
-                                                                <div class="price">
-                                                                    <h4><sup>$</sup>50</h4>
-                                                                </div>
-                                                                <div class="option">
-                                                                    <ul>
-                                                                        <li><i class="fa fa-check" aria-hidden="true"></i>50 GB Space</li>
-                                                                        <li><i class="fa fa-check" aria-hidden="true"></i>5 Domain Names</li>
-                                                                        <li><i class="fa fa-check" aria-hidden="true"></i>20 Emails Addresse</li>
-                                                                        <li><i class="fa fa-times" aria-hidden="true"></i>Live Support</li>
-                                                                    </ul>
-                                                                </div>
-                                                                <a href="#">Order Now</a>
-                                                            </div>
-                                                        </div>-->
                         </div>
                     </div>
                 </div>
             </section>
-        </main>
 
+        </main><!-- End #main -->
 
 
         <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
@@ -566,5 +438,7 @@
 
         <!-- Template Main JS File -->
         <script src="assetsUser/js/main.js"></script>
+
     </body>
+
 </html>

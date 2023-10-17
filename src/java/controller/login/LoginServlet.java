@@ -4,6 +4,7 @@
  */
 package controller.login;
 
+import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -12,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import model.User;
-import model.UserRegister;
+import ultils.EncryptPassword;
 
 /**
  *
@@ -70,12 +71,13 @@ public class LoginServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
+            throws ServletException, IOException {   
+        
+        UserDAO userDAO = new UserDAO();
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        HttpSession session = request.getSession();
-        
+        HttpSession mySession = request.getSession();
+
         boolean checkLoginValid = true;
 
         if (username == null || username.equals("")) {
@@ -95,42 +97,48 @@ public class LoginServlet extends HttpServlet {
 
         if (checkLoginValid) {
 
-            UserRegister userRegister = (UserRegister) session.getAttribute("userRegister");
             boolean checkLogin = true;
             PrintWriter out = response.getWriter();
-            if (userRegister != null) {
 
-                // CODE: for loop in DB to check username and passwod...
-                
-                if (userRegister.getUsername().equals(username) == false) {
-                    request.setAttribute("status", "failedUsername");
-                    checkLogin = false;
-                    request.setAttribute("valueUsername", "");
+
+            // check username in DB
+            if (userDAO.isUsernameExists(username) == false) {
+                mySession.setAttribute("status", "failedUsername");
+                checkLogin = false;
+                request.setAttribute("valueUsername", "");
+
+            } else {
+                // Next, check password of username in DB
+                EncryptPassword encryptPassword = new EncryptPassword();
+                password = encryptPassword.toSHA1(password);
+                if (userDAO.isUserExists(username, password) == false) {
+                    mySession.setAttribute("status", "failedPassword");
                     request.setAttribute("valuePassword", "");
-//                    request.getRequestDispatcher("login.jsp").forward(request, response);
-//                    return;   
-                } else {
+                    checkLogin = false;
                     request.setAttribute("valueUsername", username);
                 }
 
-                if (userRegister.getPassword().equals(password) == false) {
-                    request.setAttribute("status", "failedPassword");
-                    request.setAttribute("valuePassword", "");
-                    checkLogin = false;
-                }
-
-                if (checkLogin) {
-
-                    request.setAttribute("valueUsername", "");
-                    request.setAttribute("valuePassword", "");
-                    request.setAttribute("status", "success");
-                    request.getRequestDispatcher("userProfile.jsp").forward(request, response);
-                    return;
-                }
-
             }
-        }
 
+            if (checkLogin) {
+
+                request.setAttribute("valueUsername", "");
+                request.setAttribute("valuePassword", "");
+                request.setAttribute("errUsername", "");
+                request.setAttribute("errPassword", "");
+                request.setAttribute("status", "success");
+                
+                User userSession = userDAO.getUserByUsername(username, password);
+                mySession.setAttribute("userSession", userSession);
+
+//                    request.getRequestDispatcher("UserProfileServlet").forward(request, response);
+                request.getRequestDispatcher("userProfile.jsp").forward(request, response);
+                return;
+            }
+
+
+        }
+//        response.sendRedirect("login.jsp");
         request.getRequestDispatcher("login.jsp").forward(request, response);
 
     }

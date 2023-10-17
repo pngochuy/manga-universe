@@ -2,13 +2,14 @@
 <%@page import="model.UserRegister"%>
 <%@page import="model.User"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%
     response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
     response.setHeader("Pragma", "no-cache"); // HTTP 1.0
     response.setHeader("Expires", "0"); // Proxies
 
-    if (session.getAttribute("userRegister") == null && session.getAttribute("userSession") == null) {
+    if (session.getAttribute("userSession") == null) {
         response.sendRedirect("login.jsp");
     }
 
@@ -18,7 +19,8 @@
 <html lang="en">
 
     <head>
-        <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
         <title>Users / Profile</title>
@@ -64,12 +66,6 @@
                 <i class="bi bi-list toggle-sidebar-btn"></i>
             </div><!-- End Logo -->
 
-            <div class="search-bar">
-                <form class="search-form d-flex align-items-center" method="POST" action="#">
-                    <input type="text" name="query" placeholder="Search" title="Enter search keyword">
-                    <button type="submit" title="Search"><i class="bi bi-search"></i></button>
-                </form>
-            </div><!-- End Search Bar -->
 
             <nav class="header-nav ms-auto">
                 <ul class="d-flex align-items-center">
@@ -84,71 +80,16 @@
 
                         <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
                             <i class="bi bi-bell"></i>
-                            <span class="badge bg-primary badge-number">4</span>
+                            <span class="badge bg-primary badge-number">0</span>
                         </a><!-- End Notification Icon -->
 
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
                             <li class="dropdown-header">
-                                You have 4 new notifications
+                                You have 0 new notifications
                                 <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
                             </li>
                             <li>
                                 <hr class="dropdown-divider">
-                            </li>
-
-                            <li class="notification-item">
-                                <i class="bi bi-exclamation-circle text-warning"></i>
-                                <div>
-                                    <h4>Lorem Ipsum</h4>
-                                    <p>Quae dolorem earum veritatis oditseno</p>
-                                    <p>30 min. ago</p>
-                                </div>
-                            </li>
-
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-
-                            <li class="notification-item">
-                                <i class="bi bi-x-circle text-danger"></i>
-                                <div>
-                                    <h4>Atque rerum nesciunt</h4>
-                                    <p>Quae dolorem earum veritatis oditseno</p>
-                                    <p>1 hr. ago</p>
-                                </div>
-                            </li>
-
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-
-                            <li class="notification-item">
-                                <i class="bi bi-check-circle text-success"></i>
-                                <div>
-                                    <h4>Sit rerum fuga</h4>
-                                    <p>Quae dolorem earum veritatis oditseno</p>
-                                    <p>2 hrs. ago</p>
-                                </div>
-                            </li>
-
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-
-                            <li class="notification-item">
-                                <i class="bi bi-info-circle text-primary"></i>
-                                <div>
-                                    <h4>Dicta reprehenderit</h4>
-                                    <p>Quae dolorem earum veritatis oditseno</p>
-                                    <p>4 hrs. ago</p>
-                                </div>
-                            </li>
-
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li class="dropdown-footer">
-                                <a href="#">Show all notifications</a>
                             </li>
 
                         </ul><!-- End Notification Dropdown Items -->
@@ -158,15 +99,22 @@
 
 
                     <li class="nav-item dropdown pe-3">
-
+                        
                         <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
                             <c:if test="${userSession != null}">
                                 <img  src="${userSession.getAvatarUrl() != '' ? userSession.getAvatarUrl() : 'assetsUser/img/user_image_default.png'}"
                                       alt="Profile" class="img-fluid rounded-circle">
                             </c:if>
                             <c:if test="${userSession == null}">
-                                <img src="${valueAvatarUrl != null ? valueAvatarUrl : 'assetsUser/img/user_image_default.png'}"
-                                     alt="Profile" class="img-fluid rounded-circle">
+                                <c:if test="${sessionScope.userGooglePicture != null}">
+                                    <img src="${sessionScope.userGooglePicture}"
+                                         alt="Profile" class="img-fluid rounded-circle">
+                                </c:if>
+                                <c:if test="${sessionScope.userGooglePicture == null}">
+                                    <img src="${valueAvatarUrl != null ? valueAvatarUrl : 'assetsUser/img/user_image_default.png'}"
+                                         alt="Profile" class="img-fluid rounded-circle">
+                                </c:if>
+
                             </c:if>
 
                             <c:if test="${sessionScope.userSession != null}">
@@ -249,7 +197,7 @@
                             </li>
 
                             <li>
-                                <a class="dropdown-item d-flex align-items-center" href="pages-faq.jsp">
+                                <a class="dropdown-item d-flex align-items-center" href="needHelp.jsp">
                                     <i class="bi bi-question-circle"></i>
                                     <span>Need Help?</span>
                                 </a>
@@ -288,32 +236,64 @@
                     <a class="nav-link collapsed" href="userProfile.jsp">
                         <i class="bi bi-layout-text-window-reverse"></i><span>My Profile </span><i class="bi"></i>
                     </a>
-
                 </li>
-
+                
                 <li class="nav-item">
-                    <a class="nav-link collapsed" href="addManga.jsp">
-                        <i class="bi bi-grid"></i>
-                        <span>Add Manga</span>
+                    <a class="nav-link collapsed" href="addBlog.jsp">
+                        <i class="bi bi-journal-bookmark"></i><span>My Blog </span><i class="bi"></i>
                     </a>
-
                 </li>
-                <li class="nav-item">
 
-                    <a class="nav-link collapsed"  href="#">
-                        <i class="bi bi-menu-button-wide"></i><span>Manage Chapter</span><i class="bi bi-chevron-down ms-auto"></i>
-                    </a>
-                    <ul id="components-nav" class="nav-content">
+                <c:if test="${sessionScope.userSession != null}">
+                    <% User uCheckType = (User) session.getAttribute("userSession"); %>
+                    <% if (uCheckType.getRole().equalsIgnoreCase("Free") || uCheckType.getRole().equalsIgnoreCase("Premium")) {%>
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="registerAuthor.jsp">
+                            <i class="bi bi-person-workspace"></i>
+                            <span>Become an author</span>
+                        </a>
 
-                        <li>
-                            <a href="viewMangaList.jsp">
-                                <i class="bi bi-circle"></i><span>View Chapter List</span>
-                            </a>
-                        </li>
+                    </li>
+                    <% } else if (uCheckType.getRole().equalsIgnoreCase("Author")) {%>   
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="addManga.jsp">
+                            <i class="bi bi-grid"></i>
+                            <span>Add Manga</span>
+                        </a>
 
-                    </ul>
+                    </li>
+                    <li class="nav-item">
 
-                </li>
+                        <a class="nav-link collapsed"  href="#">
+                            <i class="bi bi-menu-button-wide"></i><span>Manage Chapter</span><i class="bi bi-chevron-down ms-auto"></i>
+                        </a>
+                        <ul id="components-nav" class="nav-content">
+
+                            <li>
+                                <a href="viewMangaList.jsp">
+                                    <i class="bi bi-circle"></i><span>View Chapter List</span>
+                                </a>
+                            </li>
+
+                        </ul>
+
+                    </li>
+
+                    <% }%>
+                </c:if>
+                <c:if test="${sessionScope.userSession == null}">
+
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="addManga.jsp">
+                            <i class="bi bi-person-workspace"></i>
+                            <span>Become an author</span>
+                        </a>
+
+                    </li>
+
+                </c:if>
+
+
 
                 <!-- End Components Nav -->
 
@@ -326,7 +306,7 @@
                 <nav>
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="home.jsp">Home</a></li>
-                        <li class="breadcrumb-item">Users</li>
+                        <li class="breadcrumb-item">User</li>
                         <li class="breadcrumb-item active">Profile</li>
                     </ol>
                 </nav>
@@ -343,8 +323,14 @@
                                          alt="Profile" class="img-fluid">
                                 </c:if>
                                 <c:if test="${userSession == null}">
-                                    <img src="${valueAvatarUrl != null ? valueAvatarUrl : 'assetsUser/img/user_image_default.png'}"
-                                         alt="Profile" class="img-fluid">
+                                    <c:if test="${sessionScope.userGooglePicture != null}">
+                                        <img src="${sessionScope.userGooglePicture}"
+                                             alt="Profile" class="img-fluid">
+                                    </c:if>
+                                    <c:if test="${sessionScope.userGooglePicture == null}">
+                                        <img src="${valueAvatarUrl != null ? valueAvatarUrl : 'assetsUser/img/user_image_default.png'}"
+                                             alt="Profile" class="img-fluid">
+                                    </c:if>
                                 </c:if>
 
                                 <c:if test="${sessionScope.userSession != null}">
@@ -396,11 +382,11 @@
                                 </ul>
                                 <div class="tab-content pt-2">
 
-                                    <div class="tab-pane fade show profile-overview" id="profile-overview">
+                                    <div class="tab-pane fade profile-overview" id="profile-overview">
                                         <h5 class="card-title">Profile Details</h5>
 
                                         <div class="row">
-                                            <div class="col-lg-3 col-md-4 label ">User Name</div>
+                                            <div class="col-lg-3 col-md-4 label ">Username</div>
                                             <div class="col-lg-9 col-md-8">
                                                 <c:if test="${sessionScope.userSession != null}">
                                                     <div>${sessionScope.userSession.getUsername()}</div>
@@ -511,20 +497,34 @@
                                                     <c:if test="${userSession != null}">
                                                         <img id="imagePreview" src="${userSession.getAvatarUrl() != '' ? userSession.getAvatarUrl() : 'assetsUser/img/user_image_default.png'}"
                                                              alt="Profile">
+
                                                     </c:if>
+                                                    <!-- <br>
+                                                    ${userSession} -->
                                                     <c:if test="${userSession == null}">
-                                                        <c:if test="${valueAvatarUrl != null}">
-                                                            <img id="imagePreview" src="${valueAvatarUrl}"
+
+                                                        <c:if test="${sessionScope.userGooglePicture != null}">
+                                                            <img id="imagePreview" src="${sessionScope.userGooglePicture}"
                                                                  alt="Profile">
                                                         </c:if>
-                                                        <c:if test="${valueAvatarUrl == null}">
-                                                            <img id="imagePreview" src="assetsUser/img/user_image_default.png"
-                                                                 alt="Profile">
+                                                        <c:if test="${sessionScope.userGooglePicture == null}">
+                                                            <c:if test="${valueAvatarUrl != null}">
+                                                                <img id="imagePreview" src="${valueAvatarUrl}"
+                                                                     alt="Profile">
+                                                            </c:if>
+                                                            <c:if test="${valueAvatarUrl == null}">
+                                                                <img id="imagePreview" src="assetsUser/img/user_image_default.png"
+                                                                     alt="Profile">
+
+                                                            </c:if>
                                                         </c:if>
+
                                                     </c:if>
 
                                                     <div class="pt-2 d-flex align-center gap-2">
-                                                        <input type="file" name="profileImage" id="profileImage" style="display: none;" accept="image/*">
+                                                        <input type="file" name="profileImage" id="profileImage" 
+                                                               style="display: none;" accept="image/*">
+
                                                         <label id="uploadButton" for="profileImage" class="btn btn-primary btn-sm" title="Upload new profile image"><i
                                                                 class="bi bi-upload text-white"></i></label>
                                                         <a href="#" class="btn btn-danger btn-sm" title="Remove my profile image" id="removeImage"><i
@@ -535,12 +535,39 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <input type="hidden" name="avatarUrl" id="avatarUrl" value="">
-                                            <!--<button type="submit" class="btn btn-primary">Save Profile</button>-->
 
+
+                                            <c:if test="${userSession != null}">
+                                                <input type="hidden" name="avatarUrl" id="avatarUrl" 
+                                                       value="${userSession.getAvatarUrl()}">
+                                            </c:if>
+                                            <br>
+
+                                            <c:if test="${userSession == null}">
+                                                <c:if test="${sessionScope.userGooglePicture != null}">
+                                                    <input type="hidden" name="avatarUrl" id="avatarUrl" 
+                                                           value="${sessionScope.userGooglePicture}">
+
+                                                </c:if>
+                                                <c:if test="${sessionScope.userGooglePicture == null}">
+                                                    <c:if test="${valueAvatarUrl != null}">
+                                                        <input type="hidden" name="avatarUrl" id="avatarUrl" 
+                                                               value="${valueAvatarUrl}">
+
+                                                    </c:if>
+                                                    <c:if test="${valueAvatarUrl == null}">
+                                                        <input type="hidden" name="avatarUrl" id="avatarUrl" 
+                                                               value="assetsUser/img/user_image_default.png">
+
+                                                    </c:if>
+                                                </c:if>
+
+                                            </c:if>
+                                            <input type="hidden" name="avatarUrl" id="avatarUrl" 
+                                                   value="${sessionScope.userGooglePicture != null ? sessionScope.userGooglePicture : ''}">
                                             <div class="row mb-3">
-                                                <label for="username" class="col-md-4 col-lg-3 col-form-label">User Name</label>
-                                                <div class="col-md-8 col-lg-9">
+                                                <label for="username" class="col-md-4 col-lg-3 col-form-label">Username</label>
+                                                <div class="col-md-8 col-lg-9"> 
 
                                                     <c:if test="${userSession != null}">
                                                         <input name="username" type="text" class="form-control" id="username" 
@@ -548,8 +575,9 @@
                                                     </c:if>
                                                     <c:if test="${userSession == null}">
                                                         <input name="username" type="text" class="form-control" id="username" 
-                                                               value="${valueUsername != null ? valueUsername : userRegister.getUsername()}">
+                                                               value="${valueUserName != null ? valueUserName : userRegister.getUsername()}">
                                                     </c:if>
+
                                                     <c:if test="${errUsername != null}">
                                                         <small class="small" style="color: red;">${errUsername}</small> 
                                                     </c:if>
@@ -617,7 +645,7 @@
                                             <div class="row mb-3">
                                                 <label for="gender" class="col-md-4 col-lg-3 col-form-label">Gender</label>
                                                 <div class="col-md-8 col-lg-9">
-                                                    <select name="gender" class="form-select" id="validationCustom04" required>
+                                                    <select name="gender" class="form-select" id="validationCustom04">
                                                         <option ${userSession == null ? 'selected' : ''} disabled value="">Choose...</option>
                                                         <option ${userSession.getGender().equals("Male") ? 'selected' : ''} value="true">Male</option>
                                                         <option ${userSession.getGender().equals("Female") ? 'selected' : ''} value="false">Female</option>
@@ -676,19 +704,6 @@
                                     </div>
 
                                     <script>
-//                                        fetch('https://api.multiavatar.com/' + 1)
-//                                                .then(res => res.text())
-//                                                .then(svg => {
-//                                                    let element = document.getElementById('divSvgContainer');
-//                                                    let svgElement = new DOMParser().parseFromString(svg, 'image/svg+xml').querySelector('svg');
-//                                                    let firstChild = element.firstChild;
-//
-//                                                    if (firstChild) {
-//                                                        element.insertBefore(svgElement, firstChild);
-//                                                    } else {
-//                                                        element.appendChild(svgElement);
-//                                                    }
-//                                                });
 
                                         document.addEventListener("DOMContentLoaded", function () {
                                             const fileInput = document.getElementById("profileImage");
@@ -703,7 +718,6 @@
                                             let isImageSelected = false;
 
                                             uploadButton.addEventListener("click", function () {
-//                                                fileInput.click();
                                                 fileInput.addEventListener("change", function (changeEvent) {
                                                     updateSubmitButtonState();
                                                     updateSpinnerUploadState();
@@ -765,17 +779,16 @@
                                     </script>
 
                                     <div class="tab-pane fade pt-3" id="profile-settings">
-
+                                        <!--tab-pane fade show active profile-edit pt-3-->
                                         <!--  Settings Form -->
                                         <form>
-
                                             <div class="row mb-3">
                                                 <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Email Notifications</label>
                                                 <div class="col-md-8 col-lg-9">
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="checkbox" id="newProducts" checked>
                                                         <label class="form-check-label" for="newProducts">
-                                                            Information on new products and services
+                                                            Information on new manga and services
                                                         </label>
                                                     </div>
                                                     <div class="form-check">
@@ -808,13 +821,26 @@
                                                 <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current Password</label>
                                                 <div class="col-md-8 col-lg-9">
                                                     <input name="password" type="password" class="form-control" id="currentPassword">
+                                                    <c:if test="${errPassword != null}">
+                                                        <small class="small" style="color: red;">${errPassword}</small> 
+                                                    </c:if>
+                                                    <%
+                                                        session.removeAttribute("errPassword");
+                                                    %>
                                                 </div>
+
                                             </div>
 
                                             <div class="row mb-3">
                                                 <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">New Password</label>
                                                 <div class="col-md-8 col-lg-9">
                                                     <input name="newpassword" type="password" class="form-control" id="newPassword">
+                                                    <c:if test="${errNewPassword != null}">
+                                                        <small class="small" style="color: red;">${errNewPassword}</small> 
+                                                    </c:if>
+                                                    <%
+                                                        session.removeAttribute("errNewPassword");
+                                                    %>
                                                 </div>
                                             </div>
 
@@ -822,12 +848,23 @@
                                                 <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Re-enter New Password</label>
                                                 <div class="col-md-8 col-lg-9">
                                                     <input name="renewpassword" type="password" class="form-control" id="renewPassword">
+                                                    <c:if test="${errReNewPassword != null}">
+                                                        <small class="small" style="color: red;">${errReNewPassword}</small> 
+                                                    </c:if>
+                                                    <%
+                                                        session.removeAttribute("errReNewPassword");
+                                                    %>
                                                 </div>
                                             </div>
 
                                             <div class="text-center">
                                                 <button type="submit" class="btn btn-primary">Change Password</button>
+                                                <c:if test="${messageChangePassword != null}">
+                                                    <br/>
+                                                    <small class="small" style="color: green;">${messageChangePassword}</small> 
+                                                </c:if>
                                             </div>
+
                                         </form><!-- End Change Password Form -->
 
                                     </div>

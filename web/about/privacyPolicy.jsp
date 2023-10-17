@@ -1,5 +1,6 @@
 <%@page import="model.User"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -145,14 +146,15 @@
 
                         <c:if test="${userSession != null}">
                             <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-                                <img src="assetsMain/img/b91392ef3b4ad7849c8d8cdbe713872a1969caa8r1-496-537v2_uhq.jpg"
-                                     alt="Profile" class="rounded-circle">
-                                <c:if test="${sessionScope.userSession != null}">
-                                    <span class="d-none d-md-block dropdown-toggle ps-2" style="color: white">${sessionScope.userSession.getUsername()}</span>
-                                </c:if>
-                                <c:if test="${sessionScope.userSession == null}">
-                                    <span class="d-none d-md-block dropdown-toggle ps-2" style="color: white">${sessionScope.userRegister.getUsername()}</span>
-                                </c:if>
+                                <% User u2 = (User) session.getAttribute("userSession");%>
+                                <% if (!u2.getAvatarUrl().isEmpty()) {%>
+                                <img  src="<%= u2.getAvatarUrl()%>"
+                                      alt="Profile" class="img-fluid rounded-circle">
+                                <% } else {%>
+                                <i class="bi bi-person-circle" style="font-size: 30px; color: white"></i>
+                                <% }%>
+
+                                <span class="d-none d-md-block dropdown-toggle ps-2">${sessionScope.userSession.getUsername()}</span>
                             </a><!-- End Profile Iamge Icon -->
                             <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                                 <li class="dropdown-header">
@@ -178,7 +180,7 @@
                                 </li>
 
                                 <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="userProfile.jsp">
+                                    <a class="dropdown-item d-flex align-items-center" href="../userProfile.jsp">
                                         <i class="bi bi-person"></i>
                                         <span style="color: black;">My Profile</span>
                                     </a>
@@ -187,8 +189,23 @@
                                     <hr class="dropdown-divider">
                                 </li>
 
+                                <c:if test="${sessionScope.userSession != null}">
+                                    <%User u3 = (User) session.getAttribute("userSession");%>
+                                    <% if (u3.getRole().equalsIgnoreCase("Free")) {%>
+                                    <li>
+                                        <a class="dropdown-item d-flex align-items-center" href="../upgradePremium.jsp">
+                                            <i class="bi bi-stars"></i>
+                                            <span style="color: black;">Upgrade Premium</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <% }%>
+                                </c:if>
+
                                 <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="userProfile.jsp">
+                                    <a class="dropdown-item d-flex align-items-center" href="../userProfile.jsp">
                                         <i class="bi bi-gear"></i>
                                         <span style="color: black;">Account Settings</span>
                                     </a>
@@ -198,7 +215,7 @@
                                 </li>
 
                                 <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="pages-faq.jsp">
+                                    <a class="dropdown-item d-flex align-items-center" href="../needHelp.jsp">
                                         <i class="bi bi-question-circle"></i>
                                         <span style="color: black;">Need Help?</span>
                                     </a>
@@ -208,7 +225,7 @@
                                 </li>
 
                                 <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <a class="dropdown-item d-flex align-items-center" href="LogoutServlet">
                                         <i class="bi bi-box-arrow-right"></i>
                                         <span style="color: black;">Sign Out</span>
                                     </a>
@@ -231,7 +248,7 @@
                                 </li>
 
                                 <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="pages-faq.jsp">
+                                    <a class="dropdown-item d-flex align-items-center" href="../needHelp.jsp">
                                         <i class="bi bi-question-circle"></i>
                                         <span style="color: black;">Need Help?</span>
                                     </a>
@@ -365,7 +382,7 @@
 
                 </li><!-- End Components Nav -->
                 <p style="color: white;">v2023.9.20<br />
-                    � MangaUniverse 2023</p>
+                    © MangaUniverse 2023</p>
 
 
         </aside><!-- End Sidebar-->
@@ -375,7 +392,7 @@
                 <div class="row">
                     <section class="policy content sec-mar">
                         <div class="container">
-                            <h6>Privacy policy last updated on – 12 December 2023</h6>
+                            <h6>Privacy policy last updated on â 12 December 2023</h6>
                             <hr>
                             <div class="row">
                                 <div class="col-lg-6">

@@ -1,14 +1,18 @@
 <%@page import="model.User"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="model.UserRegister"%>
 <%
     String tokenVerifyEmail = request.getParameter("tokenVerifyEmail");
     String tokenVerify = (String) session.getAttribute("tokenVerify");
+
     if (tokenVerifyEmail != null && tokenVerifyEmail.equals(tokenVerify)) {
 //        response.sendRedirect("userProfile.jsp");
-        response.sendRedirect("/MangaUniverse/UserProfileServlet");
-    }
+        session.removeAttribute("tokenVerify");
+        response.sendRedirect("/MangaUniverse/LoginServlet");
 
+    }
+    
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -36,8 +40,13 @@
 
     </head>
     <body>
-
-        <input type="hidden" id="status" value="<%= request.getAttribute("status")%>">
+        <c:if test="${status != null}">
+            <input type="hidden" id="status" value="${status}">
+            <%
+                session.removeAttribute("status");
+            %>
+        </c:if>
+            
 
 
         <% boolean redirect = true;%>
@@ -49,6 +58,7 @@
                     <div class="signup-content">
                         <div class="signup-form">
                             <h2 class="form-title">Sign up</h2>
+
                             <c:if test="${messageVerify != null}">
                                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                                     <i class="bi bi-check-circle me-1"></i>
@@ -121,6 +131,16 @@
                                            class="form-submit" value="Register" />
                                 </div>
                             </form>
+                            <div class="col-12 mt-2">
+                                <span class="social-label">Or sign up with</span>
+                                <ul class="socials d-inline-block">
+                                    <li>
+                                        <a href="https://accounts.google.com/o/oauth2/auth?scope=profile email phone&redirect_uri=http://localhost:8080/MangaUniverse/RegisterGoogleServlet&response_type=code&client_id=727306614937-6mj4mhufjq06aqns6el83e2fnegocjbn.apps.googleusercontent.com&approval_prompt=force">
+                                            <i class="display-flex-center zmdi zmdi-google"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                         <div class="signup-image">
                             <figure>
@@ -130,6 +150,7 @@
                                 member</a>
                         </div>
                     </div>
+
                 </div>
             </section>
 
@@ -147,6 +168,10 @@
             if (status == "success") {
                 swal("Congrats", "Account Created Successfully", "success");
             }
+            if (status == "failedRegisterGoogle") {
+                swal("Sorry", "Your email is already register!", "error");
+            }
+
             //------------------------------------------------------
             const togglePassword = document.querySelector("#togglePassword");
             const password = document.querySelector("#password");
