@@ -1,3 +1,6 @@
+<%@page import="java.util.Date"%>
+<%@page import="model.Manga"%>
+<%@page import="dal.MangaDAO"%>
 <%@page import="model.User"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -425,18 +428,43 @@
                     <!-- >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
                                         breadcrumb part end
         >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+
+                    <!-- Take Manga from hom.jsp -->
+                    <%
+                        int id = Integer.parseInt(request.getParameter("id"));
+                        String title = "";
+                        String description = "";
+                        Integer userID = 0;
+                        Date createdAt = null;
+                        Boolean isCopyright = null;
+                        Boolean isFree = null;
+                        String coverImage = "";
+                        MangaDAO manageManga = new MangaDAO();
+                        for (Manga manga : manageManga.getAllMangas()) {
+                            if (id == manga.getMangaID()) {
+                                coverImage = manga.getCoverImage();
+                                title = manga.getTitle();
+                                description = manga.getDescription();
+                                userID = manga.getUserID();
+                                createdAt = manga.getCreateAt();
+                                isCopyright = manga.isIsCopyRight();
+                                isFree = manga.isIsFree();
+                            }
+                        }
+                    %>
+
                     <section id="manga_single_page" class="pt-50 pb-20">
                         <div class="container-manga-single-page">
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="manga_name text-start">
-                                        <h2>The Boy in the All-Girls School</h2>
+                                        <h2><%= title%></h2>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-lg-3">
-                                    <img class="w-100 img-fluid" src="assetsMain/img/manga.jpg" alt="">
+                                    <img class="w-100 img-fluid" src="<%= coverImage%>" alt="">
                                 </div>
                                 <div class="col-lg-6">
                                     <form class="form-1 mb-3 mt-3">
@@ -490,16 +518,19 @@
                                                 <p>Boy in A Girls' School ; Nuzi Xueyuan de Nansheng</p>
                                             </li>
                                             <li class="d-flex flex-wrap">
-                                                <h6>Genre(s) </h6>
+                                                <h6>Genre(s)</h6>
                                                 <p>
-                                                    <a href="genres.jsp">Comedy</a>,
-                                                    <a href="genres.jsp">Harem</a>,
-                                                    <a href="genres.jsp">Romance</a>,
-                                                    <a href="genres.jsp">School life</a>,
-                                                    <a href="genres.jsp">Shounen</a>,
-                                                    <a href="genres.jsp">Slice of life</a>
+                                                    <c:if test="${cateL != null}">
+                                                        
+                                                        <c:forEach var="t" items="${cateL}" varStatus="loop">
+                                                            <a href="genres.jsp">${t.getType()}</a>,
+                                                        </c:forEach>
+                                                    </c:if>
+
+                                                 
                                                 </p>
                                             </li>
+
                                             <li class="d-flex flex-wrap">
                                                 <h6>Type </h6>
                                                 <p>Author(s) Huy Handsome </p>
@@ -543,13 +574,9 @@
                                         <h3>Summary</h3>
                                     </div>
                                     <div class="manga_info">
-                                        <p>In an all-girls school full of jaw-dropping beauties, a male student suddenly
-                                            transfers in!!!
-                                            Perhaps in the eyes of others, this would be a dream-like paradise, but in
-                                            reality, the
-                                            future is completely unimaginable <span id="dots"
-                                                                                    style="display: inline;">...</span><span id="more"
-                                                                                    style="display: none;">erisque enim
+                                        <p><%= description%> 
+                                            <span id="dots"style="display: inline;">...</span>
+                                            <span id="more"style="display: none;">erisque enim
                                                 ligula venenatis dolor. Maecenas nisl est, ultrices nec
                                                 congue eget, auctor vitae massa. Fusce luctus vestibulum augue ut aliquet.
                                                 Nunc
@@ -582,12 +609,17 @@
                                             <h3>LATEST MANGA RELEASES</h3>
                                         </div>
                                         <ul class="chapter mb-3">
-                                            <li>
-                                                <a href="chapter/chapter.jsp"
-                                                   class="d-flex flex-wrap justify-content-between">
-                                                    <span>Chapter 0 - Introduction</span><span>07/19/2020 </span>
-                                                </a>
-                                            </li>
+                                            <!<!-- add Chapter nè -->  
+                                            <c:forEach var="c" items="${listC}" varStatus="loop"> 
+
+                                                <li>
+                                                    <a href="chapter/chapter.jsp?cid=${c.chapterID}"
+                                                       class="d-flex flex-wrap justify-content-between">
+                                                        <span>Chapter ${loop.index + 1} - ${c.title}</span><span>07/19/2020 </span>
+                                                    </a>
+                                                </li>
+
+                                            </c:forEach>
                                             <li>
                                                 <a href="chapter/chapter.jsp"
                                                    class="d-flex flex-wrap justify-content-between">

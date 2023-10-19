@@ -1,7 +1,9 @@
 <%@page import="model.User"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-
+<%@page import="model.Manga" %>
+<%@page import="dal.MangaDAO" %>
+<%@page import="java.math.BigDecimal"%>
 <%
     // session.removeAttribute("tokenVerify");
     String tokenVerify = (String) session.getAttribute("tokenVerify");
@@ -455,16 +457,19 @@
 
                             </div>
                         </div>
+                        
+                       
                         <div class="mb-5">
                             <div class="title">
                                 <h2 class="fw-bold">Latest Updates <a href="#"><i class="bi bi-arrow-right"
                                                                                   style="display: block; float: right;"></i></a></h2>
                                 <div class="row mt-2">
+                                  <c:forEach var="i" items="${listM}" varStatus="loop"> 
                                     <div class="col-lg-2 col-md-4 col-sm-6">
-                                        <a href="mangaSinglePage.jsp">
+                                        <a href="mangaSPServlet?id=${i.mangaID}">
                                             <div class="product-card grow-box">
                                                 <div class="img-con set-bg"
-                                                     style="background-image: url('https://res.cloudinary.com/djytvqlon/image/upload/v1695319321/igzzfbqeajlmm4os2vpv.jpg');"
+                                                     style="background-image: url('${i.coverImage}');"
                                                      data-setbg="assetsMain/img/manga.jpg">
                                                     <div class="ep">18/20</div>
                                                     <div class="comment"><i class="bi bi-chat"></i> 21</div>
@@ -475,31 +480,12 @@
                                                         <li>Active</li>
                                                         <li>Movie</li>
                                                     </ul>
-                                                    <h5>Kaguya-sama wa Kokurasetai: First Kiss wa Owaranai</h5>
+                                                    <h5>${i.title}</h5>
                                                 </div>
                                             </div>
                                         </a>
                                     </div>
-                                    <div class="col-lg-2 col-md-4 col-sm-6">
-                                        <a href="mangaSinglePage.jsp">
-                                            <div class="product-card grow-box">
-                                                <div class="img-con set-bg"
-                                                     style="background-image: url('assetsMain/img/manga.jpg');"
-                                                     data-setbg="assetsMain/img/manga.jpg">
-                                                    <div class="ep">18/20</div>
-                                                    <div class="comment"><i class="bi bi-chat"></i> 21</div>
-                                                    <div class="view"><i class="bi bi-eye"></i> 7141</div>
-                                                </div>
-                                                <div class="product-card-con">
-                                                    <ul>
-                                                        <li>Active</li>
-                                                        <li>Movie</li>
-                                                    </ul>
-                                                    <h5>Kaguya-sama wa Kokurasetai: First Kiss wa Owaranai</h5>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
+                                  </c:forEach> 
                                     <div class="col-lg-2 col-md-4 col-sm-6">
                                         <a href="mangaSinglePage.jsp">
                                             <div class="product-card grow-box">
@@ -540,47 +526,7 @@
                                             </div>
                                         </a>
                                     </div>
-                                    <div class="col-lg-2 col-md-4 col-sm-6">
-                                        <a href="mangaSinglePage.jsp">
-                                            <div class="product-card grow-box">
-                                                <div class="img-con set-bg"
-                                                     style="background-image: url('assetsMain/img/manga.jpg');"
-                                                     data-setbg="assetsMain/img/manga.jpg">
-                                                    <div class="ep">18/20</div>
-                                                    <div class="comment"><i class="bi bi-chat"></i> 21</div>
-                                                    <div class="view"><i class="bi bi-eye"></i> 7141</div>
-                                                </div>
-                                                <div class="product-card-con">
-                                                    <ul>
-                                                        <li>Active</li>
-                                                        <li>Movie</li>
-                                                    </ul>
-                                                    <h5>Kaguya-sama wa Kokurasetai: First Kiss wa Owaranai</h5>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="col-lg-2 col-md-4 col-sm-6">
-                                        <a href="mangaSinglePage.jsp">
-                                            <div class="product-card grow-box">
-                                                <div class="img-con set-bg"
-                                                     style="background-image: url('assetsMain/img/manga.jpg');"
-                                                     data-setbg="assetsMain/img/manga.jpg">
-                                                    <div class="ep">18/20</div>
-                                                    <div class="comment"><i class="bi bi-chat"></i> 21</div>
-                                                    <div class="view"><i class="bi bi-eye"></i> 7141</div>
-                                                </div>
-                                                <div class="product-card-con">
-                                                    <ul>
-                                                        <li>Active</li>
-                                                        <li>Movie</li>
-                                                    </ul>
-                                                    <h5>Kaguya-sama wa Kokurasetai: First Kiss wa Owaranai</h5>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-
+                                    
 
                                 </div>
                             </div>
