@@ -158,14 +158,14 @@ public class UserProfileServlet extends HttpServlet {
 
 //            User userSession = new User(avatarUrl, username, password, name,
 //                    email, phone, gender, role, expiredTime, coinQuantity, createAt);
-            User user = new User(avatarUrl, username, userSession.getPassword(), name, 
+            User user = new User(userSession.getUserId(), avatarUrl, username, userSession.getPassword(), name, 
                     userSession.getEmail(), phone, gender, userSession.getRole(), 
                     userSession.getExpiredTime(), userSession.getCoinQuantity(), 
                     userSession.getCreateAt());
             
-            int userId = userDAO.getUserId(userSession.getUsername(), userSession.getPassword(), 
-                    userSession.getEmail());
-            userDAO.update(user, userId);
+//            int userId = userDAO.getUserId(userSession.getUsername(), userSession.getPassword(), 
+//                    userSession.getEmail());
+            userDAO.update(user);
             
             mySession.setAttribute("userSession", user);
             

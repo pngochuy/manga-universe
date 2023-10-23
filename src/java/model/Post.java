@@ -12,6 +12,8 @@ import java.time.format.DateTimeFormatter;
  * @author PC
  */
 public class Post {
+
+    private int postId;
     private int userId;
     private String imgUrl;
     private String title;
@@ -27,6 +29,23 @@ public class Post {
         this.title = title;
         this.description = description;
         this.createAt = createAt;
+    }
+
+    public Post(int postId, int userId, String imgUrl, String title, String description, LocalDateTime createAt) {
+        this.postId = postId;
+        this.userId = userId;
+        this.imgUrl = imgUrl;
+        this.title = title;
+        this.description = description;
+        this.createAt = createAt;
+    }
+
+    public int getPostId() {
+        return postId;
+    }
+
+    public void setPostId(int postId) {
+        this.postId = postId;
     }
 
     public int getUserId() {
@@ -64,7 +83,7 @@ public class Post {
     public LocalDateTime getCreateAt() {
         return createAt;
     }
-    
+
     public String getCreateAtFormat() {
         return createAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
@@ -75,8 +94,9 @@ public class Post {
 
     @Override
     public String toString() {
-        return "Blog{" + "userId=" + userId + ", imgUrl=" + imgUrl + ", title=" + title + ", description=" + description + ", createAt=" + createAt + '}';
+        return "Post{" + "postId=" + postId + ", userId=" + userId + ", imgUrl=" + imgUrl + ", title=" + title + ", description=" + description + ", createAt=" + createAt + '}';
     }
+
     
-    
+
 }

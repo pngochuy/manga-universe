@@ -2979,7 +2979,7 @@ div#ad_position_box .card {
   border-radius: 5px;
 }
 .blog img {
-    border-radius: 10px;
+    /*border-radius: 10px;*/
     max-width: 100%;
     height: auto;
     vertical-align: middle;

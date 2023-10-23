@@ -13,6 +13,7 @@ import java.time.format.DateTimeFormatter;
  */
 public class User {
     
+    private int userId;
     private String avatarUrl;
     private String username; // 1
     private String password; // 2
@@ -27,11 +28,29 @@ public class User {
 
     public User() {
     }
-//    LocalDateTime now = LocalDateTime.now();
-//    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
-//    String formattedDateTime = now.format(formatter);
-//    LocalDateTime dateCreated = LocalDateTime.parse(formattedDateTime, formatter);
+    
+    public User(int userId, String avatarUrl, String username) {
+        this.userId = userId;
+        this.avatarUrl = avatarUrl;
+        this.username = username;
+    }
 
+    public User(int userId, String avatarUrl, String username, String password, String name, String email, String phone, boolean gender, String role, LocalDateTime expiredTime, int coinQuantity, LocalDateTime createAt) {
+        this.userId = userId;
+        this.avatarUrl = avatarUrl;
+        this.username = username;
+        this.password = password;
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.gender = gender;
+        this.role = role;
+        this.expiredTime = expiredTime;
+        this.coinQuantity = coinQuantity;
+        this.createAt = createAt;
+    }
+
+    
     public User(String avatarUrl, String username, String password, String name, String email, String phone, boolean gender, String role, LocalDateTime expiredTime, int coinQuantity, LocalDateTime createAt) {
         this.avatarUrl = avatarUrl;
         this.username = username;
@@ -44,6 +63,14 @@ public class User {
         this.expiredTime = expiredTime;
         this.coinQuantity = coinQuantity;
         this.createAt = createAt;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
   
@@ -153,10 +180,8 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" + "avatarUrl=" + avatarUrl + ", username=" + username + ", password=" + password + ", name=" + name + ", email=" + email + ", phone=" + phone + ", gender=" + gender + ", role=" + role + ", expiredTime=" + expiredTime + ", coinQuantity=" + coinQuantity + ", createAt=" + createAt + '}';
+        return "User{" + "userId=" + userId + ", avatarUrl=" + avatarUrl + ", username=" + username + ", password=" + password + ", name=" + name + ", email=" + email + ", phone=" + phone + ", gender=" + gender + ", role=" + role + ", expiredTime=" + expiredTime + ", coinQuantity=" + coinQuantity + ", createAt=" + createAt + '}';
     }
 
     
-   
-
 }

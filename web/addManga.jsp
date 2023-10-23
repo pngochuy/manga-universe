@@ -1,6 +1,20 @@
 <%@page import="model.User"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page language="java" contentType="text/html" pageEncoding="UTF-8"%>
+
+<%
+
+    if (session.getAttribute("userSession") == null) {
+        response.sendRedirect("login.jsp");
+    } else {
+        User userSession = (User) session.getAttribute("userSession");
+        String author = userSession.getUsername();
+        request.setAttribute("authorName", author);
+    }
+
+
+%>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -39,304 +53,8 @@
 
     <body>
 
-        <!-- ======= Header ======= -->
-        <header id="header" class="header fixed-top d-flex align-items-center">
-
-            <div class="d-flex align-items-center justify-content-between">
-                <a href="home.jsp" class="logo d-flex align-items-center">
-                    <img src="assetsUser/img/logo.png" alt="" width="100">
-                    <span class="d-none d-lg-block">MangaUniverse</span>
-                </a>
-                <i class="bi bi-list toggle-sidebar-btn"></i>
-            </div><!-- End Logo -->
-
-            <div class="search-bar">
-                <form class="search-form d-flex align-items-center" method="POST" action="#">
-                    <input type="text" name="query" placeholder="Search" title="Enter search keyword">
-                    <button type="submit" title="Search"><i class="bi bi-search"></i></button>
-                </form>
-            </div><!-- End Search Bar -->
-
-            <nav class="header-nav ms-auto">
-                <ul class="d-flex align-items-center">
-
-                    <li class="nav-item d-block d-lg-none">
-                        <a class="nav-link nav-icon search-bar-toggle " href="#">
-                            <i class="bi bi-search"></i>
-                        </a>
-                    </li><!-- End Search Icon-->
-
-                    <li class="nav-item dropdown">
-
-                        <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-                            <i class="bi bi-bell"></i>
-                            <span class="badge bg-primary badge-number">4</span>
-                        </a><!-- End Notification Icon -->
-
-                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
-                            <li class="dropdown-header">
-                                You have 4 new notifications
-                                <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-
-                            <li class="notification-item">
-                                <i class="bi bi-exclamation-circle text-warning"></i>
-                                <div>
-                                    <h4>Lorem Ipsum</h4>
-                                    <p>Quae dolorem earum veritatis oditseno</p>
-                                    <p>30 min. ago</p>
-                                </div>
-                            </li>
-
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-
-                            <li class="notification-item">
-                                <i class="bi bi-x-circle text-danger"></i>
-                                <div>
-                                    <h4>Atque rerum nesciunt</h4>
-                                    <p>Quae dolorem earum veritatis oditseno</p>
-                                    <p>1 hr. ago</p>
-                                </div>
-                            </li>
-
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-
-                            <li class="notification-item">
-                                <i class="bi bi-check-circle text-success"></i>
-                                <div>
-                                    <h4>Sit rerum fuga</h4>
-                                    <p>Quae dolorem earum veritatis oditseno</p>
-                                    <p>2 hrs. ago</p>
-                                </div>
-                            </li>
-
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-
-                            <li class="notification-item">
-                                <i class="bi bi-info-circle text-primary"></i>
-                                <div>
-                                    <h4>Dicta reprehenderit</h4>
-                                    <p>Quae dolorem earum veritatis oditseno</p>
-                                    <p>4 hrs. ago</p>
-                                </div>
-                            </li>
-
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li class="dropdown-footer">
-                                <a href="#">Show all notifications</a>
-                            </li>
-
-                        </ul><!-- End Notification Dropdown Items -->
-
-                    </li><!-- End Notification Nav -->
-
-
-
-                    <li class="nav-item dropdown pe-3">
-
-                        <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-                            <c:if test="${userSession != null}">
-                                <img  src="${userSession.getAvatarUrl() != '' ? userSession.getAvatarUrl() : 'assetsUser/img/user_image_default.png'}"
-                                      alt="Profile" class="img-fluid rounded-circle">
-                            </c:if>
-                            <c:if test="${userSession == null}">
-                                <c:if test="${sessionScope.userGooglePicture != null}">
-                                    <img src="${sessionScope.userGooglePicture}"
-                                         alt="Profile" class="img-fluid rounded-circle">
-                                </c:if>
-                                <c:if test="${sessionScope.userGooglePicture == null}">
-                                    <img src="${valueAvatarUrl != null ? valueAvatarUrl : 'assetsUser/img/user_image_default.png'}"
-                                         alt="Profile" class="img-fluid rounded-circle">
-                                </c:if>
-
-                            </c:if>
-
-                            <c:if test="${sessionScope.userSession != null}">
-                                <span class="d-none d-md-block dropdown-toggle ps-2">${sessionScope.userSession.getUsername()}</span>
-                            </c:if>
-                            <c:if test="${sessionScope.userSession == null}">
-                                <span class="d-none d-md-block dropdown-toggle ps-2">${sessionScope.userRegister.getUsername()}</span>
-                            </c:if>
-
-                        </a><!-- End Profile Image Icon -->
-
-                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-                            <li class="dropdown-header">
-                                <c:if test="${sessionScope.userSession != null}">
-                                    <% User user = (User) session.getAttribute("userSession");%>
-                                    <h6>${sessionScope.userSession.getUsername()}</h6>
-                                    <% if (user.getRole().equalsIgnoreCase("Free")) {%>
-                                    <span>${sessionScope.userSession.getRole()}</span>
-                                    <% } else if (user.getRole().equalsIgnoreCase("Premium")) {%>
-                                    <span>${sessionScope.userSession.getRole()} <i class="bi bi-star-fill" style="color: gold;"></i></span>
-                                        <% } else if (user.getRole().equalsIgnoreCase("Author")) {%>   
-                                    <span>${sessionScope.userSession.getRole()} <i class="bi bi-star-fill" style="color: greenyellow;"></i></span>
-                                        <% }%>
-                                    </c:if>
-                                    <c:if test="${sessionScope.userSession == null}">
-                                    <h6>${sessionScope.userRegister.getUsername()}</h6>
-                                    <span>Free</span>
-                                </c:if>
-
-
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-
-                            <li>
-                                <a class="dropdown-item d-flex align-items-center" href="userProfile.jsp">
-                                    <i class="bi bi-person"></i>
-                                    <span>My Profile</span>
-                                </a>
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-
-                            <c:if test="${sessionScope.userSession != null}">
-                                <%User u = (User) session.getAttribute("userSession");%>
-                                <% if (u.getRole().equalsIgnoreCase("Free")) {%>
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="upgradePremium.jsp">
-                                        <i class="bi bi-stars"></i>
-                                        <span>Upgrade Premium</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <% } %>
-                            </c:if>
-                            <c:if test="${sessionScope.userSession == null}">
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="upgradePremium.jsp">
-                                        <i class="bi bi-stars"></i>
-                                        <span>Upgrade Premium</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                            </c:if>
-
-                            <li>
-                                <a class="dropdown-item d-flex align-items-center" href="userProfile.jsp">
-                                    <i class="bi bi-gear"></i>
-                                    <span>Account Settings</span>
-                                </a>
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-
-                            <li>
-                                <a class="dropdown-item d-flex align-items-center" href="needHelp.jsp">
-                                    <i class="bi bi-question-circle"></i>
-                                    <span>Need Help?</span>
-                                </a>
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-
-                            <li>
-                                <a class="dropdown-item d-flex align-items-center" href="LogoutServlet">
-                                    <i class="bi bi-box-arrow-right"></i>
-                                    <span>Sign Out</span>
-                                </a>
-                            </li>
-
-                        </ul><!-- End Profile Dropdown Items -->
-                    </li><!-- End Profile Nav -->
-
-                </ul>
-            </nav><!-- End Icons Navigation -->
-
-        </header><!-- End Header -->
-
-        <!-- ======= Sidebar ======= -->
-        <aside id="sidebar" class="sidebar">
-
-            <ul class="sidebar-nav" id="sidebar-nav">
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="home.jsp">
-                        <i class="bi bi-grid"></i>
-                        <span>Homepage</span>
-                    </a> 
-
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="userProfile.jsp">
-                        <i class="bi bi-layout-text-window-reverse"></i><span>My Profile </span><i class="bi"></i>
-                    </a>
-                </li>
-
-                <c:if test="${sessionScope.userSession != null}">
-                    <% User uCheckType = (User) session.getAttribute("userSession"); %>
-                    <% if (uCheckType.getRole().equalsIgnoreCase("Free") || uCheckType.getRole().equalsIgnoreCase("Premium")) {%>
-                    <li class="nav-item">
-                        <a class="nav-link collapsed" href="registerAuthor.jsp">
-                            <i class="bi bi-person-workspace"></i>
-                            <span>Become an author</span>
-                        </a>
-
-                    </li>
-                    <% } else if (uCheckType.getRole().equalsIgnoreCase("Author")) {%>   
-                    <li class="nav-item">
-                        <a class="nav-link collapsed" href="addManga.jsp">
-                            <i class="bi bi-grid"></i>
-                            <span>Add Manga</span>
-                        </a>
-
-                    </li>
-                    <li class="nav-item">
-
-                        <a class="nav-link collapsed"  href="#">
-                            <i class="bi bi-menu-button-wide"></i><span>Manage Chapter</span><i class="bi bi-chevron-down ms-auto"></i>
-                        </a>
-                        <ul id="components-nav" class="nav-content">
-
-                            <li>
-                                <a href="viewMangaList.jsp">
-                                    <i class="bi bi-circle"></i><span>View Chapter List</span>
-                                </a>
-                            </li>
-
-                        </ul>
-
-                    </li>
-
-                    <% }%>
-                </c:if>
-                <c:if test="${sessionScope.userSession == null}">
-
-                    <li class="nav-item">
-                        <a class="nav-link collapsed" href="addManga.jsp">
-                            <i class="bi bi-person-workspace"></i>
-                            <span>Become an author</span>
-                        </a>
-
-                    </li>
-
-                </c:if>
-
-
-
-                <!-- End Components Nav -->
-
-        </aside><!-- End Sidebar-->
+        <%@include file="layouts/layoutUser/headerUser.jsp" %> 
+        <%@include file="layouts/layoutUser/sidebarUser.jsp" %>
 
         <main id="main" class="main">
 
@@ -359,7 +77,9 @@
 
                             <div class="card-body card-title">
                                 <h5 class="card-title">Your New Manga</h5>
+
                                 <hr>
+
                                 <c:if test="${sessionScope.userSession == null}">   
                                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                         <i class="bi bi-exclamation-octagon me-1"></i>
@@ -375,89 +95,110 @@
                                         an author!
                                         <!--<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>-->
                                     </div>
-                                    
+
                                     <% }%>
                                     <% if (u2.getRole().equalsIgnoreCase("Author")) {%>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-sm-3 text-right">
-                                                <label class="control-label" for="Name">Name</label>
-                                                <span class="text-error">(*)</span>
-                                            </div>
-                                            <div class="col-sm-9">
-                                                <input class="form-control url-create" data-val="true"
-                                                       id="Name" name="Name"
-                                                       placeholder="Input text" type="text" value="">
-                                                <span class="field-validation-valid" data-valmsg-for="Name" data-valmsg-replace="true"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-sm-3 text-right">
-                                                <label class="control-label" for="Name">Author</label>
-                                                <span class="text-error">(*)</span>
-                                            </div>
-                                            <div class="col-sm-9">
-                                                <input class="form-control url-create" data-val="true"
-                                                       id="Name" name="Name"
-                                                       placeholder="Input text" type="text" value="">
-                                                <span class="field-validation-valid" data-valmsg-for="Name" data-valmsg-replace="true"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-sm-3 text-right">
-                                                <label class="control-label" for="Name">Cover</label>
-                                                <span class="text-error">(*)</span>
-                                            </div>
-                                            <div class="col-sm-9">
-                                                <span class="btn btn-success fileinput-button" style="color: white;">
-                                                    Upload Cover <span class="plus">+</span>
 
-                                                </span>
-                                                <!-- The global progress bar -->
+                                    <form action="AddMangaServlet" method="POST" accept-charset="" enctype="multipart/form-data" accept-charset="UTF-8">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-sm-3 text-right">
+                                                    <label class="control-label" for="Title">Title</label>
+                                                    <span class="text-error">(*)</span>
+                                                </div>
+                                                <div class="col-sm-9">
+                                                    <input class="form-control url-create" data-val="true" id="Title" name="title" placeholder="Input text" type="text" value="${titleValue}">
+                                                    <c:if test="${titleError != null}">
+                                                        <small class="small" style="color: red;">${titleError}</small> 
+                                                    </c:if>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-sm-3 text-right">
+                                                    <label class="control-label" for="Author">Author</label>
+                                                    <span class="text-error">(*)</span>
+                                                </div>
+                                                <div class="col-sm-9">
+                                                    <input class="form-control url-create" data-val="true" id="Author" name="author" type="text" value="${authorName}" readonly="">
+                                                    <c:if test="${authorError != null}">
+                                                        <small class="small" style="color: red;">${authorError}</small> 
+                                                    </c:if>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <label for="postImage" class="col-md-4 col-lg-3 col-form-label">Cover Image <span class="text-error">(*)</span></label>
+                                                <div class="col-md-8 col-lg-9" id="divSvgContainer">
 
+                                                    <img id="imagePreview" src="${coverUrlValue != null ? coverUrlValue : 'assetsUser/img/no_image.jpg'}" alt="Post Image">
+
+                                                    <div class="pt-2 d-flex align-center gap-2">
+                                                        <input type="file" name="postImage" id="postImage" style="display: none;" accept="image/*">
+
+                                                        <label id="uploadButton" for="postImage" class="btn btn-primary btn-sm" title="Upload new post image"><i
+                                                                class="bi bi-upload text-white"></i></label>
+
+                                                        <a href="#" class="btn btn-danger btn-sm" title="Remove my post image" id="removeImage"><i
+                                                                class="bi bi-trash"></i></a>
+                                                        <div id="spinnerUpload" class="spinner-border text-success" role="status" style="display: none;">
+                                                            <span class="visually-hidden">Loading...</span>
+                                                        </div>
+                                                    </div>
+                                                    <c:if test="${coverUrlError != null}">
+                                                        <small class="small" style="color: red;">${coverUrlError}</small> 
+                                                    </c:if>
+
+                                                </div>
+                                                <input type="hidden" name="coverUrl" id="coverUrl" value="${coverUrlValue}">
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-sm-3 text-right">
-                                                <label class="control-label" for="Name">Category</label>
-                                                <span class="text-error">(*)</span>
-                                            </div>
-                                            <div class="col-sm-9">
-                                                <input class="form-control url-create" data-val="true"
-                                                       id="Name" name="Name"
-                                                       placeholder="Choose Category" type="text" value="">
-                                                <span class="field-validation-valid" data-valmsg-for="Name" data-valmsg-replace="true"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-sm-3 text-right">
-                                                <label class="control-label" for="Name">Summary</label>
-                                                <span class="text-error">(*)</span>
-                                            </div>
-                                            <div class="col-sm-9">
-                                                <textarea class="form-control" placeholder="Content" rows="10"></textarea>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-sm-3 text-right">
+                                                    <label class="control-label" for="Category">Category</label>
+                                                    <span class="text-error">(*)</span>
+                                                </div>
+                                                <div class="col-sm-9">
+                                                    <input class="form-control url-create" data-val="true" id="Category" name="category" placeholder="Choose Category" type="text" value="${categoryValue}">
+                                                    <c:if test="${categoryError != null}">
+                                                        <small class="small" style="color: red;">${categoryError}</small> 
+                                                    </c:if>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group-update">
-                                        <div class="row">
-                                            <div class="col-sm-3 text-right">
-                                            </div>
-                                            <div class="col-sm-9">
-                                                <span class="btn btn-primary fileinput-button">
-                                                    <a href="addChapter.jsp" style="color: white;">Update</a>
-                                                </span>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-sm-3 text-right">
+                                                    <label class="control-label" for="Summary">Summary</label>
+                                                    <span class="text-error">(*)</span>
+                                                </div>
+                                                <div class="col-sm-9">
+                                                    <textarea class="form-control" placeholder="Content" rows="10" name="summary">${summaryValue}</textarea>
+                                                    <c:if test="${summaryError != null}">
+                                                        <small class="small" style="color: red;">${summaryError}</small> 
+                                                    </c:if>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                        <div class="form-group-update">
+                                            <div class="row">
+                                                <div class="col-sm-3 text-right">
+                                                </div>
+                                                
+                                                <div class="col-sm-9">
+                                                    <button id="submitButton" type="submit" class="btn btn-primary">Add</button>
+                                                    <c:if test="${messageAdd != null}">
+                                                        <br/>
+                                                        <small class="small" style="color: green;">${messageAdd}</small> 
+                                                    </c:if>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+
                                     <% }%>
                                 </c:if>
 
@@ -478,6 +219,80 @@
 
         <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
                 class="bi bi-arrow-up-short"></i></a>
+
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const fileInput = document.getElementById("postImage");
+                const imagePreview = document.getElementById("imagePreview");
+                const removeImage = document.getElementById("removeImage");
+                const coverUrl = document.getElementById("coverUrl");
+                const submitButton = document.getElementById("submitButton");
+                const uploadButton = document.getElementById("uploadButton");
+                const spinnerUpload = document.getElementById("spinnerUpload");
+
+
+                let isImageSelected = false;
+
+                uploadButton.addEventListener("click", function () {
+                    fileInput.addEventListener("change", function (changeEvent) {
+                        updateSubmitButtonState();
+                        updateSpinnerUploadState();
+                        const file = changeEvent.target.files[0];
+                        if (file) {
+                            const formData = new FormData();
+                            formData.append("file", file);
+                            formData.append("upload_preset", "demo_manga");
+
+                            fetch("https://api.cloudinary.com/v1_1/djytvqlon/image/upload", {
+                                method: "POST",
+                                body: formData,
+                            })
+                                    .then((response) => response.json())
+                                    .then((data) => {
+
+                                        // updateSpinnerUploadState();
+                                        imagePreview.src = data.url;
+                                        coverUrl.value = data.url;
+                                        isImageSelected = true;
+                                        updateSpinnerUploadState();
+                                        updateSubmitButtonState();
+                                    })
+                                    .catch((error) => {
+                                        console.error("Error:", error);
+                                    });
+                        }
+                    });
+
+
+                });
+
+                removeImage.addEventListener("click", function () {
+                    imagePreview.src = "assetsUser/img/no_image.jpg";
+                    coverUrl.value = "";
+                    fileInput.value = "";
+                    isImageSelected = true;
+                    updateSubmitButtonState();
+
+                });
+
+                function updateSubmitButtonState() {
+                    if (isImageSelected) {
+                        submitButton.removeAttribute("disabled");
+                    } else {
+                        submitButton.setAttribute("disabled", "disabled");
+                    }
+                }
+                function updateSpinnerUploadState() {
+                    if (isImageSelected) {
+                        spinnerUpload.style.display = "none";
+                    } else {
+                        spinnerUpload.style.display = "inline-block";
+                    }
+                }
+            });
+
+        </script>
 
         <!-- Vendor JS Files -->
         <script src="assetsUser/vendor/apexcharts/apexcharts.min.js"></script>

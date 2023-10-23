@@ -33,7 +33,7 @@ public class UserDAO extends DBContext {
             User user = new User();
 
             while (rs.next()) {
-
+                user.setUserId(rs.getInt("userID"));
                 user.setAvatarUrl(rs.getString("avatarUrl"));
                 user.setUsername(rs.getString("username"));
                 user.setPassword(rs.getString("password"));
@@ -79,7 +79,8 @@ public class UserDAO extends DBContext {
             User user = new User();
 
             while (rs.next()) {
-
+                
+                user.setUserId(rs.getInt("userID"));
                 user.setAvatarUrl(rs.getString("avatarUrl"));
                 user.setUsername(rs.getString("username"));
                 user.setPassword(rs.getString("password"));
@@ -146,7 +147,7 @@ public class UserDAO extends DBContext {
     }
 
     // Update 
-    public void update(User user, int userId) {
+    public void update(User user) {
 
         try {
 
@@ -162,7 +163,7 @@ public class UserDAO extends DBContext {
                     + "    email = ?,\n"
                     + "    phoneNumber = ?,\n"
                     + "    gender = ?\n"
-                    + "WHERE userId = ?;";
+                    + "WHERE userID = ?;";
 
             PreparedStatement ps = connection.prepareStatement(sql);
 
@@ -177,7 +178,7 @@ public class UserDAO extends DBContext {
             ps.setString(9, user.getEmail().trim());
             ps.setString(10, user.getPhone().trim());
             ps.setBoolean(11, user.isGender());
-            ps.setInt(12, userId);
+            ps.setInt(12, user.getUserId());
 
             ps.execute();
 
@@ -233,7 +234,7 @@ public class UserDAO extends DBContext {
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return 0;
+        return -1;
 
     }
 

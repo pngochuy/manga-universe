@@ -1,3 +1,6 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="model.Post"%>
+<%@page import="dal.PostDAO"%>
 <%@page import="model.User"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -34,358 +37,37 @@
         <link href="../assetsMain/css/style.css" rel="stylesheet">
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+        <!-- Favicons -->
+        <link href="${pageContext.request.contextPath}/assetsMain/img/logo.png" rel="icon">
+        <link href="${pageContext.request.contextPath}/assetsMain/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+        <!-- Google Fonts -->
+        <link href="https://fonts.gstatic.com" rel="preconnect">
+        <link
+            href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+            rel="stylesheet">
+
+        <!-- Vendor CSS Files -->
+        <link href="${pageContext.request.contextPath}/assetsMain/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/assetsMain/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/assetsMain/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/assetsMain/vendor/quill/quill.snow.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/assetsMain/vendor/quill/quill.bubble.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/assetsMain/vendor/remixicon/remixicon.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/assetsMain/vendor/simple-datatables/style.css" rel="stylesheet">
+
+        <!-- Template Main CSS File -->
+        <link href="${pageContext.request.contextPath}/assetsMain/css/style.css" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
     </head>
 
     <body>
 
-        <!-- ======= Header ======= -->
-        <header id="header" class="header fixed-top d-flex align-items-center" style="background-color: #191a1c;">
+        <%@include file="../layouts/layoutsMain/headerMain.jsp" %> 
+        <%@include file="../layouts/layoutsMain/sidebarMain.jsp" %> 
 
-            <div class="d-flex align-items-center justify-content-between">
-                <a href="../home.jsp" class="logo d-flex align-items-center">
-                    <img src="../assetsMain/img/logo.png" alt="" width="100">
-                    <span class="d-none d-lg-block" style="color: white">MangaUniverse</span>
-                </a>
-                <i class="bi bi-list toggle-sidebar-btn" style="color: white"></i>
-            </div><!-- End Logo -->
-
-            <div class="search-bar">
-                <form class="search-form d-flex align-items-center" method="POST" action="#">
-                    <input type="text" name="query" placeholder="Search" title="Enter search keyword">
-                    <button type="submit" title="Search"><i class="bi bi-search"></i></button>
-                </form>
-            </div><!-- End Search Bar -->
-
-            <nav class="header-nav ms-auto">
-                <ul class="d-flex align-items-center">
-
-                    <li class="nav-item d-block d-lg-none">
-                        <a class="nav-link nav-icon search-bar-toggle " href="#">
-                            <i class="bi bi-search" style="color: white"></i>
-                        </a>
-                    </li><!-- End Search Icon-->
-
-                    <li class="nav-item dropdown">
-
-                        <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-                            <i class="bi bi-bell" style="color: white"></i>
-                            <span class="badge bg-primary badge-number">4</span>
-                        </a><!-- End Notification Icon -->
-
-                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
-                            <li class="dropdown-header">
-                                You have 4 new notifications
-                                <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-
-                            <li class="notification-item">
-                                <i class="bi bi-exclamation-circle text-warning"></i>
-                                <div>
-                                    <h4>Lorem Ipsum</h4>
-                                    <p>Quae dolorem earum veritatis oditseno</p>
-                                    <p>30 min. ago</p>
-                                </div>
-                            </li>
-
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-
-                            <li class="notification-item">
-                                <i class="bi bi-x-circle text-danger"></i>
-                                <div>
-                                    <h4>Atque rerum nesciunt</h4>
-                                    <p>Quae dolorem earum veritatis oditseno</p>
-                                    <p>1 hr. ago</p>
-                                </div>
-                            </li>
-
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-
-                            <li class="notification-item">
-                                <i class="bi bi-check-circle text-success"></i>
-                                <div>
-                                    <h4>Sit rerum fuga</h4>
-                                    <p>Quae dolorem earum veritatis oditseno</p>
-                                    <p>2 hrs. ago</p>
-                                </div>
-                            </li>
-
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-
-                            <li class="notification-item">
-                                <i class="bi bi-info-circle text-primary"></i>
-                                <div>
-                                    <h4>Dicta reprehenderit</h4>
-                                    <p>Quae dolorem earum veritatis oditseno</p>
-                                    <p>4 hrs. ago</p>
-                                </div>
-                            </li>
-
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li class="dropdown-footer">
-                                <a href="#">Show all notifications</a>
-                            </li>
-
-                        </ul><!-- End Notification Dropdown Items -->
-
-                    </li><!-- End Notification Nav -->
-
-
-
-                    <li class="nav-item dropdown pe-3">
-
-                        <c:if test="${userSession != null}">
-                            <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-                                <% User u2 = (User) session.getAttribute("userSession");%>
-                                <% if (!u2.getAvatarUrl().isEmpty()) {%>
-                                <img  src="<%= u2.getAvatarUrl()%>"
-                                      alt="Profile" class="img-fluid rounded-circle">
-                                <% } else {%>
-                                <i class="bi bi-person-circle" style="font-size: 30px; color: white"></i>
-                                <% }%>
-
-                                <span class="d-none d-md-block dropdown-toggle ps-2">${sessionScope.userSession.getUsername()}</span>
-                            </a><!-- End Profile Iamge Icon -->
-                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-                                <li class="dropdown-header">
-
-                                    <c:if test="${sessionScope.userSession != null}">
-                                        <% User u = (User) session.getAttribute("userSession");%>
-                                        <h6>${sessionScope.userSession.getUsername()}</h6>
-                                        <% if (u.getRole().equalsIgnoreCase("Free")) {%>
-                                        <span style="color: black;">${sessionScope.userSession.getRole()}</span>
-                                        <% } else if (u.getRole().equalsIgnoreCase("Premium")) {%>
-                                        <span style="color: black;">${sessionScope.userSession.getRole()} <i class="bi bi-star-fill" style="color: gold;"></i></span>
-                                            <% } else if (u.getRole().equalsIgnoreCase("Author")) {%>   
-                                        <span style="color: black;">${sessionScope.userSession.getRole()} <i class="bi bi-star-fill" style="color: greenyellow;"></i></span>
-                                            <% }%>
-                                        </c:if>
-                                        <c:if test="${sessionScope.userSession == null}">
-                                        <h6>${sessionScope.userRegister.getUsername()}</h6>
-                                        <span style="color: black;">Free Account</span>
-                                    </c:if>
-                                </li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="../userProfile.jsp">
-                                        <i class="bi bi-person"></i>
-                                        <span style="color: black;">My Profile</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-
-                                <c:if test="${sessionScope.userSession != null}">
-                                    <%User u3 = (User) session.getAttribute("userSession");%>
-                                    <% if (u3.getRole().equalsIgnoreCase("Free")) {%>
-                                    <li>
-                                        <a class="dropdown-item d-flex align-items-center" href="../upgradePremium.jsp">
-                                            <i class="bi bi-stars"></i>
-                                            <span style="color: black;">Upgrade Premium</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
-                                    <% }%>
-                                </c:if>
-
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="../userProfile.jsp">
-                                        <i class="bi bi-gear"></i>
-                                        <span style="color: black;">Account Settings</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="../needHelp.jsp">
-                                        <i class="bi bi-question-circle"></i>
-                                        <span style="color: black;">Need Help?</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="LogoutServlet">
-                                        <i class="bi bi-box-arrow-right"></i>
-                                        <span style="color: black;">Sign Out</span>
-                                    </a>
-                                </li>
-
-                            </ul><!-- End Profile Dropdown Items -->
-                        </c:if>
-                        <c:if test="${userSession == null}">
-                            <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-                                <i class="bi bi-person-circle" style="font-size: 30px; color: white"></i>
-                            </a><!-- End Profile Iamge Icon -->
-
-                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-                                <li class="dropdown-header">
-                                    <h6>Guest</h6>
-                                </li>
-
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="../needHelp.jsp">
-                                        <i class="bi bi-question-circle"></i>
-                                        <span style="color: black;">Need Help?</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="login.jsp">
-                                        <i class="bi bi-box-arrow-left"></i>
-                                        <span style="color: black; font-weight: bold">Sign In</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>   
-
-                            </ul><!-- End Profile Dropdown Items -->
-                        </c:if>
-                    </li><!-- End Profile Nav -->
-
-                </ul>
-            </nav><!-- End Icons Navigation -->
-
-        </header><!-- End Header -->
-
-        <!-- ======= Sidebar ======= -->
-        <aside id="sidebar" class="sidebar" style="background-color: #2c2c2c;">
-            <ul class="sidebar-nav" id="sidebar-nav">
-
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="../home.jsp">
-                        <i class="bi bi-grid"></i>
-                        <span>Homepage</span>
-                    </a>
-                </li><!-- End Dashboard Nav -->
-
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="#">
-                        <i class="bi bi-bookmark"></i><span>Follows</span><i class="bi bi-chevron-down ms-auto"></i>
-                    </a>
-                    <ul class="nav-content">
-                        <li>
-                            <a href="../follows/updates.jsp">
-                                <i class="bi bi-circle"></i><span>Updates</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="../follows/readingHistory.jsp">
-                                <i class="bi bi-circle"></i><span>Reading History</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li><!-- End Components Nav -->
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="#">
-                        <i class="bi bi-book"></i><span>Title</span><i class="bi bi-chevron-down ms-auto"></i>
-                    </a>
-                    <ul class="nav-content">
-                        <li>
-                            <a href="../title/advancedSearch.jsp">
-                                <i class="bi bi-circle"></i><span>Advanced Search</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="../title/recentlyAdded.jsp">
-                                <i class="bi bi-circle"></i><span>Recently Added</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="../title/latestUpdates.jsp">
-                                <i class="bi bi-circle"></i><span>Latest Updates</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="../title/random.jsp">
-                                <i class="bi bi-circle"></i><span>Random</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li><!-- End Components Nav -->
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="../forum/forum.jsp">
-                        <i class="bi bi-people"></i><span>Forums</span>
-                    </a>
-                </li><!-- End Components Nav -->
-
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="#">
-                        <i class="bi bi-pin-angle"></i><span>MangaUniverse</span><i class="bi bi-chevron-down ms-auto"></i>
-                    </a>
-                    <ul class="nav-content">
-                        <li>
-                            <a href="../about/aboutUs.jsp">
-                                <i class="bi bi-circle"></i><span>About Us</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="../about/siteRules.jsp">
-                                <i class="bi bi-circle"></i><span>Site Rules</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="../about/privacyPolicy.jsp">
-                                <i class="bi bi-circle"></i><span>Privacy Policy</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="../about/announcement.jsp">
-                                <i class="bi bi-circle"></i><span>Announcements</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li><!-- End Components Nav -->
-                <hr>
-                <li class="nav-item align-center d-flex justify-content-evenly ">
-
-                    <a class=" collapsed" href="#">
-                        <i class="bi bi-discord fs-4"></i>
-                    </a>
-                    <a class="collapsed" href="#">
-                        <i class="bi bi-twitch fs-4"></i>
-                    </a>
-                    <a class="collapsed" href="#">
-                        <i class="bi bi-reddit fs-4"></i>
-                    </a>
-                    <a class="collapsed" href="#">
-                        <i class="bi bi-facebook fs-4"></i>
-                    </a>
-
-                </li><!-- End Components Nav -->
-                <p style="color: white;">v2023.9.20<br />
-                    © MangaUniverse 2023</p>
-
-
-        </aside><!-- End Sidebar-->
 
         <main id="main" class="main">
             <section class="section profile">
@@ -394,169 +76,123 @@
                                         Blog part start
             >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
                     <h2 class="fw-bold">Blogs</h2>
+
                     <section class="blog style-1 sec-mar">
                         <div class="container">
                             <div class="row">
                                 <div class="col-lg-8">
-                                    <div class="row">
-                                        <div class="col-lg-6 col-md-6col-12 mb-4">
-                                            <a href="./blogDetail.jsp" class="inner-box">
-                                                <div class="image-box">
-                                                    <img src="https://uiparadox.co.uk/templates/animeloop/demo/assets/media/blog/blog-img-1.png"
-                                                         alt="" class="w-100 attachment-full size-full">
-                                                </div>
-                                                <div class="author-box text-start">
-                                                    <div class="detail d-flex align-items-center justify-content-between">
-                                                        <p>28 NOV 2022</p>
-                                                        <p>Anime</p>
-                                                    </div>
-                                                    <h4>Why One pieceâs 948th Episode </h4>
-                                                    <div class="d-flex align-items-center">
-                                                        <img src="https://uiparadox.co.uk/templates/animeloop/demo/assets/media/comment/comment-img.png"
-                                                             class="w-auto" alt="">
-                                                        <h5>Authorâs Name</h5>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                        <div class="col-lg-6 col-md-6col-12 mb-4">
-                                            <a href="./blogDetail.jsp" class="inner-box">
-                                                <div class="image-box">
-                                                    <img src="https://uiparadox.co.uk/templates/animeloop/demo/assets/media/blog/blog-img-2.png"
-                                                         alt="" class="attachment-full size-full w-100">
-                                                </div>
-                                                <div class="author-box text-start">
-                                                    <div class="detail d-flex align-items-center justify-content-between">
-                                                        <p>28 NOV 2022</p>
-                                                        <p>Manga</p>
-                                                    </div>
-                                                    <h4>ANime Community Is Going mad </h4>
-                                                    <div class="d-flex align-items-center">
-                                                        <img src="https://uiparadox.co.uk/templates/animeloop/demo/assets/media/comment/comment-img-6.png"
-                                                             class="w-auto" alt="">
-                                                        <h5>Authorâs Name</h5>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                        <div class="col-lg-6 col-md-6col-12 mb-4">
-                                            <a href="./blogDetail.jsp" class="inner-box">
-                                                <div class="image-box">
-                                                    <img src="https://uiparadox.co.uk/templates/animeloop/demo/assets/media/blog/blog-img-3.png"
-                                                         alt="" class="attachment-full size-full w-100">
-                                                </div>
-                                                <div class="author-box text-start">
-                                                    <div class="detail d-flex align-items-center justify-content-between">
-                                                        <p>28 NOV 2022</p>
-                                                        <p>Light Novel</p>
-                                                    </div>
-                                                    <h4>Tokyo Ghoul 2nd Season Review</h4>
-                                                    <div class="d-flex align-items-center">
-                                                        <img src="https://uiparadox.co.uk/templates/animeloop/demo/assets/media/comment/comment-img-2.png"
-                                                             class="w-auto" alt="">
-                                                        <h5>Authorâs Name</h5>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                        <div class="col-lg-6 col-md-6col-12 mb-4">
-                                            <a href="./blogDetail.jsp" class="inner-box">
-                                                <div class="image-box">
-                                                    <img src="https://uiparadox.co.uk/templates/animeloop/demo/assets/media/blog/blog-img-2.png"
-                                                         alt="" class="attachment-full size-full w-100">
-                                                </div>
-                                                <div class="author-box text-start">
-                                                    <div class="detail d-flex align-items-center justify-content-between">
-                                                        <p>28 NOV 2022</p>
-                                                        <p>Manga</p>
-                                                    </div>
-                                                    <h4>ANime Community Is Going mad </h4>
-                                                    <div class="d-flex align-items-center">
-                                                        <img src="https://uiparadox.co.uk/templates/animeloop/demo/assets/media/comment/comment-img-3.png"
-                                                             class="w-auto" alt="">
-                                                        <h5>Authorâs Name</h5>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                        <div class="col-lg-6 col-md-6col-12 mb-4">
-                                            <a href="./blogDetail.jsp" class="inner-box">
-                                                <div class="image-box">
-                                                    <img src="https://uiparadox.co.uk/templates/animeloop/demo/assets/media/blog/blog-img-1.png"
-                                                         alt="" class="attachment-full size-full w-100">
-                                                </div>
-                                                <div class="author-box text-start">
-                                                    <div class="detail d-flex align-items-center justify-content-between">
-                                                        <p>28 NOV 2022</p>
-                                                        <p>Community</p>
-                                                    </div>
-                                                    <h4>Why One pieceâs 948th Episode </h4>
-                                                    <div class="d-flex align-items-center">
-                                                        <img src="https://uiparadox.co.uk/templates/animeloop/demo/assets/media/comment/comment-img-4.png"
-                                                             class="w-auto" alt="">
-                                                        <h5>Authorâs Name</h5>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </div>
+                                    <%
+                                        PostDAO postDAO = new PostDAO();
 
+                                        ArrayList<Post> postList = (ArrayList<Post>) session.getAttribute("postList");
+
+                                        if (postList == null) {
+                                            int count = postDAO.getTotalPost();
+                                            int endPage = count / 4; // each page has 4 posts
+
+                                            if (count % 4 != 0) {
+                                                endPage++;
+
+                                                postList = postDAO.pagingPostList(1);
+                                                session.setAttribute("postList", postList);
+                                                session.setAttribute("endPage", endPage);
+                                                session.setAttribute("tag", 1);
+                                            }
+                                        }
+
+                                        ArrayList<User> userListByPost = new ArrayList<>();
+                                        for (Post p : postList) {
+                                            User user = postDAO.getUserByPost(p.getUserId());
+                                            userListByPost.add(user);
+                                        }
+                                        session.setAttribute("userListByPost", userListByPost);
+                                    %>
+                                    <div id="content">
+
+                                        <div class="row">
+
+                                            <c:if test="${postList != null}">
+
+                                                <c:forEach items="${postList}" var="post" varStatus="loop">
+
+                                                    <div class="col-lg-6 col-md-6 col-12 mb-4">
+                                                        <a href="/MangaUniverse/PostDetailServlet?postID=${post.getPostId()}&userID=${userListByPost[loop.index].getUserId()}" class="inner-box">
+                                                            <div class="image-box">
+                                                                <img src="${post.getImgUrl()}"
+                                                                     alt="" class="attachment-full size-full w-100">
+                                                            </div>
+                                                            <div class="author-box text-start">
+                                                                <div class="detail d-flex align-items-center justify-content-between">
+                                                                    <p>${post.getCreateAtFormat()}</p>
+                                                                    <p>Manga</p>
+                                                                </div>
+                                                                <h4>${post.getTitle()} </h4>
+
+                                                                <div class="d-flex align-items-center">
+                                                                    <img src="${userListByPost[loop.index].getAvatarUrl() != null ? userListByPost[loop.index].getAvatarUrl() : '../assetsUser/img/user_image_default.png'}"
+                                                                         class="w-auto" alt="" style="width: 50px; height: 50px">
+                                                                    <h5>${userListByPost[loop.index].getUsername()}</h5>
+
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+
+                                                </c:forEach>
+                                            </c:if>
+
+
+                                        </div>
                                     </div>
+
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="card blog-sidebar">
                                         <div class="card-body bg-color-black">
-                                            <form method="get" action="blogs.html">
-                                                <div class="input-group form-group mb-4">
-                                                    <input class="form-control" name="query" placeholder="Search">
-                                                    <button class="input-group-text anime-btn" type="submit"><i
-                                                            class="bi bi-search" style="color: white;"></i></button>
-                                                </div>
-                                            </form>
+                                            <div class="input-group form-group mb-4">
+                                                <input oninput="searchByTitle(this)" value="${txtS}" class="form-control" name="txt" placeholder="Search">
+                                                <button class="input-group-text anime-btn" type="submit"><i
+                                                        class="bi bi-search" style="color: white;"></i></button>
+                                            </div>
 
                                             <h5 class="mb-2 mt-4">Popular Blogs</h5>
                                             <ul class="popular-blogs">
-                                                <li>
-                                                    <a href="">
-                                                        <div class="row align-items-center">
-                                                            <div class="col-5">
-                                                                <img alt=""
-                                                                     src="https://uiparadox.co.uk/templates/animeloop/demo/assets/media/blog-detail/blog-img-4.jpg">
-                                                            </div>
-                                                            <div class="col-7 ps-0">
-                                                                <p class="date">10 Nov 2023</p>
-                                                                <h6 class="mb-0">Transparent Fashion Making Ways</h6>
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="">
-                                                        <div class="row align-items-center">
-                                                            <div class="col-5">
-                                                                <img alt=""
-                                                                     src="https://uiparadox.co.uk/templates/animeloop/demo/assets/media/blog-detail/blog-img-5.png">
-                                                            </div>
-                                                            <div class="col-7 ps-0">
-                                                                <p class="date">10 Nov 2023</p>
-                                                                <h6 class="mb-0">New Wave of Fashion Trends</h6>
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="">
-                                                        <div class="row align-items-center">
-                                                            <div class="col-5">
-                                                                <img alt=""
-                                                                     src="https://uiparadox.co.uk/templates/animeloop/demo/assets/media/blog-detail/blog-img-6.png">
-                                                            </div>
-                                                            <div class="col-7 ps-0">
-                                                                <p class="date">10 Nov 2023</p>
-                                                                <h6 class="mb-0">Sports Trends that are Making Waves</h6>
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                </li>
+                                                <div id="postSearchContent">
+                                                    <%
+                                                        ArrayList<Post> threePostlist = postDAO.getThreePost();
+                                                        session.setAttribute("threePostlist", threePostlist);
+
+                                                        ArrayList<User> userListByThreePost = new ArrayList<>();
+                                                        for (Post p : postList) {
+                                                            User user = postDAO.getUserByPost(p.getUserId());
+                                                            userListByThreePost.add(user);
+                                                        }
+                                                        session.setAttribute("userListByThreePost", userListByThreePost);
+                                                    %>
+                                                    <c:if test="${sessionScope.threePostlist != null}">
+                                                        <c:forEach items="${threePostlist}" var="post" varStatus="loop">
+                                                            <li class="post-item">
+                                                                <a href="/MangaUniverse/PostDetailServlet?postID=${post.getPostId()}&userID=${userListByThreePost[loop.index].getUserId()}">
+                                                                    <div class="row align-items-center">
+                                                                        <div class="col-5">
+                                                                            <img alt=""
+                                                                                 src="${post.getImgUrl()}">
+                                                                        </div>
+                                                                        <div class="col-7 ps-0">
+                                                                            <p class="date">${post.getCreateAtFormat()}</p>
+                                                                            <h6 class="mb-0">${post.getTitle()}</h6>
+                                                                        </div>
+                                                                    </div>
+                                                                </a>
+                                                            </li>
+                                                        </c:forEach>
+
+                                                    </c:if>
+
+                                                </div>
+                                                <div class="text-center mt-5">
+                                                    <button id="submitButton" onclick="loadMore()" class="btn btn-primary">Load more</button>
+                                                </div>
                                             </ul>
 
                                         </div>
@@ -565,29 +201,31 @@
                             </div>
 
                             <div class="pagination-wrape">
+
                                 <ul class="pagination">
-                                    <li class="page-item">
-                                        <a href="#" class="page-link arrow" aria-label="Previous">
-                                            <i class="bi bi-caret-left-fill"></i>
-                                        </a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a href="#" class="page-link current">1</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a href="#" class="page-link">2</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a href="#" class="page-link">3</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a href="#" class="page-link">4</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a href="#" class="page-link arrow" aria-label="next">
-                                            <i class="bi bi-caret-right-fill"></i>
-                                        </a>
-                                    </li>
+                                    <c:if test="${tag > 1}">
+                                        <li class="page-item">
+                                            <a href="/MangaUniverse/PostListPagingServlet?index=${tag-1}" class="page-link arrow" aria-label="Previous">
+                                                <i class="bi bi-caret-left-fill"></i>
+                                            </a>
+                                        </li>
+                                    </c:if>
+
+                                    <c:forEach begin="1" end="${endPage}" var="i">
+                                        <li class="page-item">
+                                            <a href="/MangaUniverse/PostListPagingServlet?index=${i}" class="page-link current">${i}</a>
+                                        </li>
+                                    </c:forEach>
+
+                                    <c:if test="${tag < endPage}">
+                                        <li class="page-item">
+                                            <a id="nextPageLink" href="/MangaUniverse/PostListPagingServlet?index=${tag+1}" 
+                                               onclick="" class="page-link arrow" aria-label="next">
+                                                <i class="bi bi-caret-right-fill"></i>
+                                            </a>
+                                        </li>
+                                    </c:if>
+
                                 </ul>
                             </div>
 
@@ -603,6 +241,119 @@
 
         <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
                 class="bi bi-arrow-up-short"></i></a>
+
+        <script>
+            function searchByTitle(inputElement) {
+                var searchText = inputElement.value;
+                $.ajax({
+                    type: "GET",
+                    url: "/MangaUniverse/SearchPostByAjax",
+                    data: {txt: searchText},
+                    success: function (data) {
+                        // Xử lý dữ liệu trả về từ máy chủ và cập nhật nội dung trang web
+//                            $("#content").html(data);
+                        $("#postSearchContent").html(data);
+                    },
+                    error: function (xhr, status, error) {
+                        // Xử lý lỗi (nếu có)
+                        console.log("Lỗi: " + error);
+                    }
+                });
+            }
+
+            function loadMore() {
+                var amountPost = $("#postSearchContent li").length;
+                $.ajax({
+                    type: "GET",
+                    url: "/MangaUniverse/LoadMorePostServlet",
+                    data: {existPost: amountPost},
+                    success: function (data) {
+                        $("#postSearchContent").append(data);
+                    },
+                    error: function (xhr, status, error) {
+                        console.log("Lỗi: " + error);
+                    }
+                });
+            }
+
+
+            $(document).ready(function () {
+                $(document).on("click", ".page-link", function (event) {
+                    event.preventDefault();
+                    var url = $(this).attr("href");
+                    $.ajax({
+                        type: "GET",
+                        url: url,
+                        success: function (data) {
+                            var content = JSON.parse(data.newContent); // Chuyển chuỗi JSON thành mảng JavaScript
+
+                            // Xóa nội dung cũ
+                            $("#content .row").empty();
+
+                            // Lặp qua từng phần tử trong mảng content
+                            $.each(content, function (index, post) {
+                                // Tạo mã HTML cho phần tử và gắn các giá trị
+                                console.log("Id: " + post.postId);
+                                var html = '<div class="col-lg-6 col-md-6 col-12 mb-4">' +
+                                        '<a href="/MangaUniverse/PostDetailServlet?postID=' + post.postId + '&userID=' + post.userId + '" class="inner-box">' +
+                                        '<div class="image-box">' +
+                                        '<img src="' + post.imgUrl + '" alt="" class="attachment-full size-full w-100">' +
+                                        '</div>' +
+                                        '<div class="author-box text-start">' +
+                                        '<div class="detail d-flex align-items-center justify-content-between">' +
+                                        '<p>' + post.createAtFormat + '</p>' +
+                                        '<p>Manga</p>' +
+                                        '</div>' +
+                                        '<h4>' + post.title + '</h4>' +
+                                        '<div class="d-flex align-items-center">' +
+                                        '<img src="' + post.avatarUrl + '" class="w-auto" alt="" style="width: 50px; height: 50px">' +
+                                        '<h5>' + post.username + '</h5>' +
+                                        '</div>' +
+                                        '</div>' +
+                                        '</a>' +
+                                        '</div>';
+                                $("#content .row").append(html);
+                            });
+
+                            // Xóa nội dung cũ của phân trang (pagination)
+                            $(".pagination").empty();
+
+                            if (data.tag > 1) {
+                                // Thêm nút Previous nếu có
+                                var previousPage = '<li class="page-item">' +
+                                        '<a href="/MangaUniverse/PostListPagingServlet?index=' + (data.tag - 1) + '" class="page-link arrow" aria-label="Previous">' +
+                                        '<i class="bi bi-caret-left-fill"></i>' +
+                                        '</a>' +
+                                        '</li>';
+                                $(".pagination").append(previousPage);
+                            }
+
+                            for (var i = 1; i <= data.endPage; i++) {
+                                // Thêm các trang cố định
+                                var pageLink = '<li class="page-item">' +
+                                        '<a href="/MangaUniverse/PostListPagingServlet?index=' + i + '" class="page-link current">' + i + '</a>' +
+                                        '</li>';
+                                $(".pagination").append(pageLink);
+                            }
+
+                            if (data.tag < data.endPage) {
+                                // Thêm nút Next nếu có
+                                var nextPage = '<li class="page-item">' +
+                                        '<a id="nextPageLink" href="/MangaUniverse/PostListPagingServlet?index=' + (data.tag + 1) + '" onclick="" class="page-link arrow" aria-label="next">' +
+                                        '<i class="bi bi-caret-right-fill"></i>' +
+                                        '</a>' +
+                                        '</li>';
+                                $(".pagination").append(nextPage);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.log("Lỗi: " + error);
+                        }
+                    });
+                });
+            });
+
+        </script>
 
         <!-- Vendor JS Files -->
         <script src="../assetsMain/vendor/apexcharts/apexcharts.min.js"></script>

@@ -1,3 +1,6 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="model.Post"%>
+<%@page import="dal.PostDAO"%>
 <%@page import="model.User"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -44,10 +47,51 @@
         <main id="main" class="main">
             <section class="section profile">
                 <div class="row">
-                    <h2 class="fw-bold">Site Rules</h2>
-                    <p>Only titles that are in the comic styles of Japanese, Korean, Chinese or of similar Asian origin are
-                        allowed. Exceptions can be made for self-published comics in a similar style originally created in
-                        other languages if you contact MangaDex staff beforehand.</p>
+                    <!-- >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+                                        Blog part start
+            >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+
+                    <%
+
+                        PostDAO postDAO = new PostDAO();
+                        ArrayList<Post> postList = postDAO.getAll();
+                        if (postList != null) {
+                            for (Post p : postList) {
+                                User userFromPostDetail = postDAO.getUserByPost(p.getUserId());
+                                if (userFromPostDetail != null) {
+                                    session.setAttribute("userFromPostDetail", userFromPostDetail);
+                                    break;
+                                }
+                            }
+
+                        }
+
+
+                    %>
+                    <h2 class="fw-bold">Blog Detail</h2>
+                    <section class="blog-detail sec-mar">
+                        <div class="container">
+                            <div class="row">
+                                <c:if test="${sessionScope.postDetail != null}">
+                                    <div class="col-lg-9" style="margin: 0 auto">
+                                        <img alt=""
+                                             src="${sessionScope.postDetail.getImgUrl()}">
+                                        <div class="text-details">
+                                            <p class="text-end author pt-3"><b>Manga -</b> ${sessionScope.postDetail.getCreateAtFormat()}</p>
+                                            <h4>${sessionScope.postDetail.getTitle()} </h4>
+                                            <p class="mb-4">${sessionScope.postDetail.getDescription()} </p>
+                                            <div class="text-box mb-4 text-center">
+                                                &copy; Created by ${userFromPostDetail.getUsername()}
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </c:if>
+
+
+                            </div>
+                        </div>
+                    </section>
                 </div>
             </section>
         </main>

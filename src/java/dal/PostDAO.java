@@ -7,6 +7,7 @@ package dal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,30 +23,71 @@ import model.Post;
 public class PostDAO extends DBContext {
 
     // get Post
-    public Post getPost(int id) {
+    public Post getPost(int postId, int userId) {
 
         try {
             String sql = "SELECT * FROM [Post] "
-                    + "WHERE postId = ?;";
+                    + "WHERE postID = ? AND userID = ?;";
             PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setInt(1, id);
+            ps.setInt(1, postId);
+            ps.setInt(2, userId);
 
             ResultSet rs = ps.executeQuery();
-            Post blog = new Post();
+            Post post = new Post();
 
             if (rs.next()) {
-                blog.setUserId(rs.getInt("userID"));
-                blog.setImgUrl(rs.getString("imgUrl"));
-                blog.setTitle(rs.getString("title"));
-                blog.setDescription(rs.getString("description"));
-                blog.setCreateAt(rs.getTimestamp("createdAt").toLocalDateTime());
+
+                post.setPostId(rs.getInt("postID"));
+                post.setUserId(rs.getInt("userID"));
+                post.setImgUrl(rs.getString("imgUrl"));
+                post.setTitle(rs.getString("title"));
+                post.setDescription(rs.getString("description"));
+                post.setCreateAt(rs.getTimestamp("createdAt").toLocalDateTime());
 
             }
 
             rs.close();
             ps.close();
 
-            return blog;
+            return post;
+
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
+    }
+
+    // get all Post by userID
+    public ArrayList<Post> getAllByUserId(int userId) {
+
+        try {
+            String sql = "SELECT * FROM [Post]\n"
+                    + "WHERE userID = ?;";
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            ps.setInt(1, userId);
+
+            ResultSet rs = ps.executeQuery();
+
+            ArrayList<Post> list = new ArrayList<>();
+            while (rs.next()) {
+                Post post = new Post();
+                post.setPostId(rs.getInt("postID"));
+                post.setUserId(rs.getInt("userID"));
+                post.setImgUrl(rs.getString("imgUrl"));
+                post.setTitle(rs.getString("title"));
+                post.setDescription(rs.getString("description"));
+                post.setCreateAt(rs.getTimestamp("createdAt").toLocalDateTime());
+
+                list.add(post);
+
+            }
+
+            rs.close();
+            ps.close();
+
+            return list;
 
         } catch (SQLException ex) {
             Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -58,20 +100,22 @@ public class PostDAO extends DBContext {
     public ArrayList<Post> getAll() {
 
         try {
-            String sql = "SELECT * FROM [Post]";
+            String sql = "SELECT * FROM [Post];";
             PreparedStatement ps = connection.prepareStatement(sql);
+
             ResultSet rs = ps.executeQuery();
 
             ArrayList<Post> list = new ArrayList<>();
             while (rs.next()) {
-                Post blog = new Post();
-                blog.setUserId(rs.getInt("userID"));
-                blog.setImgUrl(rs.getString("imgUrl"));
-                blog.setTitle(rs.getString("title"));
-                blog.setDescription(rs.getString("description"));
-                blog.setCreateAt(rs.getTimestamp("createdAt").toLocalDateTime());
+                Post post = new Post();
+                post.setPostId(rs.getInt("postID"));
+                post.setUserId(rs.getInt("userID"));
+                post.setImgUrl(rs.getString("imgUrl"));
+                post.setTitle(rs.getString("title"));
+                post.setDescription(rs.getString("description"));
+                post.setCreateAt(rs.getTimestamp("createdAt").toLocalDateTime());
 
-                list.add(blog);
+                list.add(post);
 
             }
 
@@ -88,57 +132,361 @@ public class PostDAO extends DBContext {
     }
 
     // create Post
-    public void create(Post blog) {
+    public int create(Post post) {
+        int generatedPostID = -1; // Giá trị mặc định nếu không có postID được tạo
+
         try {
-            String sql = "INSERT INTO [Post] (userId, imgUrl, title, description, createdAt)\n"
+            String sql = "INSERT INTO [Post] (userID, imgUrl, title, description, createdAt)\n"
                     + "VALUES (?, ?, ?, ?, ?)";
-            PreparedStatement ps = connection.prepareStatement(sql);
-            
-            ps.setInt(1, blog.getUserId());
-            ps.setString(2, blog.getImgUrl());
-            ps.setString(3, blog.getTitle());   
-            ps.setString(4, blog.getDescription());
-            ps.setTimestamp(5, Timestamp.valueOf(blog.getCreateAt())); // Convert LocalDateTime to Timestamp
-            
-            ps.execute();
-            
+
+            // Sử dụng PreparedStatement với RETURN_GENERATED_KEYS để lấy postID
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+            ps.setInt(1, post.getUserId());
+            ps.setString(2, post.getImgUrl());
+            ps.setNString(3, post.getTitle());
+            ps.setNString(4, post.getDescription());
+            ps.setTimestamp(5, Timestamp.valueOf(post.getCreateAt())); // Convert LocalDateTime to Timestamp
+
+            // Thực hiện lệnh SQL
+            int affectedRows = ps.executeUpdate();
+
+            if (affectedRows > 0) {
+                // Lấy các giá trị được sinh ra sau khi thêm dữ liệu
+                ResultSet generatedKeys = ps.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    generatedPostID = generatedKeys.getInt(1); // Lấy giá trị postID
+                }
+            }
+
             ps.close();
         } catch (SQLException ex) {
             Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        return generatedPostID;
     }
-    
+
+//    // create Post
+//    public void create(Post post) {
+//        try {
+//            String sql = "INSERT INTO [Post] (userID, imgUrl, title, description, createdAt)\n"
+//                    + "VALUES (?, ?, ?, ?, ?)";
+//            PreparedStatement ps = connection.prepareStatement(sql);
+//
+//            ps.setInt(1, post.getUserId());
+//            ps.setString(2, post.getImgUrl());
+//            ps.setString(3, post.getTitle());
+//            ps.setString(4, post.getDescription());
+//            ps.setTimestamp(5, Timestamp.valueOf(post.getCreateAt())); // Convert LocalDateTime to Timestamp
+//
+//            ps.execute();
+//
+//            ps.close();
+//        } catch (SQLException ex) {
+//            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
     // update Post
-    public void update(Post blog, int blogId) {
+    public void update(Post post) {
         try {
             String sql = "UPDATE [Post]\n"
-                    + "SET userId = ?,\n"
+                    + "SET userID = ?,\n"
                     + "    imgUrl = ?,\n"
                     + "    title = ?,\n"
                     + "    description = ?,\n"
                     + "    createdAt = ?\n"
-                    + "WHERE blogId = ?;";
+                    + "WHERE postID = ?;";
 
             PreparedStatement ps = connection.prepareStatement(sql);
-            
-            ps.setInt(1, blog.getUserId());
-            ps.setString(2, blog.getImgUrl());
-            ps.setString(3, blog.getTitle());
-            ps.setString(4, blog.getDescription());
-            ps.setTimestamp(5, Timestamp.valueOf(blog.getCreateAt())); // Convert LocalDateTime to Timestamp
-            ps.setInt(6, blogId);
-            
+
+            ps.setInt(1, post.getUserId());
+            ps.setString(2, post.getImgUrl());
+            ps.setNString(3, post.getTitle());
+//            ps.setString(4, post.getDescription());
+            ps.setNString(4, post.getDescription()); // UTF-8
+
+            ps.setTimestamp(5, Timestamp.valueOf(post.getCreateAt())); // Convert LocalDateTime to Timestamp
+            ps.setInt(6, post.getPostId());
+
             ps.execute();
-            
+
             ps.close();
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    
+
     // Delete
-    public void delete(int userId) {
+    public void delete(Post post) {
+        try {
+            String sql = "DELETE FROM [Post] "
+                    + "WHERE postId = ?;";
+
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            ps.setInt(1, post.getPostId());
+
+            ps.execute();
+
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    // get PostID by userId, title
+    public int getPostID(int userId, String title) {
+        int postID = -1;
+
+        try {
+            String sql = "SELECT postID FROM [Post] WHERE userID = ? AND title = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            ps.setInt(1, userId);
+            ps.setString(2, title);
+
+            ResultSet resultSet = ps.executeQuery();
+
+            if (resultSet.next()) {
+                postID = resultSet.getInt("postID");
+            }
+
+            resultSet.close();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return postID;
+    }
+
+    // check Title exist
+    public boolean isTitleExist(String title) {
+        boolean titleExists = false;
+
+        try {
+            String sql = "SELECT COUNT(*) FROM [Post] WHERE title = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            ps.setString(1, title);
+
+            ResultSet resultSet = ps.executeQuery();
+
+            if (resultSet.next()) {
+                int count = resultSet.getInt(1);
+                if (count > 0) {
+                    titleExists = true;
+                }
+            }
+
+            resultSet.close();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return titleExists;
+    }
+
+    // find user by UserId
+    public User getUserByPost(int userId) {
+
+        try {
+            String sql = "SELECT userID, username, avatarUrl FROM [Users]\n"
+                    + "WHERE [Users].userID =  ?;";
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            ps.setInt(1, userId);
+
+            ResultSet resultSet = ps.executeQuery();
+
+            User user = new User();
+
+            while (resultSet.next()) {
+                user.setUserId(resultSet.getInt("userID"));
+                user.setUsername(resultSet.getString("username"));
+                user.setAvatarUrl(resultSet.getString("avatarUrl"));
+            }
+
+            resultSet.close();
+            ps.close();
+
+            return user;
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
+    }
+
+    // pagingPostList
+    public int getTotalPost() {
+
+        try {
+            String sql = "SELECT COUNT(*) FROM Post";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                return rs.getInt(1);
+            }
+
+            rs.close();
+            ps.close();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return -1;
+    }
+
+    // paging post list
+    public ArrayList<Post> pagingPostList(int index) {
+        try {
+            String sql = "SELECT * FROM Post\n"
+                    + "ORDER BY postID\n"
+                    + "OFFSET ? ROWS FETCH NEXT 4 ROWS ONLY;";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, (index - 1) * 4);
+
+            ResultSet rs = ps.executeQuery();
+
+            ArrayList<Post> list = new ArrayList<>();
+            while (rs.next()) {
+                Post post = new Post();
+                post.setPostId(rs.getInt("postID"));
+                post.setUserId(rs.getInt("userID"));
+                post.setImgUrl(rs.getString("imgUrl"));
+                post.setTitle(rs.getString("title"));
+                post.setDescription(rs.getString("description"));
+                post.setCreateAt(rs.getTimestamp("createdAt").toLocalDateTime());
+
+                list.add(post);
+
+            }
+
+            rs.close();
+            ps.close();
+
+            return list;
+
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
+    }
+
+    // search by title
+    public ArrayList<Post> searchByTitle(String txtSearch) {
+        try {
+            String sql = "SELECT * FROM Post\n"
+                    + "WHERE title LIKE ?;";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, "%" + txtSearch + "%");
+
+            ResultSet rs = ps.executeQuery();
+
+            ArrayList<Post> list = new ArrayList<>();
+            while (rs.next()) {
+                Post post = new Post();
+                post.setPostId(rs.getInt("postID"));
+                post.setUserId(rs.getInt("userID"));
+                post.setImgUrl(rs.getString("imgUrl"));
+                post.setTitle(rs.getString("title"));
+                post.setDescription(rs.getString("description"));
+                post.setCreateAt(rs.getTimestamp("createdAt").toLocalDateTime());
+
+                list.add(post);
+
+            }
+
+            rs.close();
+            ps.close();
+
+            return list;
+
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
+    }
+
+    // get 3 Post
+    public ArrayList<Post> getThreePost() {
+
+        try {
+            String sql = "SELECT TOP 3 * FROM [Post];";
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+
+            ArrayList<Post> list = new ArrayList<>();
+            while (rs.next()) {
+                Post post = new Post();
+                post.setPostId(rs.getInt("postID"));
+                post.setUserId(rs.getInt("userID"));
+                post.setImgUrl(rs.getString("imgUrl"));
+                post.setTitle(rs.getString("title"));
+                post.setDescription(rs.getString("description"));
+                post.setCreateAt(rs.getTimestamp("createdAt").toLocalDateTime());
+
+                list.add(post);
+
+            }
+
+            rs.close();
+            ps.close();
+
+            return list;
+
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
+    }
+
+    // get next 3 Post
+    public ArrayList<Post> getNextThreePost(int amountPost) {
+
+        try {
+            String sql = "SELECT * FROM [Post]\n"
+                    + "ORDER BY postID\n"
+                    + "OFFSET ? ROWS\n"
+                    + "FETCH NEXT 3 ROWS ONLY;;";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, amountPost);
+            
+            ResultSet rs = ps.executeQuery();
+
+            ArrayList<Post> list = new ArrayList<>();
+            while (rs.next()) {
+                Post post = new Post();
+                post.setPostId(rs.getInt("postID"));
+                post.setUserId(rs.getInt("userID"));
+                post.setImgUrl(rs.getString("imgUrl"));
+                post.setTitle(rs.getString("title"));
+                post.setDescription(rs.getString("description"));
+                post.setCreateAt(rs.getTimestamp("createdAt").toLocalDateTime());
+
+                list.add(post);
+
+            }
+
+            rs.close();
+            ps.close();
+
+            return list;
+
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
     }
 }

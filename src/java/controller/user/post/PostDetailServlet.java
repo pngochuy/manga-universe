@@ -2,8 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller.login;
+package controller.user.post;
 
+import dal.PostDAO;
+import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -11,12 +13,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import model.Post;
+import model.User;
 
 /**
  *
  * @author PC
  */
-public class LogoutServlet extends HttpServlet {
+public class PostDetailServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,10 +39,10 @@ public class LogoutServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet LogoutServlet</title>");            
+            out.println("<title>Servlet PostDetailServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet LogoutServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet PostDetailServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -55,13 +59,20 @@ public class LogoutServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        PrintWriter out = response.getWriter();
         
-        // Logout user session
         HttpSession mySession = request.getSession();
-        mySession.removeAttribute("userSession");
-//        mySession.removeAttribute("post");
-        mySession.invalidate();
-        response.sendRedirect("home.jsp");
+        UserDAO userDAO = new UserDAO();
+        PostDAO postDAO = new PostDAO();
+        
+        int postID = Integer.parseInt(request.getParameter("postID"));
+        int userID = Integer.parseInt(request.getParameter("userID"));
+        
+        Post postDetail = postDAO.getPost(postID, userID);
+        
+        mySession.setAttribute("postDetail", postDetail);
+        response.sendRedirect("forum/postDetail.jsp");
+//        request.getRequestDispatcher("forum/postDetail.jsp").forward(request, response);
     }
 
     /**
