@@ -65,7 +65,7 @@ public class MangaDAO extends DBContext implements mangaInterface  {
         try {
             conn = connection;
             String sql = "INSERT INTO Manga (title, description, userID,"
-                    + "createAt, isCopyRight, isFree, coverImage) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                    + "createAt, isCopyRight, isFree, coverImage) VALUES (?, ?, ?, ?, ?, ?, ?)";
             stmt = conn.prepareStatement(sql);
 
             stmt.setString(1, title);

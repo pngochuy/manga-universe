@@ -72,6 +72,10 @@
         <servlet-name>chapterServlet</servlet-name>
         <servlet-class>controller.chapter.getAllChapterServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ChapterServlet</servlet-name>
+        <servlet-class>controller.manga.ChapterServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/LoginServlet</url-pattern>
@@ -147,6 +151,10 @@
     <servlet-mapping>
         <servlet-name>chapterServlet</servlet-name>
         <url-pattern>/chapterServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChapterServlet</servlet-name>
+        <url-pattern>/ChapterServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

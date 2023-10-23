@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import model.Category;
 import model.Chapter;
+import model.Manga;
 
 /**
  *
@@ -71,6 +72,8 @@ public class mangaSPServlet extends HttpServlet {
             PrintWriter out = response.getWriter();
 
             MangaDAO daoM = new MangaDAO();
+            List<Manga> listM = daoM.getAllMangas();
+            request.setAttribute("listM", listM);
             
             String id = request.getParameter("id");
             
@@ -79,7 +82,7 @@ public class mangaSPServlet extends HttpServlet {
 //            out.println(cate);
 
             ChapterDAO daoC = new ChapterDAO();
-            List<Chapter> list = daoC.getAllChapter(Integer.parseInt(id));
+            List<Chapter> list = daoC.getChapterByID(Integer.parseInt(id));
 
 //            request.setAttribute("cateL", cate);
             mySession.setAttribute("cateL", cate);

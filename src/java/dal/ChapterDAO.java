@@ -11,13 +11,48 @@ import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Chapter;
-import model.Manga;
 
 public class ChapterDAO extends DBContext  {
     
     List<Chapter> listOfChapter = new ArrayList<>();
     
-    public List<Chapter> getAllChapter(int mangaID) {
+    public List<Chapter> getAllChapter() {
+        Connection cnt = null;
+        PreparedStatement stm = null;
+        ResultSet res = null;
+        try{
+            cnt = connection;
+            String sql = "select * from Chapter ";
+            
+            stm = cnt.prepareStatement(sql);  
+            res = stm.executeQuery();
+            while(res.next()){
+                Integer id = res.getInt("chapterID");
+                String title = res.getString("title");
+//                nhớ xoá imageID
+                Integer imgId = res.getInt("imageID");
+                String description = res.getString("description");
+                Integer mangaId = res.getInt("mangaID");
+                
+                Chapter chapter = new Chapter(id, title,imgId, description, mangaId );
+                listOfChapter.add(chapter);
+            }
+            
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }finally{
+            try {
+                cnt.close();
+                stm.close();
+                res.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(ChapterDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return listOfChapter;    
+    }
+    
+    public List<Chapter> getChapterByID(int mangaID) {
         Connection cnt = null;
         PreparedStatement stm = null;
         ResultSet res = null;
@@ -48,7 +83,7 @@ public class ChapterDAO extends DBContext  {
                 stm.close();
                 res.close();
             } catch (SQLException ex) {
-                Logger.getLogger(MangaDAO.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ChapterDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return listOfChapter;    

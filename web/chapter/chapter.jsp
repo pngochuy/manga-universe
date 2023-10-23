@@ -1,3 +1,8 @@
+<%@page import="model.Chapter"%>
+<%@page import="dal.ChapterDAO"%>
+<%@page import="model.Manga"%>
+<%@page import="dal.MangaDAO"%>
+<%@page import="java.util.Date"%>
 <%@page import="model.User"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -9,27 +14,27 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Document</title>
         <!-- Favicons -->
-        <link href="../assetsMain/img/logo.png" rel="icon">
-        <link href="../assetsMain/img/apple-touch-icon.png" rel="apple-touch-icon">
+        <link href="${pageContext.request.contextPath}/assetsMain/img/logo.png" rel="icon">
+        <link href="${pageContext.request.contextPath}/assetsMain/img/apple-touch-icon.png" rel="apple-touch-icon">
 
         <!-- Google Fonts -->
-        <link href="../https://fonts.gstatic.com" rel="preconnect">
+        <link href="${pageContext.request.contextPath}/https://fonts.gstatic.com" rel="preconnect">
         <link
-            href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+            href="${pageContext.request.contextPath}https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
             rel="stylesheet">
 
         <!-- Vendor CSS Files -->
-        <link href="../assetsMain/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-        <link href="../assetsMain/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-        <link href="../assetsMain/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-        <link href="../assetsMain/vendor/quill/quill.snow.css" rel="stylesheet">
-        <link href="../assetsMain/vendor/quill/quill.bubble.css" rel="stylesheet">
-        <link href="../assetsMain/vendor/remixicon/remixicon.css" rel="stylesheet">
-        <link href="../assetsMain/vendor/simple-datatables/style.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/assetsMain/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/assetsMain/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/assetsMain/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/assetsMain/vendor/quill/quill.snow.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/assetsMain/vendor/quill/quill.bubble.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/assetsMain/vendor/remixicon/remixicon.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/assetsMain/vendor/simple-datatables/style.css" rel="stylesheet">
 
         <!-- Template Main CSS File -->
-        <link href="../assetsMain/css/style.css" rel="stylesheet">
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <link href="${pageContext.request.contextPath}/assetsMain/css/style.css" rel="stylesheet">
+        <script src="${pageContext.request.contextPath}https://code.jquery.com/jquery-3.6.0.min.js"></script>
     </head>
 
     <body>
@@ -38,7 +43,7 @@
 
             <div class="d-flex align-items-center justify-content-between">
                 <a href="../home.jsp" class="logo d-flex align-items-center">
-                    <img src="../assetsMain/img/logo.png" alt="" width="100">
+                    <img src="${pageContext.request.contextPath}/assetsMain/img/logo.png" alt="" width="100">
                     <span class="d-none d-lg-block" style="color: white">MangaUniverse</span>
                 </a>
                 <i class="bi bi-list toggle-sidebar-btn" style="color: white"></i>
@@ -388,6 +393,46 @@
                     <!-- >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
                                         Chapter start
         >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+                     <%
+                        int imgid = Integer.parseInt(request.getParameter("cid"));
+                        int mid = Integer.parseInt(request.getParameter("mid"));
+                        String titleC = "";
+                        int chapterId = 0;
+                        String descriptionC = "";
+                        
+                        ChapterDAO manageChapter = new ChapterDAO();
+                        for (Chapter chapter : manageChapter.getAllChapter()) {
+                            if (imgid == chapter.getImageID() && mid == chapter.getMangaID()) {
+                                chapterId = chapter.getChapterID();
+                                titleC = chapter.getTitle();
+                                descriptionC = chapter.getDescription();
+                            }
+                        }
+                    %>
+                    <%
+                        int id = mid;
+                        String title = "";
+                        String description = "";
+                        Integer userID = 0;
+                        Date createdAt = null;
+                        Boolean isCopyright = null;
+                        Boolean isFree = null;
+                        String coverImage = "";
+                        MangaDAO manageManga = new MangaDAO();
+                        for (Manga manga : manageManga.getAllMangas()) {
+                            if (id == manga.getMangaID()) {
+                                coverImage = manga.getCoverImage();
+                                title = manga.getTitle();
+                                description = manga.getDescription();
+                                userID = manga.getUserID();
+                                createdAt = manga.getCreateAt();
+                                isCopyright = manga.isIsCopyRight();
+                                isFree = manga.isIsFree();
+                            }
+                        }
+                    %>
+                    
+                   
                     <section id="breadcrumb">
                         <div class="container">
                             <div class="row">
@@ -399,12 +444,12 @@
                                         <ol class="breadcrumb">
                                             <li class="breadcrumb-item"><a href="../home.jsp">Home</a></li>
                                             <li class="breadcrumb-item"><a href="../follows/readingHistory.jsp">All Mangas</a></li>
-                                            <li class="breadcrumb-item"><a href="../mangaSinglePage.jsp">The Boy in the
-                                                    All-Girls
-                                                    School </a></li>
-                                            <li class="breadcrumb-item active" aria-current="page">The Boy in the All-Girls
-                                                School -
-                                                Chapter 1</li>
+                                            <li class="breadcrumb-item"><a href="mangaSPServlet?id=<%= id%>">
+                                                    <%= title%>
+                                                  </a></li>
+                                            <li class="breadcrumb-item active" aria-current="page">
+                                                <%= title%> - Chapter <%= imgid%>
+                                            </li>
                                         </ol>
                                     </nav>
                                 </div>
@@ -415,13 +460,14 @@
                     <!-- >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
                                         breadcrumb part end
         >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
-
+                    
+                    
                     <section id="chapter" class="pt-50 pb-20">
                         <div class="container">
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="manga_name text-start">
-                                        <h2>The Boy in the All-Girls School</h2>
+                                        <h2><%= title%></h2>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
@@ -437,16 +483,12 @@
                                 <div class="col-lg-6 mb-30 mt-30">
                                     <select class="form-select form-select-sm" aria-label=".form-select-sm example"
                                             onchange="javascript:handleSelect(this)">
-                                        <option value="../chapter/chapter">Chapter 00</option>
-                                        <option selected="" disabled="">Chapter 1 - The Beginning of Everything </option>
-                                        <option value="../chapter/chapter02">Chapter 2 - Friends and Relatives </option>
-                                        <option value="../chapter/chapter03">Chapter 3 - First Visit to the All-Girls School
-                                        </option>
-                                        <option value="../chapter/chapter04">Chapter 4 - A Surprise While Out Strolling
-                                        </option>
-                                        <option value="../chapter/chapter05">Chapter 5 - Appropriate Countermeasures
-                                        </option>
-                                        <option value="../chapter/chapter06">Chapter 6 - First Day of School </option>
+                                       
+                                        <option selected="" disabled="">Chapter <%= imgid%> - <%= titleC%> </option>
+                                      <c:forEach var="c" items="${listC}" varStatus="loop"> 
+                                        <option value="../chapter/chapter.jsp?cid=${c.chapterID}">Chapter ${loop.index + 1} - ${c.title} </option>
+                                      </c:forEach>
+
                                     </select>
                                     <script>
                                         function handleSelect(elm) {
@@ -458,9 +500,10 @@
                                     <div class="manga_info">
                                         <ul>
                                             <li class="d-flex flex-wrap watch justify-content-end">
-                                                <a class="mr-2" href="../chapter/chapter.jsp"><i
-                                                        class="fa-solid fa-arrow-left"></i>
-                                                    Prev</a><a href="../chapter/chapter02.jsp">Next <i
+                                                <a class="mr-2" href="ChapterServlet?cid=<%= imgid-1%>&mid=<%= mid%>">
+                                                    <i class="fa-solid fa-arrow-left"></i>
+                                                    Prev</a>
+                                                <a href="ChapterServlet?cid=<%= imgid+1%>&mid=<%= mid%>">Next <i
                                                         class="fa-solid fa-arrow-right"></i></a>
                                             </li>
                                         </ul>
@@ -468,50 +511,11 @@
                                 </div>
                             </div>
                             <div class="row">
+                               <c:forEach var="im" items="${listI}" varStatus="loop"> 
                                 <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/1.jpg" alt=""></div>
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/2.jpg" alt=""></div>
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/3.jpg" alt=""></div>
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/4.jpg" alt=""></div>
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/5.jpg" alt=""></div>
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/6.jpg" alt=""></div>
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/7.jpg" alt=""></div>
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/8.jpg" alt=""></div>
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/9.jpg" alt=""></div>
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/10.jpg" alt=""></div>
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/11.jpg" alt=""></div>
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/12.jpg" alt=""></div>
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/13.jpg" alt=""></div>
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/14.jpg" alt=""></div>
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/15.jpg" alt=""></div>
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/16.jpg" alt=""></div>
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/17.jpg" alt=""></div>
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/18.jpg" alt=""></div>
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/19.jpg" alt=""></div>
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/20.jpg" alt=""></div>
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/21.jpg" alt=""></div>
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/22.jpg" alt=""></div>
+                                                         src="${im.getImageURL()}" alt=""></div>
+                               </c:forEach>
+                                
                             </div>
 
 
@@ -519,16 +523,11 @@
                                 <div class="col-lg-6 mb-30 mt-30">
                                     <select class="form-select form-select-sm" aria-label=".form-select-sm example"
                                             onchange="javascript:handleSelect(this)">
-                                        <option value="../chapter/chapter">Chapter 00</option>
-                                        <option selected="" disabled="">Chapter 1 - The Beginning of Everything </option>
-                                        <option value="../chapter/chapter02">Chapter 2 - Friends and Relatives </option>
-                                        <option value="../chapter/chapter03">Chapter 3 - First Visit to the All-Girls School
-                                        </option>
-                                        <option value="../chapter/chapter04">Chapter 4 - A Surprise While Out Strolling
-                                        </option>
-                                        <option value="../chapter/chapter05">Chapter 5 - Appropriate Countermeasures
-                                        </option>
-                                        <option value="../chapter/chapter06">Chapter 6 - First Day of School </option>
+                                          <option selected="" disabled="">Chapter <%= imgid%> - <%= titleC%> </option>
+                                      <c:forEach var="c" items="${listC}" varStatus="loop"> 
+                                        <option value="../chapter/chapter.jsp?cid=${c.chapterID}">Chapter ${loop.index + 1} - ${c.title} </option>
+                                      </c:forEach>
+
                                     </select>
                                     <script>
                                         function handleSelect(elm) {
@@ -540,10 +539,11 @@
                                     <div class="manga_info">
                                         <ul>
                                             <li class="d-flex flex-wrap watch justify-content-end">
-                                                <a class="mr-2" href="../chapter/chapter.jsp"><i
-                                                        class="bi bi-arrow-left"></i>
-                                                    Prev</a><a href="../chapter/chapter02.jsp">Next <i
-                                                        class="bi bi-arrow-right"></i></a>
+                                                <a class="mr-2" href="ChapterServlet?cid=<%= imgid-1%>&mid=<%= mid%>">
+                                                    <i class="fa-solid fa-arrow-left"></i>
+                                                    Prev</a>
+                                                <a href="ChapterServlet?cid=<%= imgid+1%>&mid=<%= mid%>">Next <i
+                                                        class="fa-solid fa-arrow-right"></i></a>
                                             </li>
                                         </ul>
                                     </div>
@@ -731,17 +731,17 @@
 
         <!-- Vendor JS Files -->
 
-        <script src="../assetsMain/vendor/apexcharts/apexcharts.min.js"></script>
-        <script src="../assetsMain/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-        <script src="../assetsMain/vendor/chart.js/chart.umd.js"></script>
-        <script src="../assetsMain/vendor/echarts/echarts.min.js"></script>
-        <script src="../assetsMain/vendor/quill/quill.min.js"></script>
-        <script src="../assetsMain/vendor/simple-datatables/simple-datatables.js"></script>
-        <script src="../assetsMain/vendor/tinymce/tinymce.min.js"></script>
-        <script src="../assetsMain/vendor/php-email-form/validate.js"></script>
+        <script src="${pageContext.request.contextPath}/assetsMain/vendor/apexcharts/apexcharts.min.js"></script>
+        <script src="${pageContext.request.contextPath}/assetsMain/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="${pageContext.request.contextPath}/assetsMain/vendor/chart.js/chart.umd.js"></script>
+        <script src="${pageContext.request.contextPath}/assetsMain/vendor/echarts/echarts.min.js"></script>
+        <script src="${pageContext.request.contextPath}/assetsMain/vendor/quill/quill.min.js"></script>
+        <script src="${pageContext.request.contextPath}/assetsMain/vendor/simple-datatables/simple-datatables.js"></script>
+        <script src="${pageContext.request.contextPath}/assetsMain/vendor/tinymce/tinymce.min.js"></script>
+        <script src="${pageContext.request.contextPath}/assetsMain/vendor/php-email-form/validate.js"></script>
 
         <!-- Template Main JS File -->
-        <script src="../assetsMain/js/main.js"></script>
+        <script src="${pageContext.request.contextPath}/assetsMain/js/main.js"></script>
     </body>
 
 </html>

@@ -407,29 +407,8 @@
                     <!-- >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
                                          breadcrumb page start
         >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
-                    <section id="breadcrumb">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <nav aria-label="breadcrumb">
-                                        <ol class="breadcrumb">
-                                            <li class="breadcrumb-item"><a href="home.jsp">Home</a></li>
-                                            <li class="breadcrumb-item"><a href="../manga_all.jsp">All Mangas</a></li>
-                                            <li class="breadcrumb-item"><a href="mangaSinglePage.jsp">The Boy in the
-                                                    All-Girls
-                                                    School </a>
-                                        </ol>
-                                    </nav>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-
-                    <!-- >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-                                        breadcrumb part end
-        >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
-
-                    <!-- Take Manga from hom.jsp -->
+             
+                    <!-- Take Manga from home.jsp -->
                     <%
                         int id = Integer.parseInt(request.getParameter("id"));
                         String title = "";
@@ -452,6 +431,28 @@
                             }
                         }
                     %>
+                    <section id="breadcrumb">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <nav aria-label="breadcrumb">
+                                        <ol class="breadcrumb">
+                                            <li class="breadcrumb-item"><a href="home.jsp">Home</a></li>
+                                            <li class="breadcrumb-item"><a href="../manga_all.jsp">All Mangas</a></li>
+                                            <li class="breadcrumb-item"><a href="mangaSPServlet?id=<%= id%>">
+                                                    <%= title%> </a>
+                                        </ol>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+                                        breadcrumb part end
+        >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+
+                    
 
                     <section id="manga_single_page" class="pt-50 pb-20">
                         <div class="container-manga-single-page">
@@ -613,7 +614,7 @@
                                             <c:forEach var="c" items="${listC}" varStatus="loop"> 
 
                                                 <li>
-                                                    <a href="chapter/chapter.jsp?cid=${c.chapterID}"
+                                                    <a href="ChapterServlet?cid=${c.imageID}&mid=${c.mangaID}"
                                                        class="d-flex flex-wrap justify-content-between">
                                                         <span>Chapter ${loop.index + 1} - ${c.title}</span><span>07/19/2020 </span>
                                                     </a>
@@ -777,6 +778,7 @@
                                     <div class="section-tittle mb-30 mt-30">
                                         <h3>Related Manga</h3>
                                     </div>
+                                    
                                     <a href="#">
                                         <div class="trand-right-single d-flex">
                                             <div class="trand-right-img">
@@ -807,6 +809,7 @@
                                             </div>
                                         </div>
                                     </a>
+                                    
                                     <a href="#">
                                         <div class="trand-right-single d-flex">
                                             <div class="trand-right-img">

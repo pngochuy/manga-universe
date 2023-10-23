@@ -2,20 +2,27 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller.chapter;
+package controller.manga;
 
+import dal.ChapterDAO;
+import dal.ImageSourceDAO;
+import dal.MangaDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.Chapter;
+import model.ImageSource;
+import model.Manga;
 
 /**
  *
  * @author OS
  */
-public class getAllChapterServlet extends HttpServlet {
+public class ChapterServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,10 +41,10 @@ public class getAllChapterServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet chapterServlet</title>");            
+            out.println("<title>Servlet ChapterServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet chapterServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ChapterServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -55,7 +62,29 @@ public class getAllChapterServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        
+        String chapterID = request.getParameter("cid");
+        String mangaID = request.getParameter("mid");
+        
+        PrintWriter out = response.getWriter();
+//        out.println(mangaID);
+//        out.print(chapterID);
+        
+        ChapterDAO daoC = new ChapterDAO();
+        List<Chapter> listC = daoC.getChapterByID(Integer.parseInt(mangaID));
+        
+        ImageSourceDAO dao = new ImageSourceDAO();
+        List<ImageSource> listI = dao.getImgSourceByID(Integer.parseInt(chapterID), Integer.parseInt(mangaID));
+        request.setAttribute("listC", listC);
+        request.setAttribute("listI", listI);
+        
+//        for(ImageSource ima:listI ){
+//            out.println(ima.getImageURL());
+//        }
+        request.getRequestDispatcher("chapter/chapter.jsp").forward(request, response);
+//        response.sendRedirect("chapter/chapter.jsp");
+        
+
     }
 
     /**

@@ -13,6 +13,26 @@ public class ImageSource {
     public String imageURL;
     public String description;
     public int chapterID;
+    public int mangaID;
+
+    public ImageSource(int imageID, String imageURL, String description, int chapterID, int mangaID) {
+        this.imageID = imageID;
+        this.imageURL = imageURL;
+        this.description = description;
+        this.chapterID = chapterID;
+        this.mangaID = mangaID;
+    }
+
+    public ImageSource(String imageURL, String description, int chapterID, int mangaID) {
+        this.imageURL = imageURL;
+        this.description = description;
+        this.chapterID = chapterID;
+        this.mangaID = mangaID;
+    }
+
+
+    
+    
 
     public int getImageID() {
         return imageID;
@@ -46,19 +66,20 @@ public class ImageSource {
         this.chapterID = chapterID;
     }
 
-    public ImageSource(int imageID, String imageURL, String description, int chapterID) {
-        this.imageID = imageID;
-        this.imageURL = imageURL;
-        this.description = description;
-        this.chapterID = chapterID;
+    public int getMangaID() {
+        return mangaID;
+    }
+
+    public void setMangaID(int mangaID) {
+        this.mangaID = mangaID;
     }
 
     @Override
     public String toString() {
-        return "ImageSource{" + "imageID=" + imageID + ", imageURL=" + imageURL + ", description=" + description + ", chapterID=" + chapterID + '}';
+        return "ImageSource{" + "imageID=" + imageID + ", imageURL=" + imageURL + ", description=" + description + ", chapterID=" + chapterID + ", mangaID=" + mangaID + '}';
     }
 
-    public ImageSource() {
-    }
+
+
     
 }

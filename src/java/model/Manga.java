@@ -7,12 +7,12 @@ package model;
 import java.util.Date;
 
 public class Manga {
-     public int mangaID;
-     public String title, description;
-     public int userID;
-     public Date createAt;
-     public boolean isCopyRight, isFree;
-     public String coverImage;
+     private int mangaID;
+     private String title, description;
+     private int userID;
+     private Date createAt;
+     private boolean isCopyRight, isFree;
+     private String coverImage;
 
     public Manga() {
     }
