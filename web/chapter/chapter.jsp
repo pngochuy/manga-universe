@@ -33,7 +33,7 @@
     </head>
 
     <body>
-        
+
         <%@include file="../layouts/layoutsMain/headerMain.jsp" %> 
         <%@include file="../layouts/layoutsMain/sidebarMain.jsp" %>
 
@@ -218,106 +218,118 @@
 
                             <div class="row">
                                 <div class="col-12 col-lg-8">
-                                    <!-- Comments Area -->
                                     <div class="comment_area mb-50 clearfix">
-                                        <h5 class="title">12 Comments</h5>
 
-                                        <ol>
-                                            <!-- Single Comment Area -->
-                                            <li class="single_comment_area">
-                                                <!-- Comment Content -->
-                                                <div class="comment-content d-flex">
-                                                    <!-- Comment Author -->
-                                                    <div class="comment-author">
-                                                        <img class="w-100 img-fluid"
-                                                             src="https://yae.hifive03.com/assets/img/comment/comment_1.png"
-                                                             alt="author">
-                                                    </div>
-                                                    <!-- Comment Meta -->
-                                                    <div class="comment-meta">
-                                                        <a href="#" class="post-date">27 Aug 2024</a>
-                                                        <h5>Jerome Leonard</h5>
-                                                        <p>I'm usually an anime-only type person but watching the first 3
-                                                            episodes of
-                                                            this show made me read the manga its actually amazing</p>
-                                                        <a href="#" class="like">Like</a>
-                                                        <a href="#" class="reply">Reply</a>
-                                                    </div>
-                                                </div>
+                                        <!--                                        <div class="fb-comments" data-href="chapter.jsp" 
+                                                                                 data-width="856" data-numposts="5"></div>-->
 
-                                                <ol class="children">
-                                                    <li class="single_comment_area">
-                                                        <!-- Comment Content -->
-                                                        <div class="comment-content d-flex">
-                                                            <!-- Comment Author -->
-                                                            <div class="comment-author">
-                                                                <img class="w-100 img-fluid"
-                                                                     src="https://yae.hifive03.com/assets/img/comment/comment_2.png"
-                                                                     alt="author">
-                                                            </div>
-                                                            <!-- Comment Meta -->
-                                                            <div class="comment-meta">
-                                                                <a href="#" class="post-date">27 Aug 2024</a>
-                                                                <h5>Theodore Adkins</h5>
-                                                                <p>I started watching this by accident and it's so funny.
-                                                                    Anya is
-                                                                    possibly the cutest anime character I've seen in a while
-                                                                    (and not in
-                                                                    that cutesy anime ick way). I really want them to be a
-                                                                    family in the
-                                                                    end, even if the mission fails. </p>
-                                                                <a href="#" class="like">Like</a>
-                                                                <a href="#" class="reply">Reply</a>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ol>
-                                            </li>
+                                        <!--                                        <div class="fb-comments" data-href="https://developers.facebook.com/docs/plugins/comments#configurator" 
+                                                                                     data-width="700" data-numposts="5"></div>-->
 
-                                            <!-- Single Comment Area -->
-                                            <li class="single_comment_area">
-                                                <!-- Comment Content -->
-                                                <div class="comment-content d-flex">
-                                                    <!-- Comment Author -->
-                                                    <div class="comment-author">
-                                                        <img class="w-100 img-fluid"
-                                                             src="https://yae.hifive03.com/assets/img/comment/comment_4.png"
-                                                             alt="author">
-                                                    </div>
-                                                    <!-- Comment Meta -->
-                                                    <div class="comment-meta">
-                                                        <a href="#" class="post-date">27 Aug 2024</a>
-                                                        <h5>Melode Mash</h5>
-                                                        <p>Great show. Anya is lovely character. I hope the 3 of them become
-                                                            a real
-                                                            family. </p>
-                                                        <a href="#" class="like">Like</a>
-                                                        <a href="#" class="reply">Reply</a>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <!-- Single Comment Area -->
-                                            <li class="single_comment_area">
-                                                <!-- Comment Content -->
-                                                <div class="comment-content d-flex">
-                                                    <!-- Comment Author -->
-                                                    <div class="comment-author">
-                                                        <img class="w-100 img-fluid"
-                                                             src="https://yae.hifive03.com/assets/img/comment/comment_3.png"
-                                                             alt="author">
-                                                    </div>
-                                                    <!-- Comment Meta -->
-                                                    <div class="comment-meta">
-                                                        <a href="#" class="post-date">27 Aug 2024</a>
-                                                        <h5>Roger Marshall</h5>
-                                                        <p>Anya is so freaking funny ! Im so happy T _ T </p>
-                                                        <a href="#" class="like">Like</a>
-                                                        <a href="#" class="reply">Reply</a>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </ol>
+                                        <div class="fb-comments" data-href="chapter.jsp" 
+                                             data-width="700" data-numposts="5"></div>
                                     </div>
+
+                                    <!-- Comments Area -->
+                                    <!--                                    <div class="comment_area mb-50 clearfix">
+                                                                            <h5 class="title">12 Comments</h5>
+                                    
+                                                                            <ol>
+                                                                                 Single Comment Area 
+                                                                                <li class="single_comment_area">
+                                                                                     Comment Content 
+                                                                                    <div class="comment-content d-flex">
+                                                                                         Comment Author 
+                                                                                        <div class="comment-author">
+                                                                                            <img class="w-100 img-fluid"
+                                                                                                 src="https://yae.hifive03.com/assets/img/comment/comment_1.png"
+                                                                                                 alt="author">
+                                                                                        </div>
+                                                                                         Comment Meta 
+                                                                                        <div class="comment-meta">
+                                                                                            <a href="#" class="post-date">27 Aug 2024</a>
+                                                                                            <h5>Jerome Leonard</h5>
+                                                                                            <p>I'm usually an anime-only type person but watching the first 3
+                                                                                                episodes of
+                                                                                                this show made me read the manga its actually amazing</p>
+                                                                                            <a href="#" class="like">Like</a>
+                                                                                            <a href="#" class="reply">Reply</a>
+                                                                                        </div>
+                                                                                    </div>
+                                    
+                                                                                    <ol class="children">
+                                                                                        <li class="single_comment_area">
+                                                                                             Comment Content 
+                                                                                            <div class="comment-content d-flex">
+                                                                                                 Comment Author 
+                                                                                                <div class="comment-author">
+                                                                                                    <img class="w-100 img-fluid"
+                                                                                                         src="https://yae.hifive03.com/assets/img/comment/comment_2.png"
+                                                                                                         alt="author">
+                                                                                                </div>
+                                                                                                 Comment Meta 
+                                                                                                <div class="comment-meta">
+                                                                                                    <a href="#" class="post-date">27 Aug 2024</a>
+                                                                                                    <h5>Theodore Adkins</h5>
+                                                                                                    <p>I started watching this by accident and it's so funny.
+                                                                                                        Anya is
+                                                                                                        possibly the cutest anime character I've seen in a while
+                                                                                                        (and not in
+                                                                                                        that cutesy anime ick way). I really want them to be a
+                                                                                                        family in the
+                                                                                                        end, even if the mission fails. </p>
+                                                                                                    <a href="#" class="like">Like</a>
+                                                                                                    <a href="#" class="reply">Reply</a>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </li>
+                                                                                    </ol>
+                                                                                </li>
+                                    
+                                                                                 Single Comment Area 
+                                                                                <li class="single_comment_area">
+                                                                                     Comment Content 
+                                                                                    <div class="comment-content d-flex">
+                                                                                         Comment Author 
+                                                                                        <div class="comment-author">
+                                                                                            <img class="w-100 img-fluid"
+                                                                                                 src="https://yae.hifive03.com/assets/img/comment/comment_4.png"
+                                                                                                 alt="author">
+                                                                                        </div>
+                                                                                         Comment Meta 
+                                                                                        <div class="comment-meta">
+                                                                                            <a href="#" class="post-date">27 Aug 2024</a>
+                                                                                            <h5>Melode Mash</h5>
+                                                                                            <p>Great show. Anya is lovely character. I hope the 3 of them become
+                                                                                                a real
+                                                                                                family. </p>
+                                                                                            <a href="#" class="like">Like</a>
+                                                                                            <a href="#" class="reply">Reply</a>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </li>
+                                                                                 Single Comment Area 
+                                                                                <li class="single_comment_area">
+                                                                                     Comment Content 
+                                                                                    <div class="comment-content d-flex">
+                                                                                         Comment Author 
+                                                                                        <div class="comment-author">
+                                                                                            <img class="w-100 img-fluid"
+                                                                                                 src="https://yae.hifive03.com/assets/img/comment/comment_3.png"
+                                                                                                 alt="author">
+                                                                                        </div>
+                                                                                         Comment Meta 
+                                                                                        <div class="comment-meta">
+                                                                                            <a href="#" class="post-date">27 Aug 2024</a>
+                                                                                            <h5>Roger Marshall</h5>
+                                                                                            <p>Anya is so freaking funny ! Im so happy T _ T </p>
+                                                                                            <a href="#" class="like">Like</a>
+                                                                                            <a href="#" class="reply">Reply</a>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </li>
+                                                                            </ol>
+                                                                        </div>-->
 
                                 </div>
                                 <div class="col-lg-3">
@@ -339,38 +351,38 @@
                                 </div>
                             </div>
 
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="comment-form">
-                                        <h4>Leave a Reply</h4>
-                                        <form class="form-contact comment_form" action="#" id="commentForm">
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <div class="form-group">
-                                                        <textarea class="form-control w-100" name="comment" id="comment"
-                                                                  cols="30" rows="9" placeholder="Write Comment"></textarea>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <input class="form-control" name="name" id="name" type="text"
-                                                               placeholder="Name">
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <input class="form-control" name="email" id="email-comment"
-                                                               type="email" placeholder="Email">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <button class="btn btn-primary" type="submit">Send Message</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
+                            <!--                            <div class="row">
+                                                            <div class="col-12">
+                                                                <div class="comment-form">
+                                                                    <h4>Leave a Reply</h4>
+                                                                    <form class="form-contact comment_form" action="#" id="commentForm">
+                                                                        <div class="row">
+                                                                            <div class="col-12">
+                                                                                <div class="form-group">
+                                                                                    <textarea class="form-control w-100" name="comment" id="comment"
+                                                                                              cols="30" rows="9" placeholder="Write Comment"></textarea>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-sm-6">
+                                                                                <div class="form-group">
+                                                                                    <input class="form-control" name="name" id="name" type="text"
+                                                                                           placeholder="Name">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-sm-6">
+                                                                                <div class="form-group">
+                                                                                    <input class="form-control" name="email" id="email-comment"
+                                                                                           type="email" placeholder="Email">
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <button class="btn btn-primary" type="submit">Send Message</button>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>-->
                         </div>
                     </section>
                     <!-- >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -381,8 +393,13 @@
         </main>
 
 
+
         <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
                 class="bi bi-arrow-up-short"></i></a>
+
+        <div id="fb-root"></div>
+        <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v18.0&appId=658565436099843" 
+        nonce="deUfXOoO"></script>
 
         <!-- Vendor JS Files -->
 

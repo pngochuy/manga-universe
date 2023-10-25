@@ -1,3 +1,4 @@
+<%@page import="model.Manga"%>
 <%@page import="model.Category"%>
 <%@page import="dal.CategoryDAO"%>
 <%@page import="java.util.ArrayList"%>
@@ -14,6 +15,9 @@
         User userSession = (User) session.getAttribute("userSession");
         String author = userSession.getUsername();
         request.setAttribute("authorName", author);
+        if (session.getAttribute("mangaEdit") == null) {
+            response.sendRedirect("viewMangaList.jsp");
+        }
     }
 
 
@@ -51,7 +55,7 @@
 
         <!-- Template Main CSS File -->
         <link href="assetsUser/css/style.css" rel="stylesheet">
-        
+
 
     </head>
 
@@ -60,6 +64,15 @@
         <%@include file="layouts/layoutUser/headerUser.jsp" %> 
         <%@include file="layouts/layoutUser/sidebarUser.jsp" %>
 
+        <%
+            Manga m = (Manga) request.getAttribute("m");
+            ArrayList<Category> sC = (ArrayList<Category>) request.getAttribute("sC");
+            if (m != null) {
+                session.setAttribute("mangaEdit", m);
+                session.setAttribute("categoriesEdit", sC);
+            }
+        %>
+
         <main id="main" class="main">
 
             <div class="pagetitle">
@@ -67,8 +80,10 @@
                 <nav>
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="home.jsp">Home</a></li>
-                        <li class="breadcrumb-item"><a href="home.jsp">User</a></li>
-                        <li class="breadcrumb-item"><a href="addManga.jsp">Add Manga</a></li>
+                        <li class="breadcrumb-item"><a href="userProfile.jsp">User</a></li>
+                        <li class="breadcrumb-item"><a href="viewMangaList.jsp">My Manga List</a></li>
+                        <li class="breadcrumb-item">${mangaEdit.getTitle()}</li>
+                        <li class="breadcrumb-item active">Edit Manga</li>
                     </ol>
                 </nav>
             </div><!-- End Page Title -->
@@ -80,7 +95,7 @@
                         <div class="card">
 
                             <div class="card-body card-title">
-                                <h5 class="card-title">Your New Manga</h5>
+                                <h5 class="card-title">Edit Manga</h5>
 
                                 <hr>
 
@@ -101,9 +116,13 @@
                                     </div>
 
                                     <% }%>
-                                    <% if (u2.getRole().equalsIgnoreCase("Author")) {%>
+                                    <% if (u2.getRole().equalsIgnoreCase("Author")) {
 
-                                    <form action="AddMangaServlet" method="POST" accept-charset="UTF-8">
+
+                                    %>
+
+
+                                    <form action="EditMangaServlet" method="POST" accept-charset="UTF-8">
                                         <div class="form-group">
                                             <div class="row">
                                                 <div class="col-sm-3 text-right">
@@ -112,7 +131,7 @@
                                                 </div>
                                                 <div class="col-sm-9">
                                                     <input class="form-control url-create" data-val="true" id="Title" 
-                                                           name="title" placeholder="Input text" type="text" value="${titleValue != null ? titleValue : ''}">
+                                                           name="title" placeholder="Input text" type="text" value="${titleValue != null ? (!titleValue.equals('') ? titleValue : mangaEdit.getTitle()) : mangaEdit.getTitle()}">
                                                     <c:if test="${titleError != null}">
                                                         <small class="small" style="color: red;">${titleError}</small> 
                                                     </c:if>
@@ -126,6 +145,7 @@
                                                     <span class="text-error">(*)</span>
                                                 </div>
                                                 <div class="col-sm-9">
+
                                                     <input class="form-control url-create" data-val="true" id="Author" 
                                                            name="author" type="text" value="${authorName != null ? authorName : ''}" readonly="" style="background-color: #e9ecef">
                                                     <c:if test="${authorError != null}">
@@ -142,11 +162,11 @@
                                                     <div class="container_imgPreview">
                                                         <input type="checkbox" id="zoomCheck">
                                                         <label for="zoomCheck">
-                                                            <img id="imagePreview" src="${coverUrlValue != null ? (!coverUrlValue.equals('') ? coverUrlValue : 'assetsUser/img/no_image.jpg') : 'assetsUser/img/no_image.jpg'}" alt="Post Image" style="width: 400px; height: 300px">
+                                                            <img id="imagePreview" src="${coverUrlValue != null ? (!coverUrlValue.equals('') ? coverUrlValue : mangaEdit.getCoverImage()) : mangaEdit.getCoverImage()}" alt="Post Image" style="width: 400px; height: 300px">
                                                         </label>
                                                     </div>
 
-                                                    
+
                                                     <div class="pt-2 d-flex align-center gap-2">
                                                         <input type="file" name="postImage" id="postImage" style="display: none;" accept="image/*" >
 
@@ -164,7 +184,7 @@
                                                     </c:if>
 
                                                 </div>
-                                                <input type="hidden" name="coverUrl" id="coverUrl" value="${coverUrlValue != null ? (!coverUrlValue.equals('') ? coverUrlValue : '') : ''}">
+                                                <input type="hidden" name="coverUrl" id="coverUrl" value="${coverUrlValue != null ? (!coverUrlValue.equals('') ? coverUrlValue : mangaEdit.getCoverImage()) : mangaEdit.getCoverImage()}">
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -174,8 +194,7 @@
                                                     <span class="text-error">(*)</span>
                                                 </div>
 
-                                                <%
-                                                    CategoryDAO categoryDAO = new CategoryDAO();
+                                                <%                                                    CategoryDAO categoryDAO = new CategoryDAO();
                                                     ArrayList<Category> list = categoryDAO.getAllCategoryAscending();
 
                                                     session.setAttribute("categories", list);
@@ -183,15 +202,50 @@
                                                 %>
 
                                                 <div class="col-sm-9">  
+
                                                     <select class="form-control url-create" data-val="true" id="Category" name="selectedCategories" multiple>
                                                         <c:forEach items="${categories}" var="category">
-                                                            <c:set var="isSelected" value="false" />
-                                                            <c:forEach items="${selectedCategories}" var="selectedCategory">
-                                                                <c:if test="${selectedCategory == category.getCategoryID()}">
-                                                                    <c:set var="isSelected" value="true" />
+
+                                                            <c:if test="${selectedCategories != null}">
+                                                                <!--in edit-->
+                                                                <c:if test="${!selectedCategories.equals('')}">
+                                                                    <c:set var="isSelected" value="false" />
+                                                                    <c:forEach items="${selectedCategories}" var="selectedCategory">
+                                                                        <c:if test="${selectedCategory == category.getCategoryID()}">
+                                                                            <c:set var="isSelected" value="true" />
+                                                                        </c:if>
+                                                                    </c:forEach>
+                                                                    <option value="${category.getCategoryID()}" <c:if test="${isSelected}">selected</c:if>>${category.getType()}</option>
                                                                 </c:if>
-                                                            </c:forEach>
-                                                            <option value="${category.getCategoryID()}" <c:if test="${isSelected}">selected</c:if>>${category.getType()}</option>
+
+
+                                                                <!--after edit-->
+                                                                <c:if test="${selectedCategories.equals('')}">
+                                                                    <c:set var="isSelected2" value="false" />
+                                                                    <c:forEach items="${sessionScope.categoriesEdit}" var="selectedCategory2">
+                                                                        <!--check ID-->
+                                                                        <c:if test="${selectedCategory2.getCategoryID() == category.getCategoryID()}">
+                                                                            <c:set var="isSelected2" value="true" />
+                                                                        </c:if>
+                                                                    </c:forEach>
+                                                                    <option value="${category.getCategoryID()}" <c:if test="${isSelected2}">selected</c:if>>${category.getType()}</option>
+                                                                </c:if>
+
+                                                            </c:if>
+
+                                                            <!--before edit-->
+                                                            <c:if test="${selectedCategories == null}">
+                                                                <c:set var="isSelected2" value="false" />
+                                                                <c:forEach items="${sessionScope.categoriesEdit}" var="selectedCategory2">
+                                                                    <!--check ID-->
+                                                                    <c:if test="${selectedCategory2.getCategoryID() == category.getCategoryID()}">
+                                                                        <c:set var="isSelected2" value="true" />
+                                                                    </c:if>
+                                                                </c:forEach>
+                                                                <option value="${category.getCategoryID()}" <c:if test="${isSelected2}">selected</c:if>>${category.getType()}</option>
+                                                            </c:if>
+
+
                                                         </c:forEach>
                                                     </select>
                                                     <c:if test="${categoryError != null}">
@@ -208,7 +262,7 @@
                                                     <span class="text-error">(*)</span>
                                                 </div>
                                                 <div class="col-sm-9">
-                                                    <textarea class="form-control" placeholder="Content" rows="10" name="summary">${summaryValue != null ? summaryValue : ''}</textarea>
+                                                    <textarea class="form-control" placeholder="Content" rows="10" name="summary">${summaryValue != null ? (!summaryValue.equals('') ? summaryValue : mangaEdit.getDescription()) : mangaEdit.getDescription()}</textarea>
                                                     <c:if test="${summaryError != null}">
                                                         <small class="small" style="color: red;">${summaryError}</small> 
                                                     </c:if>
@@ -221,17 +275,11 @@
                                                 </div>
 
                                                 <div class="col-sm-9">
-                                                    <input type="hidden" name="id" value="${mangaID}">
-                                                    <button id="submitButton" type="submit" class="btn btn-primary">Add</button>
+                                                    <input type="hidden" name="mangaID" value="${mangaEdit.getMangaID()}">
+                                                    <button id="submitButton" type="submit" class="btn btn-primary">Edit</button>
                                                     <c:if test="${messageAdd != null}">
                                                         <br/>
                                                         <small class="small" style="color: green;">${messageAdd}</small> 
-                                                        <br/>
-                                                        <div class="alert alert-primary alert-dismissible fade show" role="alert">
-                                                            <i class="bi bi-star me-1"></i>
-                                                            Check your new Manga in your List Manga
-                                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                                        </div>
                                                     </c:if>
                                                 </div>
                                             </div>

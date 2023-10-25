@@ -2539,7 +2539,7 @@ ul.pagination li a {
     -webkit-transition: all 0.3s ease-in-out;
     transition: all 0.3s ease-in-out;
     position: relative;
-    z-index: 1;
+    /*z-index: 1;*/
     border-right: none;
     background: #242424;
 }

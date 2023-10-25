@@ -19,6 +19,51 @@ import model.User;
 public class UserDAO extends DBContext {
 
     // get User
+    public User getUserById(int userID) {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            String sql = "SELECT * FROM [Users] "
+                    + "WHERE userID = ?;";
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, userID);
+
+            rs = ps.executeQuery();
+            User user = new User();
+
+            while (rs.next()) {
+                user.setUserId(rs.getInt("userID"));
+                user.setAvatarUrl(rs.getString("avatarUrl"));
+                user.setUsername(rs.getString("username"));
+                user.setPassword(rs.getString("password"));
+                user.setName(rs.getString("name"));
+                user.setEmail(rs.getString("email"));
+                user.setPhone(rs.getString("phoneNumber"));
+                user.setGender(rs.getBoolean("gender"));
+                user.setRole(rs.getString("role"));
+                user.setExpiredTime(rs.getTimestamp("expiredTime").toLocalDateTime());
+                user.setCoinQuantity(rs.getInt("coinQuantity"));
+                user.setCreateAt(rs.getTimestamp("createAt").toLocalDateTime());
+
+                // return lap tuc!
+                return user;
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                ps.close();
+                rs.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        return null;
+    }
+    // get User
     public User getUserByGmail(String email) {
         PreparedStatement ps = null;
         ResultSet rs = null;

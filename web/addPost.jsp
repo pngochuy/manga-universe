@@ -201,7 +201,7 @@
                                                                                 <div class="col-sm-3">
                                                                                     <div class="text-center">
                                                                                         <input type="hidden" name="id" value="${post.getPostId()}">
-                                                                                        <button type="submit" class="btn btn-primary">Edit</button>
+                                                                                        <button type="submit" class="btn btn-primary">Edit <i class="bi bi-pencil-square"></i></button>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -348,7 +348,7 @@
                                                                     </c:if>
 
                                                                     <div class="text-center">
-                                                                        <button type="submit" class="btn btn-primary">Delete Post</button>
+                                                                        <button type="submit" class="btn btn-danger">Delete Post</button>
                                                                     </div> 
                                                                 </form>
                                                             </div>

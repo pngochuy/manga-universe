@@ -1,13 +1,20 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="model.Manga"%>
+<%@page import="dal.MangaDAO"%>
 <%@page import="model.User"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%
-
-    if (session.getAttribute("userSession") == null) {
+    User userSession = (User) session.getAttribute("userSession");
+    if (userSession == null) {
         response.sendRedirect("login.jsp");
     }
-
+    
+    MangaDAO mangaDAO = new MangaDAO();
+    
+    ArrayList<Manga> list = mangaDAO.getAllByUserID(userSession.getUserId());
+    session.setAttribute("mangaList", list);
 
 %>
 <!DOCTYPE html>
@@ -48,7 +55,6 @@
     <body>
 
         <%@include file="layouts/layoutUser/headerUser.jsp" %> 
-        
         <%@include file="layouts/layoutUser/sidebarUser.jsp" %>
 
         <main id="main" class="main">
@@ -59,7 +65,7 @@
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="home.jsp">Home</a></li>
                         <li class="breadcrumb-item">User</li>
-                        <li class="breadcrumb-item active">View Manga List</li>
+                        <li class="breadcrumb-item active">My Manga List</li>
                     </ol>
                 </nav>
             </div><!-- End Page Title -->
@@ -86,30 +92,48 @@
                                         an author!
                                         <!--<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>-->
                                     </div>
-                                    
-                                    <% }%>
-                                    <% if (u2.getRole().equalsIgnoreCase("Author")) {%>
 
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-sm-3 text-right">
-                                                <label class="control-label" for="Name">1</label>
-                                            </div>
-                                            <div class="col-sm-9">
-                                                <a href="viewChapter.jsp">Manga A</a>
-                                            </div>
-                                        </div>
+                                    <% }%>
+                                    <% if (u2.getRole().equalsIgnoreCase("Author")) {
+
+                                    %>
+                                    <div id="content" class="">
+                                        <c:if test="${sessionScope.mangaList != null}">
+                                            <c:forEach items="${sessionScope.mangaList}" var="manga" varStatus="loop">
+
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <div class="col-sm-3 text-right">
+                                                            <label class="control-label" for="Name">${loop.index + 1}</label>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <a href="MangaDetailServlet?id=${manga.getMangaID()}">${manga.getTitle()}</a>
+                                                        </div>
+                                                        <div class="col-sm-5 row">
+                                                            <div class=" col-sm-4 text-center">
+                                                                <a href="ViewChapterServlet?id=${manga.getMangaID()}" class="btn btn-dark">Chapter</a>
+                                                            </div>
+                                                            <div class="col-sm-4 text-center">
+                                                                <a href="EditMangaServlet?id=${manga.getMangaID()}" class="btn btn-primary">Edit <i class="bi bi-pencil-square"></i></a>
+                                                            </div>
+                                                            <div class="col-sm-4 text-center">
+                                                                <form action="DeleteMangaServlet" method="POST">
+                                                                    <input type="hidden" name="id" value="${manga.getMangaID()}">
+                                                                    <button type="submit" class="btn btn-danger">Delete <i class="bi bi-trash"></i></button>
+                                                                </form>
+                                                                
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                            </c:forEach>
+                                        </c:if>
                                     </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-sm-3 text-right">
-                                                <label class="control-label" for="Name">2</label>
-                                            </div>
-                                            <div class="col-sm-9">
-                                                <a href="viewChapter.jsp">Manga B</a>
-                                            </div>
-                                        </div>
-                                    </div>
+
+
                                     <%}%>
                                 </c:if>
 

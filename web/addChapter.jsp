@@ -44,6 +44,22 @@
         <!-- Template Main CSS File -->
         <link href="assetsUser/css/style.css" rel="stylesheet">
 
+        <style>
+            .image-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 10px;
+                padding: 30px;
+            }
+
+            .image-grid-item {
+                max-width: 100%;
+                max-height: 100%;
+                object-fit: cover;
+                /* Để ảnh không bị méo */
+            }
+        </style>
+
     </head>
 
     <body>
@@ -57,8 +73,10 @@
 
                 <nav>
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item">User</li>
+                        <li class="breadcrumb-item"><a href="home.jsp">Home</a></li>
+                        <li class="breadcrumb-item"><a href="userProfile.jsp">User</a></li>
+                        <li class="breadcrumb-item"><a href="viewMangaList.jsp">My Manga List</a></li>
+                        <li class="breadcrumb-item">${mangaToAddChapter.getTitle()}</li>
                         <li class="breadcrumb-item active">Add Chapter</li>
                     </ol>
                 </nav>
@@ -70,7 +88,7 @@
 
                         <div class="card">
                             <div class="card-body card-title">
-                                <h3 class="card-title">(Name of manga)</h3>
+                                <h3 class="card-title">${mangaToAddChapter.getTitle()}</h3>
                                 <hr>
                                 <c:if test="${sessionScope.userSession == null}">   
                                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -88,16 +106,7 @@
                                     </div>
 
                                     <% }%>
-                                    <% if (u2.getRole().equalsIgnoreCase("Author")) {%>
 
-                                    <h5 class="card-title">Chapter Name</h5>
-
-                                    <!-- Quill Editor Default -->
-                                    <div>
-                                        <input class="form-control" placeholder="Chapter Name" type="text" value="">
-                                    </div>
-                                    <!-- End Quill Editor Default -->
-                                    <%}%>
                                 </c:if>
 
                             </div>
@@ -108,19 +117,78 @@
                             <% if (u3.getRole().equalsIgnoreCase("Author")) {%>
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="card-title">Image</h5>
-                                    <div class="card-content">
-                                        <input type="file" class="btn btn-primary">
-                                        </input>
-                                        <button type="button" class="btn">
-                                            <a href="success.jsp">Post</a>
-                                        </button>
-                                    </div>
-                                    <!-- Quill Editor Full -->
-                                    <div class="card-content">
-                                        <textarea class="form-control" placeholder="Content" rows="10"></textarea>
-                                        <!-- End Quill Editor Full -->
-                                    </div>
+                                    <form action="AddChapterServlet" method="POST">
+                                        <h5 class="card-title">Chapter Name</h5>
+
+                                        <!-- Quill Editor Default -->
+                                        <div>
+                                            <input class="form-control" placeholder="Chapter Name" name="title" type="text" value="">
+                                        </div>
+                                        <h5 class="card-title">Description</h5>
+
+                                        <!-- Quill Editor Default -->
+                                        <div>
+                                            <input class="form-control" placeholder="Description" name="description" type="text" value="">
+                                        </div>
+                                        <h5 class="card-title">Image</h5>
+                                        <div class="row mb-3">
+                                            <label for="postImage" class="col-md-4 col-lg-3 col-form-label">Post Image</label>
+                                            <div class="col-md-8 col-lg-9" id="divSvgContainer">
+
+
+                                                <!-- ----------------- -->
+                                                <div id="feedback"></div>
+                                                <label id="progress-label" for="progress">0%</label>
+                                                <progress id="progress" value="0" max="100"></progress>
+                                                <div id="image-grid" class="image-grid">
+                                                    <img id="imagePreview" src="assetsUser/img/no_image.jpg" alt="Post Image">
+                                                </div>
+                                                <!-- ----------------- -->
+
+
+                                                <div class="pt-2 d-flex align-center gap-2">
+                                                    <input type="file" name="postImage" id="postImage" style="display: none;" accept="image/*" multiple>
+
+                                                    <label id="uploadButton" for="postImage" class="btn btn-primary btn-sm"
+                                                           title="Upload new post image"><i class="bi bi-upload text-white"></i></label>
+
+                                                    <a href="#" class="btn btn-danger btn-sm" title="Remove my post image" id="removeImage"><i
+                                                            class="bi bi-trash"></i></a>
+                                                    <div id="spinnerUpload" class="spinner-border text-success" role="status" style="display: none;">
+                                                        <span class="visually-hidden">Loading...</span>
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                            <div id="postUrls">
+                                                <!--...-->
+                                            </div>
+                                        </div>
+                                        <!--                                     Quill Editor Full 
+                                                                            <div class="card-content">
+                                                                                <textarea class="form-control" placeholder="Content" rows="10"></textarea>
+                                                                                 End Quill Editor Full 
+                                                                            </div>-->
+
+                                        <div class="form-group-update">
+                                            <div class="row">
+                                                <div class="col-sm-3 text-right">
+                                                </div>
+
+                                                <div class="col-sm-9">
+                                                    
+                                                    <input type="hidden" name="mangaID" value="${mangaToAddChapter.getMangaID()}">
+                                                    <button id="submitButton" type="submit" class="btn btn-primary">Add Chapter</button>
+                                                    <c:if test="${messageAdd != null}">
+                                                        <br/>
+                                                        <small class="small" style="color: green;">${messageAdd}</small> 
+                                                    </c:if>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+
                                 </div>
                             </div>
                             <%}%>
@@ -131,12 +199,16 @@
 
 
                 </div>
+
+
             </section>
 
         </main><!-- End #main -->
 
         <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
                 class="bi bi-arrow-up-short"></i></a>
+
+
 
         <!-- Vendor JS Files -->
         <script src="assetsUser/vendor/apexcharts/apexcharts.min.js"></script>
@@ -150,6 +222,7 @@
 
         <!-- Template Main JS File -->
         <script src="assetsUser/js/main.js"></script>
+
 
     </body>
 

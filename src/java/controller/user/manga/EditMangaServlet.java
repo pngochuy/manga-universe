@@ -4,16 +4,18 @@
  */
 package controller.user.manga;
 
+import dal.CategoryDAO;
 import dal.MangaCategoryDAO;
 import dal.MangaDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import model.Category;
 import model.Manga;
 import model.User;
 
@@ -21,7 +23,7 @@ import model.User;
  *
  * @author PC
  */
-public class AddMangaServlet extends HttpServlet {
+public class EditMangaServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,10 +42,10 @@ public class AddMangaServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet AddMangaServlet</title>");
+            out.println("<title>Servlet EditMangaServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet AddMangaServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet EditMangaServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,7 +62,27 @@ public class AddMangaServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8"); // works fine
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+
+        HttpSession mySession = request.getSession();
+        MangaDAO mangaDAO = new MangaDAO();
+        MangaCategoryDAO mangaCategoryDAO = new MangaCategoryDAO();
+        CategoryDAO categoryDAO = new CategoryDAO();
+
+        int mangaID = Integer.parseInt(request.getParameter("id"));
+        ArrayList<Category> categories = categoryDAO.getCategoriesByMangaID(mangaID);
+        Manga manga = mangaDAO.getManga(mangaID);
+
+        mySession.setAttribute("mangaEdit", manga);
+        mySession.setAttribute("categoriesEdit", categories);
+
+//        out.println(manga + "<br/>");
+//        out.println(categories);
+        response.sendRedirect("editManga.jsp?mangaID="+mangaID);
+
     }
 
     /**
@@ -71,12 +93,10 @@ public class AddMangaServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    LocalDateTime dateCreated = LocalDateTime.now();
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//        response.setContentType("text/html;charset=UTF-8");
+        //        response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8"); // works fine
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
@@ -84,9 +104,10 @@ public class AddMangaServlet extends HttpServlet {
         HttpSession mySession = request.getSession();
         User userSession = (User) mySession.getAttribute("userSession");
         MangaDAO mangaDAO = new MangaDAO();
+        CategoryDAO categoryDAO = new CategoryDAO();
         MangaCategoryDAO mangaCategoryDAO = new MangaCategoryDAO();
 
-//        String id = (String) mySession.getAttribute("mangaID");
+        String id = request.getParameter("mangaID");
         String title = request.getParameter("title");
         String coverUrl = request.getParameter("coverUrl");
         String[] selectedCategories = request.getParameterValues("selectedCategories");
@@ -101,21 +122,14 @@ public class AddMangaServlet extends HttpServlet {
 //        }
 //        out.println(summary + "\n");
 //        out.println("line 2---------\n");
-
-
         boolean hasError = true;
 
         if (title == null || title.isEmpty()) {
             request.setAttribute("titleError", "Title is required.");
             hasError = false;
         } else {
-            if (mangaDAO.isTitleExist(title)) {
-                request.setAttribute("titleError", "Title is already exist!.");
-                request.setAttribute("titleValue", title);
-                hasError = false;
-            } else {
-                request.setAttribute("titleValue", title);
-            }
+
+            request.setAttribute("titleValue", title);
 
         }
 
@@ -143,15 +157,18 @@ public class AddMangaServlet extends HttpServlet {
         if (hasError) {
             String author = userSession.getUsername();
             int userId = userSession.getUserId();
+            int mangaID = Integer.parseInt(id);
+            Manga m = mangaDAO.getManga(mangaID);
 
 //anga(String title, String description, int userID, LocalDateTime createAt, boolean copyRight, boolean free, String coverImage)
-            Manga manga = new Manga(title, summary, userId, dateCreated, true, false, coverUrl);
-            int mangaID = mangaDAO.create(manga);
+            Manga manga = new Manga(m.getMangaID(), title, summary, userId, m.getCreateAt(), m.isCopyRight(), m.isFree(), coverUrl);
+            mangaDAO.update(manga);
 
-            mySession.setAttribute("mangaIDAdded", mangaID);
+            request.setAttribute("m", manga);
 
             // mangaCategoryDAO....
-            mangaCategoryDAO.addCategoriesToManga(mangaID, selectedCategories);
+            mangaCategoryDAO.updateCategories(mangaID, selectedCategories);
+            request.setAttribute("sC", categoryDAO.getCategoriesByMangaID(mangaID));
 
             // no error message
             request.setAttribute("titleError", "");
@@ -165,9 +182,9 @@ public class AddMangaServlet extends HttpServlet {
             request.setAttribute("selectedCategories", "");
             request.setAttribute("summaryValue", "");
 
-            request.setAttribute("messageAdd", "Add Manga Successfully");
+            request.setAttribute("messageAdd", "Edit Manga Successfully");
         }
-        request.getRequestDispatcher("addManga.jsp").forward(request, response);
+        request.getRequestDispatcher("editManga.jsp").forward(request, response);
     }
 
     /**

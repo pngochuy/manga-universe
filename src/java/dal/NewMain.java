@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 
 import java.util.ArrayList;
 import java.util.List;
+import model.Category;
+import model.Chapter;
 import model.Manga;
 import model.Post;
 import model.User;
@@ -27,6 +29,8 @@ public class NewMain {
         UserDAO userDAO = new UserDAO();
         PostDAO postDAO = new PostDAO();
         MangaDAO mangaDAO = new MangaDAO();
+        CategoryDAO categoryDAO = new CategoryDAO();
+        ChapterDAO chapterDAO = new ChapterDAO();
         EncryptPassword encryptPassword = new EncryptPassword();
 
 //        userDAO.create(new User("image/3.png", "fpt", "123", "", "sieunhangao@gmail.com", "", 
@@ -49,10 +53,22 @@ public class NewMain {
 //        for (Post p : postDAO.getNextThreePost(3)) {
 //            System.out.println(p);
 //        }
-        Manga manga = new Manga("Boku No Hero Academia", "Vào tương lai, lúc mà con người với những sức mạnh siêu nhiên là điều thường thấy quanh thế giới. Đây là câu chuyện về Izuku Midoriya, từ một kẻ bất tài trở thành một siêu anh hùng. Tất cả ta cần là mơ ước.",
-                4, dateCreated, true, true, "http://res.cloudinary.com/djytvqlon/image/upload/v1696507608/t6plxvqducox94cokk90.jpg");
-        System.out.println(mangaDAO.create(manga));
-                
+        Manga manga = new Manga("Dragon Ball", "Dragon ball là bộ truyện tranh thuộc nhóm nổi tiếng nhất thế giới, được rất nhiều bạn trẻ ưa thích.",
+                4, dateCreated, true, false, "http://res.cloudinary.com/djytvqlon/image/upload/v1696507667/nzlzwjy9oqlwsmu7ydhj.jpg");
+        //        System.out.println(mangaDAO.create(manga));
+
+//        mangaDAO.create(manga);
+//        for (Category c : categoryDAO.getCategoriesByMangaID(1)) {
+//            System.out.println(c);
+//        }
+//        System.out.println(mangaDAO.getTop4MangaList().get(1).getUserID());
+//            System.out.println(mangaDAO.getManga(4));
+        Chapter chapter = new Chapter("Chapter 1", "description_1", 4);
+        chapterDAO.create(chapter);
+        
+//        for (Chapter c : chapterDAO.getAllChaptersByMangaID(5)) {
+//            System.out.println(c);
+//        }
     }
 
 }

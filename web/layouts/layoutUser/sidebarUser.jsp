@@ -53,13 +53,13 @@
             <li class="nav-item">
 
                 <a class="nav-link collapsed"  href="#">
-                    <i class="bi bi-menu-button-wide"></i><span>Manage Chapter</span><i class="bi bi-chevron-down ms-auto"></i>
+                    <i class="bi bi-menu-button-wide"></i><span>My Manga</span><i class="bi bi-chevron-down ms-auto"></i>
                 </a>
                 <ul id="components-nav" class="nav-content">
 
                     <li>
                         <a href="viewMangaList.jsp">
-                            <i class="bi bi-circle"></i><span>View Chapter List</span>
+                            <i class="bi bi-circle"></i><span>Manga List</span>
                         </a>
                     </li>
 

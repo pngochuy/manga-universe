@@ -389,7 +389,7 @@
                                         If you want to be an Author, please register the form below!
                                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                     </div>
-                                    <form>
+                                    <form action="UpgradeToAuthorServlet" method="POST">
                                         <div class="row mb-3">
                                             <label for="inputNumber" class="col-sm-2 col-form-label">Author certificate</label>
                                             <div class="col-sm-10">
@@ -405,12 +405,17 @@
                                         <div class="row mb-3">
                                             <label class="col-sm-2 col-form-label"></label>
                                             <div class="col-sm-10">
+                                                <%
+
+                                                    User userSession = (User) session.getAttribute("userSession");
+                                                %>
+                                                <input type="hidden" name="userID" value="${userSession.getUserId()}">
                                                 <button type="submit" class="btn btn-primary">Submit Form</button>
                                             </div>
                                         </div>
                                     </form>
                                     <% }%>
-                                    
+
                                 </c:if>
 
 

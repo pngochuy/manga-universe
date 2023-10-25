@@ -76,6 +76,34 @@
         <servlet-name>AddMangaServlet</servlet-name>
         <servlet-class>controller.user.manga.AddMangaServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>MangaDetailServlet</servlet-name>
+        <servlet-class>controller.user.manga.MangaDetailServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditMangaServlet</servlet-name>
+        <servlet-class>controller.user.manga.EditMangaServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteMangaServlet</servlet-name>
+        <servlet-class>controller.user.manga.DeleteMangaServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewChapterServlet</servlet-name>
+        <servlet-class>controller.user.manga.ViewChapterServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AjaxPaymentServlet</servlet-name>
+        <servlet-class>controller.payment.AjaxPaymentServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpgradeToAuthorServlet</servlet-name>
+        <servlet-class>controller.user.UpgradeToAuthorServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddChapterServlet</servlet-name>
+        <servlet-class>controller.user.chapter.AddChapterServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/LoginServlet</url-pattern>
@@ -155,6 +183,34 @@
     <servlet-mapping>
         <servlet-name>AddMangaServlet</servlet-name>
         <url-pattern>/AddMangaServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MangaDetailServlet</servlet-name>
+        <url-pattern>/MangaDetailServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditMangaServlet</servlet-name>
+        <url-pattern>/EditMangaServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteMangaServlet</servlet-name>
+        <url-pattern>/DeleteMangaServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewChapterServlet</servlet-name>
+        <url-pattern>/ViewChapterServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AjaxPaymentServlet</servlet-name>
+        <url-pattern>/AjaxPaymentServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpgradeToAuthorServlet</servlet-name>
+        <url-pattern>/UpgradeToAuthorServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddChapterServlet</servlet-name>
+        <url-pattern>/AddChapterServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

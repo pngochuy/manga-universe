@@ -1342,3 +1342,18 @@ h6 {
     display: inline-block;
     margin: 100px auto;
 }
+
+input#zoomCheck[type=checkbox] {
+  display: none;
+}
+
+.container_imgPreview img {
+/*  margin: 100px;*/
+  transition: transform 0.25s ease;
+  cursor: zoom-in;
+}
+
+input#zoomCheck[type=checkbox]:checked ~ label > img {
+  transform: scale(2);
+  cursor: zoom-out;
+}

@@ -54,13 +54,14 @@
         <main id="main" class="main">
 
             <div class="pagetitle">
-                <h1>Chapter</h1>
+                <h1>Chapter List</h1>
                 <nav>
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="home.jsp">Home</a></li>
-                        <li class="breadcrumb-item">User</li>
-                        <li class="breadcrumb-item">Manga A</li>
-                        <li class="breadcrumb-item active">View Chapter List</li>
+                        <li class="breadcrumb-item"><a href="userProfile.jsp">User</a></li>
+                        <li class="breadcrumb-item"><a href="viewMangaList.jsp">My Manga List</a></li>
+                        <li class="breadcrumb-item">${mangaToViewChapter.getTitle()}</li>
+                        <li class="breadcrumb-item active">Chapter List</li>
                     </ol>
                 </nav>
             </div><!-- End Page Title -->
@@ -70,7 +71,7 @@
                     <div class="col-lg-12">
                         <div class="card">
                             <div class="card-body card-title">
-                                <h5 class="card-title">(Manga Name)</h5>
+                                <h5 class="card-title">${mangaToViewChapter.getTitle()}</h5>
                                 <!-- <div class="form-group">
                                   <div class="row">
                                     <div class="col-sm-6">
@@ -111,7 +112,7 @@
                                                             <button class="btn btn-danger btn-delete">Delete</button>
                                                         </div>
                                                         <div class="col-sm-4">
-                                                            <a href="addChapter.jsp" class="btn btn-primary">New chapter</a>
+                                                            <a href="AddChapterServlet?mangaID=${mangaToViewChapter.getMangaID()}" class="btn btn-primary">New chapter</a>
                                                         </div>
 
                                                     </div>
@@ -127,31 +128,29 @@
                                                     </th>
 
                                                     <th>Chapter</th>
-                                                    <th class="w100">Author</th>
-                                                    <th class="w130">Date</th>
-                                                    <th class="w50 text-center"></th>
+                                                    <th class="w100">Description</th>
                                                 </tr>
                                             </thead>
 
 
                                             <tbody class="lstChapters sortable ui-sortable">
+                                                <c:forEach items="${chapterListByManga}" var="chapter">
+                                                    <tr class="chatper-item move" id="item_481217" data-id="481217" data-sort="-550862">
+                                                        <td class="text-center w10">
+                                                            <input type="checkbox" id="" value="true" class="pointer">
+                                                        </td>
+                                                        <td>
+                                                            <a href="">${chapter.getTitle()}</a>
+                                                        </td>
+                                                        <td>${chapter.getDescription()}</td>
+                                                        <td class="text-center">
+                                                            <a href="" class="mr10">
+                                                                <i class="bi bi-pencil-square" class=" "></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </c:forEach>
 
-                                                <tr class="chatper-item move" id="item_481217" data-id="481217" data-sort="-550862">
-                                                    <td class="text-center w10">
-                                                        <input type="hidden" value="481217">
-                                                        <input type="checkbox" id="Chapters[481217]" value="true" class="pointer">
-                                                    </td>
-                                                    <td>
-                                                        <a href="/c481217/kuchi-ga-saketemo-kimi-ni-wa-2020-chapter-1">Chapter 1</a>
-                                                    </td>
-                                                    <td>Klee'sdaddy</td>
-                                                    <td>05/08/2020 00:15</td>
-                                                    <td class="text-center">
-                                                        <a href="/admin/cap-nhat-chuong/481217?isCaption=False" class="mr10">
-                                                            <i class="bi bi-pencil-square" class=" "></i>
-                                                        </a>
-                                                    </td>
-                                                </tr>
 
                                             </tbody>
                                         </table>

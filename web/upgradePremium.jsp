@@ -222,7 +222,11 @@
                                             <li><i class="fa fa-check" aria-hidden="true"></i>24/7 customer support</li>
                                         </ul>
                                     </div>
-                                    <a href="checkout.jsp">Subscribe Now</a>
+                                    <%
+                                    
+                                        User userSession = (User) session.getAttribute("userSession");
+                                    %>
+                                    <a href="vnpay_pay.jsp?userID=${userSession.getUserId()}">Subscribe Now</a>
                                 </div>
                             </div>
                             <!--                            <div class="col-sm-4">
