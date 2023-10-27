@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import model.Chapter;
 import model.ImageSource;
 
 /**
@@ -42,7 +43,7 @@ public class ViewChapterDetail extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ViewChapterDetail</title>");            
+            out.println("<title>Servlet ViewChapterDetail</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet ViewChapterDetail at " + request.getContextPath() + "</h1>");
@@ -62,7 +63,7 @@ public class ViewChapterDetail extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         //        response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8"); // works fine
         response.setCharacterEncoding("UTF-8");
@@ -75,17 +76,50 @@ public class ViewChapterDetail extends HttpServlet {
 
         ChapterDAO chapterDAO = new ChapterDAO();
         ImageSourceDAO imageSourceDAO = new ImageSourceDAO();
-        
+
         String action = request.getParameter("action");
-        
-        if (action.equals("first-manga")) {
-            
-            // get all
-//             ArrayList<ImageSource> list = imageSourceDAO.getAllImageSourcesByChapterID_MangaID(chapterID, mangaID);
+        int mangaID = Integer.parseInt(request.getParameter("mangaID"));
+
+        Chapter chapter = new Chapter();
+        ImageSource imageSource = new ImageSource();
+
+        if (action.equals("read-first-chapter")) {
+            chapter = chapterDAO.getFirstChapterByMangaID(mangaID);
+            imageSource = imageSourceDAO.getFirstImageSourcesByChapterID_MangaID(mangaID, mangaID);
+//            out.println("mangaID: " + mangaID);
+        } else if (action.equals("read-last-chapter")) {
+            chapter = chapterDAO.getLastChapterByMangaID(mangaID);
+            imageSource = imageSourceDAO.getLastImageSourcesByChapterID_MangaID(mangaID, mangaID);
+//            out.println("mangaID: " + mangaID);
+        } else if (action.equals("read-chapter")) {
+            // ...
+            int chapterID = Integer.parseInt(request.getParameter("chapterID"));
+            chapter = chapterDAO.getChapterByMangaID(chapterID);
+
         }
+
+//        out.println("chapter: " + chapter);
+        // get all
+        ArrayList<ImageSource> imageSourcelist = imageSourceDAO.getAllImageSourcesByChapterID_MangaID(chapter.getChapterID(), mangaID);
+        ArrayList<Chapter> chapterList = chapterDAO.getAllChaptersByMangaID(mangaID);
         
-        int chapterID = Integer.parseInt(request.getParameter("chapterID"));
-        out.println(chapterID);
+        /*
+            - khi click vào sẽ bao gồm:
+        + mảng Ảnh từng chapter của manga => imageSourcelist
+        + mảng Chapter của manga          => chapterList
+        + thông tin Manga                 => 
+        + thông tin Chapter               => 
+        + thông tin ImageSource           => imageSource
+        
+        */
+        
+        mySession.setAttribute("mangaToView", mangaDAO.getManga(mangaID));
+        mySession.setAttribute("imageSourcelistToView", imageSourcelist);
+        mySession.setAttribute("chapterListByMangaIDToView", chapterList);
+        mySession.setAttribute("chapterToView", chapter);
+//        mySession.setAttribute("imageSourceToView", imageSource);
+        
+        response.sendRedirect("chapter/chapter.jsp");
     }
 
     /**

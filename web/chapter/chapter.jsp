@@ -1,6 +1,13 @@
 <%@page import="model.User"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<%
+
+
+%>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -53,14 +60,10 @@
                                     <nav aria-label="breadcrumb">
                                         <ol class="breadcrumb">
                                             <li class="breadcrumb-item"><a href="../home.jsp">Home</a></li>
-                                            <li class="breadcrumb-item"><a href="../follows/readingHistory.jsp">All Mangas</a></li>
-                                            <li class="breadcrumb-item"><a href="../mangaSinglePage.jsp">The Boy in the
-                                                    All-Girls
-                                                    School </a></li>
-                                            <li class="breadcrumb-item active" aria-current="page">The Boy in the All-Girls
-                                                School -
-                                                Chapter 1</li>
-                                        </ol>
+                                            <li class="breadcrumb-item"><a href="../follows/readingHistory.jsp">All Manga</a></li>
+                                            <li class="breadcrumb-item"><a href="../mangaSinglePage.jsp">${mangaDetail.getTitle()} </a></li>
+                                            <li class="breadcrumb-item active" aria-current="page">${chapterToView.getTitle()} - ${chapterToView.getDescription()}</li>
+                                        </ol> 
                                     </nav>
                                 </div>
                             </div>
@@ -76,7 +79,7 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="manga_name text-start">
-                                        <h2>The Boy in the All-Girls School</h2>
+                                        <h2>${mangaDetail.getTitle()}</h2>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
@@ -92,81 +95,40 @@
                                 <div class="col-lg-6 mb-30 mt-30">
                                     <select class="form-select form-select-sm" aria-label=".form-select-sm example"
                                             onchange="javascript:handleSelect(this)">
-                                        <option value="../chapter/chapter">Chapter 00</option>
-                                        <option selected="" disabled="">Chapter 1 - The Beginning of Everything </option>
-                                        <option value="../chapter/chapter02">Chapter 2 - Friends and Relatives </option>
-                                        <option value="../chapter/chapter03">Chapter 3 - First Visit to the All-Girls School
-                                        </option>
-                                        <option value="../chapter/chapter04">Chapter 4 - A Surprise While Out Strolling
-                                        </option>
-                                        <option value="../chapter/chapter05">Chapter 5 - Appropriate Countermeasures
-                                        </option>
-                                        <option value="../chapter/chapter06">Chapter 6 - First Day of School </option>
+                                        <c:forEach items="${chapterListByMangaIDToView}" var="chapter">
+
+                                            <c:if test="${chapterToView.getChapterID() == chapter.getChapterID()}">
+                                                <option value="/MangaUniverse/ViewChapterDetail?action=read-chapter&mangaID=${mangaDetail.getMangaID()}&chapterID=${chapter.getChapterID()}" selected="" disabled="">${chapter.getTitle()} - ${chapter.getDescription()}</option>
+                                            </c:if>
+
+                                            <c:if test="${chapterToView.getChapterID() != chapter.getChapterID()}">
+                                                <option value="/MangaUniverse/ViewChapterDetail?action=read-chapter&mangaID=${mangaDetail.getMangaID()}&chapterID=${chapter.getChapterID()}">${chapter.getTitle()} - ${chapter.getDescription()}</option>
+                                            </c:if>
+                                        </c:forEach>
+
                                     </select>
-                                    <script>
-                                        function handleSelect(elm) {
-                                            window.location = elm.value + ".jsp";
-                                        }
-                                    </script>
+
                                 </div>
                                 <div class="col-lg-6 mb-30 mt-30">
                                     <div class="manga_info">
                                         <ul>
                                             <li class="d-flex flex-wrap watch justify-content-end">
-                                                <a class="mr-2" href="../chapter/chapter.jsp"><i
-                                                        class="fa-solid fa-arrow-left"></i>
-                                                    Prev</a><a href="../chapter/chapter02.jsp">Next <i
-                                                        class="fa-solid fa-arrow-right"></i></a>
+                                                <a class="mr-2" href="javascript:navigateChapters(-1)"><i class="fa-solid fa-arrow-left"></i> Prev</a>
+                                                <a href="javascript:navigateChapters(1)">Next <i class="fa-solid fa-arrow-right"></i></a>
                                             </li>
                                         </ul>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/1.jpg" alt=""></div>
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/2.jpg" alt=""></div>
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/3.jpg" alt=""></div>
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/4.jpg" alt=""></div>
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/5.jpg" alt=""></div>
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/6.jpg" alt=""></div>
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/7.jpg" alt=""></div>
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/8.jpg" alt=""></div>
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/9.jpg" alt=""></div>
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/10.jpg" alt=""></div>
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/11.jpg" alt=""></div>
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/12.jpg" alt=""></div>
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/13.jpg" alt=""></div>
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/14.jpg" alt=""></div>
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/15.jpg" alt=""></div>
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/16.jpg" alt=""></div>
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/17.jpg" alt=""></div>
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/18.jpg" alt=""></div>
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/19.jpg" alt=""></div>
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/20.jpg" alt=""></div>
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/21.jpg" alt=""></div>
-                                <div class="col-12"><img class="w-100 img-fluid align-items-center"
-                                                         src="https://yae.hifive03.com/assets/img/chapter/chapter01/22.jpg" alt=""></div>
+                                <c:forEach items="${imageSourcelistToView}" var="imageSource">
+                                    <div class="col-12">
+                                        <img class="w-100 img-fluid align-items-center"
+                                             src="${imageSource.getImageURL()}" alt="">
+                                    </div>
+                                </c:forEach>
+
+
                             </div>
 
 
@@ -174,31 +136,26 @@
                                 <div class="col-lg-6 mb-30 mt-30">
                                     <select class="form-select form-select-sm" aria-label=".form-select-sm example"
                                             onchange="javascript:handleSelect(this)">
-                                        <option value="../chapter/chapter">Chapter 00</option>
-                                        <option selected="" disabled="">Chapter 1 - The Beginning of Everything </option>
-                                        <option value="../chapter/chapter02">Chapter 2 - Friends and Relatives </option>
-                                        <option value="../chapter/chapter03">Chapter 3 - First Visit to the All-Girls School
-                                        </option>
-                                        <option value="../chapter/chapter04">Chapter 4 - A Surprise While Out Strolling
-                                        </option>
-                                        <option value="../chapter/chapter05">Chapter 5 - Appropriate Countermeasures
-                                        </option>
-                                        <option value="../chapter/chapter06">Chapter 6 - First Day of School </option>
+                                        <c:forEach items="${chapterListByMangaIDToView}" var="chapter">
+
+                                            <c:if test="${chapterToView.getChapterID() == chapter.getChapterID()}">
+                                                <option value="/MangaUniverse/ViewChapterDetail?action=read-chapter&mangaID=${mangaDetail.getMangaID()}&chapterID=${chapter.getChapterID()}" selected="" disabled="">${chapter.getTitle()} - ${chapter.getDescription()}</option>
+                                            </c:if>
+
+                                            <c:if test="${chapterToView.getChapterID() != chapter.getChapterID()}">
+                                                <option value="/MangaUniverse/ViewChapterDetail?action=read-chapter&mangaID=${mangaDetail.getMangaID()}&chapterID=${chapter.getChapterID()}">${chapter.getTitle()} - ${chapter.getDescription()}</option>
+                                            </c:if>
+                                        </c:forEach>
+
                                     </select>
-                                    <script>
-                                        function handleSelect(elm) {
-                                            window.location = elm.value + ".jsp";
-                                        }
-                                    </script>
+
                                 </div>
                                 <div class="col-lg-6 mb-30 mt-30">
                                     <div class="manga_info">
                                         <ul>
                                             <li class="d-flex flex-wrap watch justify-content-end">
-                                                <a class="mr-2" href="../chapter/chapter.jsp"><i
-                                                        class="bi bi-arrow-left"></i>
-                                                    Prev</a><a href="../chapter/chapter02.jsp">Next <i
-                                                        class="bi bi-arrow-right"></i></a>
+                                                <a class="mr-2" href="javascript:navigateChapters(-1)"><i class="fa-solid fa-arrow-left"></i> Prev</a>
+                                                <a href="javascript:navigateChapters(1)">Next <i class="fa-solid fa-arrow-right"></i></a>
                                             </li>
                                         </ul>
                                     </div>
@@ -392,6 +349,39 @@
             </section>
         </main>
 
+        <script>
+            function handleSelect(elm) {
+                window.location = elm.value; // Điều hướng đến URL được chọn
+            }
+
+            // Lấy danh sách tất cả các options trong select
+            var options = document.querySelectorAll('select option');
+
+            // Lấy index của option hiện tại (chương hiện tại)
+            var currentIndex = 0;
+            for (var i = 0; i < options.length; i++) {
+                if (options[i].selected) {
+                    currentIndex = i;
+                    break;
+                }
+            }
+
+            // Bắt đầu tại option hiện tại, cập nhật index và điều hướng
+            function navigateChapters(direction) {
+                currentIndex += direction;
+                if (currentIndex < 0) {
+                    currentIndex = 0; // Đảm bảo không thể đi lùi hơn chương đầu tiên
+                }
+                if (currentIndex >= options.length) {
+                    currentIndex = options.length - 1; // Đảm bảo không thể đi tiến hơn chương cuối cùng
+                }
+
+                var nextOption = options[currentIndex];
+                if (nextOption) {
+                    window.location = nextOption.value;
+                }
+            }
+        </script>
 
 
         <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i

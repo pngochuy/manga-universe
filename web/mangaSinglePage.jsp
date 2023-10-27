@@ -63,7 +63,7 @@
                 int userID = mangaDAO.getUserIDByMangaID(mangaID);
                 String username = userDAO.getUserById(userID).getUsername();
                 ArrayList<Chapter> chaptersByMangaDetail = chapterDAO.getAllChaptersByMangaID(mangaID);
-
+                
                 session.setAttribute("mangaDetail", m);
                 session.setAttribute("usernameDetail", username);
                 session.setAttribute("categoriesByMangaDetail", categoriesByMangaDetail);
@@ -180,8 +180,8 @@
                                                 <p>${usernameDetail} </p>
                                             </li>
                                             <li class="d-flex flex-wrap watch">
-                                                <a class="mr-2" href="ViewChapterDetail?action=first-chapter">Read First</a><a
-                                                    href="ViewChapterDetail?action=last-chapter">Read Last</a>
+                                                <a class="mr-2" href="ViewChapterDetail?action=read-first-chapter&mangaID=${mangaDetail.getMangaID()}">Read First</a><a
+                                                    href="ViewChapterDetail?action=read-last-chapter&mangaID=${mangaDetail.getMangaID()}">Read Last</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -262,7 +262,7 @@
                                             <c:forEach items="${chaptersByMangaDetail}" var="chapter" varStatus="loop">
                                                 <c:if test="${loop.index < 2}">
                                                     <li>
-                                                        <a href="chapter/chapter.jsp"
+                                                        <a href="ViewChapterDetail?action=read-chapter&mangaID=${mangaDetail.getMangaID()}&chapterID=${chapter.getChapterID()}"
                                                            class="d-flex flex-wrap justify-content-between">
                                                             <span>${chapter.getTitle()} - ${chapter.getDescription()}</span><span>${chapter.getCreateAtFormat()} </span>
                                                         </a>
@@ -277,16 +277,10 @@
                                             <c:if test="${sessionScope.userSession != null}">
                                                 <% User u4 = (User) session.getAttribute("userSession");%>
                                                 <% if (u4.getRole().equalsIgnoreCase("Free")) {%>
-                                                <li>
-                                                    <a href="chapter/chapter.jsp"
-                                                       class="d-flex flex-wrap justify-content-between disabled-link">
-                                                        <span>Chapter 2 - Friends and Relatives <i class="bi bi-lock-fill"></i></span><span>07/19/2020 </span>
-                                                    </a>  
-                                                </li>
                                                 <c:forEach items="${chaptersByMangaDetail}" var="chapter" varStatus="loop">
                                                     <c:if test="${loop.index >= 2}">
                                                         <li>
-                                                            <a href="chapter/chapter.jsp"
+                                                            <a href="ViewChapterDetail?action=read-chapter&mangaID=${mangaDetail.getMangaID()}&chapterID=${chapter.getChapterID()}"
                                                                class="d-flex flex-wrap justify-content-between disabled-link">
                                                                 <span>${chapter.getTitle()} - ${chapter.getDescription()} <i class="bi bi-lock-fill"></i></span><span>${chapter.getCreateAtFormat()} </span>
                                                             </a>
@@ -299,7 +293,7 @@
                                                 <c:forEach items="${chaptersByMangaDetail}" var="chapter" varStatus="loop">
                                                     <c:if test="${loop.index >= 2}">
                                                         <li>
-                                                            <a href="chapter/chapter.jsp"
+                                                            <a href="ViewChapterDetail?action=read-chapter&mangaID=${mangaDetail.getMangaID()}&chapterID=${chapter.getChapterID()}"
                                                                class="d-flex flex-wrap justify-content-between">
                                                                 <span>${chapter.getTitle()} - ${chapter.getDescription()}</span><span>${chapter.getCreateAtFormat()} </span>
                                                             </a>
@@ -313,7 +307,7 @@
                                                 <c:forEach items="${chaptersByMangaDetail}" var="chapter" varStatus="loop">
                                                     <c:if test="${loop.index >= 2}">
                                                         <li>
-                                                            <a href="chapter/chapter.jsp"
+                                                            <a href="ViewChapterDetail?action=read-chapter&mangaID=${mangaDetail.getMangaID()}&chapterID=${chapter.getChapterID()}"
                                                                class="d-flex flex-wrap justify-content-between disabled-link">
                                                                 <span>${chapter.getTitle()} - ${chapter.getDescription()} <i class="bi bi-lock-fill"></i></span><span>${chapter.getCreateAtFormat()} </span>
                                                             </a>

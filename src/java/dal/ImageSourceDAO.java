@@ -172,7 +172,7 @@ public class ImageSourceDAO extends DBContext {
     }
 
     // get first imageSource by ChapterID and MangaID
-    public ArrayList<ImageSource> getFirstImageSourcesByChapterID_MangaID(int chapterID, int mangaID) {
+    public ImageSource getFirstImageSourcesByChapterID_MangaID(int chapterID, int mangaID) {
 
         try {
             String sql = "SELECT TOP 1 * FROM [ImageSource]\n"
@@ -185,22 +185,20 @@ public class ImageSourceDAO extends DBContext {
 
             ResultSet res = ps.executeQuery();
 
-            ArrayList<ImageSource> list = new ArrayList<>();
+            ImageSource imageSource = new ImageSource();
+            if (res.next()) {
 
-            while (res.next()) {
-                ImageSource imageSource = new ImageSource();
                 imageSource.setImageSourceID(res.getInt("imageSourceID"));
                 imageSource.setImageURL(res.getNString("imageURL"));
                 imageSource.setChapterID(res.getInt("chapterID"));
                 imageSource.setMangaID(res.getInt("mangaID"));
 
-                list.add(imageSource);
             }
 
             res.close();
             ps.close();
 
-            return list;
+            return imageSource;
 
         } catch (SQLException ex) {
             Logger.getLogger(ImageSourceDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -208,13 +206,14 @@ public class ImageSourceDAO extends DBContext {
 
         return null;
     }
+
     // get last imageSource by ChapterID and MangaID
-    public ArrayList<ImageSource> getLastImageSourcesByChapterID_MangaID(int chapterID, int mangaID) {
+    public ImageSource getLastImageSourcesByChapterID_MangaID(int chapterID, int mangaID) {
 
         try {
             String sql = "SELECT TOP 1 * FROM [ImageSource]\n"
                     + "  WHERE chapterID = ? AND mangaID = ?\n"
-                    + "  ORDER BY imageSourceID ASC;";
+                    + "  ORDER BY imageSourceID DESC;";
             PreparedStatement ps = connection.prepareStatement(sql);
 
             ps.setInt(1, chapterID);
@@ -222,22 +221,20 @@ public class ImageSourceDAO extends DBContext {
 
             ResultSet res = ps.executeQuery();
 
-            ArrayList<ImageSource> list = new ArrayList<>();
+            ImageSource imageSource = new ImageSource();
+            if (res.next()) {
 
-            while (res.next()) {
-                ImageSource imageSource = new ImageSource();
                 imageSource.setImageSourceID(res.getInt("imageSourceID"));
                 imageSource.setImageURL(res.getNString("imageURL"));
                 imageSource.setChapterID(res.getInt("chapterID"));
                 imageSource.setMangaID(res.getInt("mangaID"));
 
-                list.add(imageSource);
             }
 
             res.close();
             ps.close();
 
-            return list;
+            return imageSource;
 
         } catch (SQLException ex) {
             Logger.getLogger(ImageSourceDAO.class.getName()).log(Level.SEVERE, null, ex);

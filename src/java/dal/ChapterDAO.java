@@ -201,9 +201,10 @@ public class ChapterDAO extends DBContext {
     }
 
     // get chapter
-    public Chapter getChapter(int chapterID) {
+    public Chapter getChapterByMangaID(int chapterID) {
         try {
-            String sql = "SELECT * FROM [Chapter];";
+            String sql = "SELECT * FROM [Chapter]"
+                    + "WHERE chapterID = ?\n";
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, chapterID);
 
@@ -229,13 +230,13 @@ public class ChapterDAO extends DBContext {
     }
 
     // get first chapter
-    public Chapter getFirstChapter(int chapterID) {
+    public Chapter getFirstChapterByMangaID(int mangaID) {
         try {
             String sql = "SELECT TOP 1 * FROM [Chapter]\n"
                     + "  WHERE mangaID = ?\n"
                     + "  ORDER BY chapterID ASC;";
             PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setInt(1, chapterID);
+            ps.setInt(1, mangaID);
 
             ResultSet res = ps.executeQuery();
             Chapter chapter = new Chapter();
@@ -259,11 +260,13 @@ public class ChapterDAO extends DBContext {
     }
 
     // get last chapter
-    public Chapter getLastChapter(int chapterID) {
+    public Chapter getLastChapterByMangaID(int mangaID) {
         try {
-            String sql = "SELECT * FROM [Chapter];";
+            String sql = "SELECT TOP 1 * FROM [Chapter]\n"
+                    + "  WHERE mangaID = ?\n"
+                    + "  ORDER BY chapterID DESC;";
             PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setInt(1, chapterID);
+            ps.setInt(1, mangaID);
 
             ResultSet res = ps.executeQuery();
             Chapter chapter = new Chapter();
