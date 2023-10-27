@@ -180,8 +180,8 @@
                                                 <p>${usernameDetail} </p>
                                             </li>
                                             <li class="d-flex flex-wrap watch">
-                                                <a class="mr-2" href="ViewChapterDetail?action=read-first-chapter&mangaID=${mangaDetail.getMangaID()}">Read First</a><a
-                                                    href="ViewChapterDetail?action=read-last-chapter&mangaID=${mangaDetail.getMangaID()}">Read Last</a>
+                                                <a class="mr-2" href="ViewChapterDetail?action=read-first-chapter&mangaID=${mangaDetail.getMangaID()}">Read First</a>
+                                                <a href="ViewChapterDetail?action=read-last-chapter&mangaID=${mangaDetail.getMangaID()}">Read Last</a>
                                             </li>
                                         </ul>
                                     </div>

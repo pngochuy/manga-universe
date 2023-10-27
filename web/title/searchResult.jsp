@@ -1,9 +1,3 @@
-<%@page import="dal.UserDAO"%>
-<%@page import="dal.CategoryDAO"%>
-<%@page import="dal.MangaDAO"%>
-<%@page import="model.Category"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="model.Manga"%>
 <%@page import="model.User"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -18,8 +12,8 @@
         <meta content="" name="keywords">
 
         <!-- Favicons -->
-        <link href="../assetsMain/img/logo.png" rel="icon">
-        <link href="../assetsMain/img/apple-touch-icon.png" rel="apple-touch-icon">
+        <link href="${pageContext.request.contextPath}/assetsMain/img/logo.png" rel="icon">
+        <link href="${pageContext.request.contextPath}/assetsMain/img/apple-touch-icon.png" rel="apple-touch-icon">
 
         <!-- Google Fonts -->
         <link href="https://fonts.gstatic.com" rel="preconnect">
@@ -28,16 +22,16 @@
             rel="stylesheet">
 
         <!-- Vendor CSS Files -->
-        <link href="../assetsMain/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-        <link href="../assetsMain/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-        <link href="../assetsMain/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-        <link href="../assetsMain/vendor/quill/quill.snow.css" rel="stylesheet">
-        <link href="../assetsMain/vendor/quill/quill.bubble.css" rel="stylesheet">
-        <link href="../assetsMain/vendor/remixicon/remixicon.css" rel="stylesheet">
-        <link href="../assetsMain/vendor/simple-datatables/style.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/assetsMain/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/assetsMain/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/assetsMain/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/assetsMain/vendor/quill/quill.snow.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/assetsMain/vendor/quill/quill.bubble.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/assetsMain/vendor/remixicon/remixicon.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/assetsMain/vendor/simple-datatables/style.css" rel="stylesheet">
 
         <!-- Template Main CSS File -->
-        <link href="../assetsMain/css/style.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/assetsMain/css/style.css" rel="stylesheet">
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
         <style>
@@ -69,54 +63,38 @@
 
     <body>
 
-        <%@include file="../layouts/layoutsMain/headerMain.jsp" %> 
-        <%@include file="../layouts/layoutsMain/sidebarMain.jsp" %> 
-
-        <%
-            MangaDAO mangaDAO = new MangaDAO();
-            CategoryDAO categoryDAO = new CategoryDAO();
-            UserDAO userDAO = new UserDAO();
-
-            // tam thoi dung getALL Manga
-            session.setAttribute("mangaListUpdates", mangaDAO.getAll());
-        %>
+<!--        <%@include file="../layouts/layoutsMain/headerMain.jsp" %> 
+        <%@include file="../layouts/layoutsMain/sidebarMain.jsp" %> -->
 
         <main id="main" class="main">
             <section class="section profile">
                 <div class="row">
-
                     <!-- ======= Filter Area Start ======= -->
                     <section class="filter sec-mar">
                         <div class="container">
                             <div class="heading style-1">
-                                <h2>Filter <span> <a class="active"><i class="bi bi-grid"></i></a> <a
+                                <h2>Search Manga <span> <a class="active"><i class="bi bi-grid"></i></a> <a
                                             href="./list-view.jsp" class="ms-2 me-2"><i
-                                                class="fa fa-solid fa-list"></i></a> Showing 6 out of 5000
+                                                class="fa fa-solid fa-list"></i></a> Showing 3 out of 5000
                                         Manga</span></h2>
                             </div>
+                            
                             <div class="container">
                                 <div class="row justify-content-center">
                                     <div class="col-12 col-md-10 col-lg-8">
-                                        <form class="card card-sm"
-                                              action="../SearchMangaSevlet?index=1" method="post">
-
-                                            <div class="card-body row no-gutters align-items-center"
-                                                 style="padding: 20px;">
+                                        <form class="card card-sm" action="../SearchController?index=1" method="post">
+                                            
+                                            <div class="card-body row no-gutters align-items-center" style="padding: 20px;">
                                                 <div class="col-auto">
-                                                    <i class="bi bi-search-heart"
-                                                       style="font-size: 30px"></i>
+                                                    <i class="bi bi-search-heart" style="font-size: 30px"></i>
                                                 </div>
                                                 <!--end of col-->
                                                 <div class="col">
-                                                    <input value="${save}" name="txtSearch"
-                                                           class="form-control form-control-lg form-control-borderless"
-                                                           type="search"
-                                                           placeholder="Search topics or keywords">
+                                                    <input value="${save}" name="txtSearch" class="form-control form-control-lg form-control-borderless" type="search" placeholder="Search topics or keywords">
                                                 </div>
                                                 <!--end of col-->
                                                 <div class="col-auto">
-                                                    <button class="btn btn-lg btn-success"
-                                                            type="submit">Search</button>
+                                                    <button class="btn btn-lg btn-success" type="submit">Search</button>
                                                 </div>
                                                 <!--end of col-->
                                             </div>
@@ -133,22 +111,42 @@
                                         Category <span><i class="fa fa-chevron-down"></i></span>
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="genre">
-
-                                        <% CategoryDAO manageCate = new CategoryDAO();
-                                            for (Category cate : manageCate.getAllCategoryAscending()) {%>
                                         <li>
                                             <div class="custom-control custom-checkbox">
                                                 <div class="custom-control-label-container">
-                                                    <span class="custom-control-label">
-                                                        <%= cate.getType()%>
-                                                    </span>
+                                                    <span class="custom-control-label" >Action</span>
                                                 </div>
 
                                             </div>
                                         </li>
-                                        <% } %>
-
-
+                                        <li>
+                                            <div class="custom-control custom-checkbox">
+                                                <div class="custom-control-label-container">
+                                                    <span class="custom-control-label" >Action</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="custom-control custom-checkbox">
+                                                <div class="custom-control-label-container">
+                                                    <span class="custom-control-label" >Action</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="custom-control custom-checkbox">
+                                                <div class="custom-control-label-container">
+                                                    <span class="custom-control-label" >Action</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="custom-control custom-checkbox">
+                                                <div class="custom-control-label-container">
+                                                    <span class="custom-control-label" >Action</span>
+                                                </div>
+                                            </div>
+                                        </li>
                                     </ul>
                                 </li>
 
@@ -335,39 +333,33 @@
 
                     <div class="mb-5">
                         <div class="title">
-                            <h2 class="fw-bold"></h2>
+                            <h2 class="fw-bold">Manga Found</h2>
                             <div class="row mt-2">
-                                <c:forEach items="${mangaListUpdates}" var="manga">
+
+                             <c:forEach var="s" items="${listSM}" varStatus="loop"> 
+                                 
                                     <div class="col-lg-2 col-md-4 col-sm-6">
-                                        <a href="/MangaUniverse/MangaDetailServlet?id=${manga.getMangaID()}">
+                                        <a href="mangaSPServlet?id=${s.mangaID}">
                                             <div class="product-card grow-box">
                                                 <div class="img-con set-bg"
-                                                     style="background-image: url('${manga.getCoverImage()}');"
-                                                     data-setbg="${manga.getCoverImage()}">
-                                                    <!--so chapter => UPDATE!!-->
-                                                    <!--<div class="ep">18/20</div>-->
+                                                     style="background-image: url('${s.coverImage}');"
+                                                     data-setbg="assetsMain/img/manga.jpg">
+                                                    <div class="ep">18/20</div>
                                                     <div class="comment"><i class="bi bi-chat"></i> 21</div>
                                                     <div class="view"><i class="bi bi-eye"></i> 7141</div>
                                                 </div>
                                                 <div class="product-card-con">
                                                     <ul>
-                                                        <c:set var="manga" value="${manga}" />
-                                                        <%
-                                                            Manga manga = (Manga) pageContext.getAttribute("manga");
-                                                            request.setAttribute("cate", categoryDAO.getCategoriesByMangaID(manga.getMangaID()));
-
-                                                        %>
-                                                        <c:forEach items="${cate}" var="category">
-                                                            <li>${category.getType()}</li>
-                                                            </c:forEach>
-
+                                                        <li>Active</li>
+                                                        <li>Movie</li>
                                                     </ul>
-                                                    <h5>${manga.getTitle()}</h5>
+                                                    <h5>${s.title}</h5>
                                                 </div>
                                             </div>
                                         </a>
                                     </div>
-                                </c:forEach>
+                                  </c:forEach> 
+                                
 
                             </div>
                         </div>
@@ -375,28 +367,25 @@
 
                     <div class="pagination-wrape">
                         <ul class="pagination">
+                            <c:if test ="${tag > 1}">
                             <li class="page-item">
-                                <a href="#" class="page-link arrow" aria-label="Previous">
+                                <a href="SearchController?index=${tag-1}&txtSearch=${save}" class="page-link arrow" aria-label="Previous">
                                     <i class="bi bi-caret-left-fill"></i>
                                 </a>
                             </li>
+                            </c:if>
+                            <c:forEach var="j" begin="1" step="1" end="${endS}">  
                             <li class="page-item">
-                                <a href="#" class="page-link current">1</a>
+                                <a href="SearchController?index=${j}&txtSearch=${save}" class="${tag == j?"active":""} page-link current">${j}</a>
                             </li>
+                            </c:forEach>
+                            <c:if test ="${tag < endS}">
                             <li class="page-item">
-                                <a href="#" class="page-link">2</a>
-                            </li>
-                            <li class="page-item">
-                                <a href="#" class="page-link">3</a>
-                            </li>
-                            <li class="page-item">
-                                <a href="#" class="page-link">4</a>
-                            </li>
-                            <li class="page-item">
-                                <a href="#" class="page-link arrow" aria-label="next">
+                                <a href="SearchController?index=${tag+1}&txtSearch=${save}" class=" page-link arrow" aria-label="next">
                                     <i class="bi bi-caret-right-fill"></i>
                                 </a>
                             </li>
+                            </c:if>
                         </ul>
                     </div>
                 </div>
@@ -404,25 +393,23 @@
         </main>
 
 
-        <c:if test="${userSession == null || userSession.getRole().equals('Free')}">
-            <%@include file="../layouts/layoutsMain/adsMain.jsp" %>
-        </c:if>
+
 
         <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
                 class="bi bi-arrow-up-short"></i></a>
 
         <!-- Vendor JS Files -->
-        <script src="../assetsMain/vendor/apexcharts/apexcharts.min.js"></script>
-        <script src="../assetsMain/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-        <script src="../assetsMain/vendor/chart.js/chart.umd.js"></script>
-        <script src="../assetsMain/vendor/echarts/echarts.min.js"></script>
-        <script src="../assetsMain/vendor/quill/quill.min.js"></script>
-        <script src="../assetsMain/vendor/simple-datatables/simple-datatables.js"></script>
-        <script src="../assetsMain/vendor/tinymce/tinymce.min.js"></script>
-        <script src="../assetsMain/vendor/php-email-form/validate.js"></script>
+        <script src="${pageContext.request.contextPath}/assetsMain/vendor/apexcharts/apexcharts.min.js"></script>
+        <script src="${pageContext.request.contextPath}/assetsMain/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="${pageContext.request.contextPath}/assetsMain/vendor/chart.js/chart.umd.js"></script>
+        <script src="${pageContext.request.contextPath}/assetsMain/vendor/echarts/echarts.min.js"></script>
+        <script src="${pageContext.request.contextPath}/assetsMain/vendor/quill/quill.min.js"></script>
+        <script src="${pageContext.request.contextPath}/assetsMain/vendor/simple-datatables/simple-datatables.js"></script>
+        <script src="${pageContext.request.contextPath}/assetsMain/vendor/tinymce/tinymce.min.js"></script>
+        <script src="${pageContext.request.contextPath}/assetsMain/vendor/php-email-form/validate.js"></script>
 
         <!-- Template Main JS File -->
-        <script src="../assetsMain/js/main.js"></script>
+        <script src="${pageContext.request.contextPath}/assetsMain/js/main.js"></script>
     </body>
 
 </html>

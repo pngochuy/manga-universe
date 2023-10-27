@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -346,7 +347,7 @@ public class MangaDAO extends DBContext {
 
         return -1;
     }
-    
+
     // 
     public ArrayList<Manga> getTop4MangaList() {
         try {
@@ -381,6 +382,74 @@ public class MangaDAO extends DBContext {
         }
 
         return null;
+    }
+
+    public ArrayList<Manga> searchMangaByTitle(String txtSearch, int index) {
+
+        ResultSet rs = null;
+
+        try {
+            ArrayList<Manga> list = new ArrayList<>();
+            String query = "with x as(select ROW_NUMBER() over (order by mangaID asc) as r\n"
+                    + ",* from Manga where title like ?)\n"
+                    + "select * from x where r between (?-1)*12+1 and ?*12";
+
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, "%" + txtSearch + "%");
+            ps.setInt(2, index);
+            ps.setInt(3, index);
+//            String query = "select * from Manga where title like ?";
+//            conn = DBContext.getConnection();
+//            ps = conn.prepareStatement(query);
+//            ps.setString(1, "%" + txtSearch + "%");
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Integer id = rs.getInt(2);
+                String title = rs.getString(3);
+                String description = rs.getString(4);
+                Integer userID = rs.getInt(5);
+                LocalDateTime createdAt = rs.getTimestamp(6).toLocalDateTime();
+                Boolean isCopyright = rs.getBoolean(7);
+                Boolean isFree = rs.getBoolean(8);
+                String coverImage = rs.getString(9);
+                list.add(new Manga(id, title, description, userID, createdAt, isCopyright, isFree, coverImage));
+            }
+
+            ps.close();
+            rs.close();
+
+            return list;
+        } catch (SQLException e) {
+            // Xử lý lỗi SQL
+            e.printStackTrace();
+        } catch (Exception ex) {
+            throw ex;
+        }
+
+        return null;
+
+    }
+
+    public int getCountSearch(String txtSearch) {
+
+        ResultSet rs = null;
+
+        String query = "select count(*) from Manga where title like ?";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, "%" + txtSearch + "%");
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return rs.getInt(1);
+            }
+            ps.close();
+            rs.close();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(MangaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
     }
 
 }

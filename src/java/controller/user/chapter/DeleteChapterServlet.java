@@ -99,7 +99,7 @@ public class DeleteChapterServlet extends HttpServlet {
         if (selectedChapters != null) {
             for (String cId : selectedChapters) {
                 int chapterId = Integer.parseInt(cId);
-                Chapter chapter = chapterDAO.getChapter(chapterId);
+                
                 imageSourceDAO.delete(chapterId);
                 chapterDAO.delete(chapterId);
             }

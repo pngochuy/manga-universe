@@ -7,55 +7,10 @@
 <%@page import="java.util.List"%>
 <%@page import="java.sql.Connection"%>
 <%@page import="java.sql.SQLException"%>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Include jQuery library -->
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
-<script>
-    $(document).ready(function () {
-        // Bắt sự kiện khi nhấn vào liên kết "Free Account," "Premium Account," hoặc "Author Account"
-        $(".filter-link").click(function (e) {
-            e.preventDefault(); // Ngăn chặn mặc định của liên kết
-
-            var filterValue = $(this).data("filter");
-
-            // Ẩn/hiển thị các phần tử dựa trên lớp CSS
-            if (filterValue === "All") {
-                // Hiển thị tất cả các phần tử
-                $(".free-account, .premium-account, .author-account").show();
-            } else {
-                // Ẩn tất cả các phần tử
-                $(".free-account, .premium-account, .author-account").hide();
-
-                // Hiển thị chỉ các phần tử có lớp CSS tương ứng
-                $("." + filterValue.toLowerCase() + "-account").show();
-            }
-        });
-    });
-</script>
-<script>
-    $(document).ready(function () {
-        // Bắt sự kiện khi nhấn vào liên kết "All Account", "Free Account", "Premium Account" hoặc "Author Account"
-        $(".filter-link").click(function (e) {
-            e.preventDefault(); // Ngăn chặn mặc định của liên kết
-
-            var filterValue = $(this).data("filter");
-
-            // Ẩn tất cả các hàng trước khi lọc
-            $("tr").hide();
-
-            if (filterValue === "All") {
-                // Hiển thị tất cả các hàng
-                $("tr").show();
-            } else {
-                // Hiển thị chỉ các hàng có vai trò tương ứng
-                $("tr." + filterValue).show();
-            }
-        });
-    });
-</script>
 <%
 
     if (session.getAttribute("userSession") == null) {
@@ -100,6 +55,7 @@
 
         <!-- Template Main CSS File -->
         <link href="assetsUser/css/style.css" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Include jQuery library -->
     </head>
 
     <body>
