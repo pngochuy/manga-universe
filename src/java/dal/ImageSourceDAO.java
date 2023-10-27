@@ -81,17 +81,17 @@ public class ImageSourceDAO extends DBContext {
     }
 
     // delete
-    public void delete(int imageSourceID) {
+    public void delete(int chapterID) {
 
         // KHI ADD IMAGE THÌ COI LẠI CÓ NÊN XÓA BÊN BẢNG IMAGESOURCE TRƯỚC 
         // RỒI TỚI BẢNG CHAPTER XÓA HAY KHÔNG?
         try {
             String sql = "DELETE FROM [ImageSource] "
-                    + "WHERE imageSourceID = ?;";
+                    + "WHERE chapterID = ?;";
 
             PreparedStatement ps = connection.prepareStatement(sql);
 
-            ps.setInt(1, imageSourceID);
+            ps.setInt(1, chapterID);
 
             ps.execute();
 
@@ -118,31 +118,32 @@ public class ImageSourceDAO extends DBContext {
                 imageSource.setImageURL(res.getNString("imageURL"));
                 imageSource.setChapterID(res.getInt("chapterID"));
                 imageSource.setMangaID(res.getInt("mangaID"));
-                
+
                 list.add(imageSource);
             }
-            
+
             res.close();
             ps.close();
 
             return list;
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(ImageSourceDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return null;
     }
-    
-    // get all imageSource by ChapterID
-    public ArrayList<ImageSource> getAllImageSourcesByChapterID(int chapterID) {
-        
+
+    // get all imageSource by ChapterID and MangaID
+    public ArrayList<ImageSource> getAllImageSourcesByChapterID_MangaID(int chapterID, int mangaID) {
+
         try {
             String sql = "SELECT * FROM [ImageSource]"
-                    + "WHERE chapterID = ?;";
+                    + "WHERE chapterID = ? AND mangaID = ?;";
             PreparedStatement ps = connection.prepareStatement(sql);
-            
+
             ps.setInt(1, chapterID);
+            ps.setInt(2, mangaID);
 
             ResultSet res = ps.executeQuery();
 
@@ -154,19 +155,94 @@ public class ImageSourceDAO extends DBContext {
                 imageSource.setImageURL(res.getNString("imageURL"));
                 imageSource.setChapterID(res.getInt("chapterID"));
                 imageSource.setMangaID(res.getInt("mangaID"));
-                
+
                 list.add(imageSource);
             }
-            
+
             res.close();
             ps.close();
 
             return list;
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(ImageSourceDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
+        return null;
+    }
+
+    // get first imageSource by ChapterID and MangaID
+    public ArrayList<ImageSource> getFirstImageSourcesByChapterID_MangaID(int chapterID, int mangaID) {
+
+        try {
+            String sql = "SELECT TOP 1 * FROM [ImageSource]\n"
+                    + "  WHERE chapterID = ? AND mangaID = ?\n"
+                    + "  ORDER BY imageSourceID ASC;";
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            ps.setInt(1, chapterID);
+            ps.setInt(2, mangaID);
+
+            ResultSet res = ps.executeQuery();
+
+            ArrayList<ImageSource> list = new ArrayList<>();
+
+            while (res.next()) {
+                ImageSource imageSource = new ImageSource();
+                imageSource.setImageSourceID(res.getInt("imageSourceID"));
+                imageSource.setImageURL(res.getNString("imageURL"));
+                imageSource.setChapterID(res.getInt("chapterID"));
+                imageSource.setMangaID(res.getInt("mangaID"));
+
+                list.add(imageSource);
+            }
+
+            res.close();
+            ps.close();
+
+            return list;
+
+        } catch (SQLException ex) {
+            Logger.getLogger(ImageSourceDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
+    }
+    // get last imageSource by ChapterID and MangaID
+    public ArrayList<ImageSource> getLastImageSourcesByChapterID_MangaID(int chapterID, int mangaID) {
+
+        try {
+            String sql = "SELECT TOP 1 * FROM [ImageSource]\n"
+                    + "  WHERE chapterID = ? AND mangaID = ?\n"
+                    + "  ORDER BY imageSourceID ASC;";
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            ps.setInt(1, chapterID);
+            ps.setInt(2, mangaID);
+
+            ResultSet res = ps.executeQuery();
+
+            ArrayList<ImageSource> list = new ArrayList<>();
+
+            while (res.next()) {
+                ImageSource imageSource = new ImageSource();
+                imageSource.setImageSourceID(res.getInt("imageSourceID"));
+                imageSource.setImageURL(res.getNString("imageURL"));
+                imageSource.setChapterID(res.getInt("chapterID"));
+                imageSource.setMangaID(res.getInt("mangaID"));
+
+                list.add(imageSource);
+            }
+
+            res.close();
+            ps.close();
+
+            return list;
+
+        } catch (SQLException ex) {
+            Logger.getLogger(ImageSourceDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         return null;
     }
 }

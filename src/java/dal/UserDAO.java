@@ -8,8 +8,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Transaction;
 import model.User;
 
 /**
@@ -63,6 +65,7 @@ public class UserDAO extends DBContext {
 
         return null;
     }
+
     // get User
     public User getUserByGmail(String email) {
         PreparedStatement ps = null;
@@ -108,6 +111,7 @@ public class UserDAO extends DBContext {
 
         return null;
     }
+
     // get User
     public User getUserByUsername(String username, String password) {
         PreparedStatement ps = null;
@@ -124,7 +128,7 @@ public class UserDAO extends DBContext {
             User user = new User();
 
             while (rs.next()) {
-                
+
                 user.setUserId(rs.getInt("userID"));
                 user.setAvatarUrl(rs.getString("avatarUrl"));
                 user.setUsername(rs.getString("username"));
@@ -177,11 +181,11 @@ public class UserDAO extends DBContext {
             ps.setString(9, user.getEmail().trim());
             ps.setString(10, user.getPhone().trim());
             ps.setBoolean(11, user.isGender());
-            
+
             ps.execute();
-            
+
             ps.close();
-            
+
 //            int userId = getUserId(user.getUsername().trim(), user.getPassword().trim(), user.getEmail().trim());
 //            return userId;
         } catch (SQLException ex) {
@@ -275,7 +279,6 @@ public class UserDAO extends DBContext {
             ps.close();
 
 //            return id;
-
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -330,6 +333,7 @@ public class UserDAO extends DBContext {
 
         return false;
     }
+
     // check exist phone
     public boolean isPhoneExists(String phone) {
         String sql = "SELECT COUNT(*) FROM Users WHERE phoneNumber = ?";
@@ -378,6 +382,185 @@ public class UserDAO extends DBContext {
         }
 
         return false;
+    }
+
+//-----------------------
+    public ArrayList<User> getUsersData() {
+        ArrayList<User> userList = new ArrayList<>();
+        String query = "SELECT userId, userName, createAt, role, coinQuantity FROM [MangaUniverse].[dbo].[Users];";
+        try {
+            PreparedStatement statement = connection.prepareStatement(query);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                int userID = resultSet.getInt("userID");
+                String userName = resultSet.getString("userName");
+                java.sql.Timestamp createAt = resultSet.getTimestamp("createAt");
+                String role = resultSet.getString("role");
+                int coinQuantity = resultSet.getInt("coinQuantity");
+
+                User user = new User();
+                user.setUserId(userID);
+                user.setUsername(userName);
+                user.setCreateAt(createAt.toLocalDateTime());
+                user.setCoinQuantity(coinQuantity);
+                user.setRole(role);
+
+                userList.add(user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return userList;
+    }
+
+    public void deleteUser(int userID) {
+        try {
+            String sql = "DELETE FROM Users WHERE userId = ?";
+
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            ps.setInt(1, userID);
+
+            ps.executeUpdate();
+
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public ArrayList<User> getUsersFree() {
+        ArrayList<User> listFree = new ArrayList<>();
+        String query = "SELECT userId, userName, createAt, role, coinQuantity FROM Users WHERE role = 'Free';";
+        try {
+            PreparedStatement statement = connection.prepareStatement(query);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                int userID = resultSet.getInt("userID");
+                String userName = resultSet.getString("userName");
+                java.sql.Timestamp createAt = resultSet.getTimestamp("createAt");
+                String role = resultSet.getString("role");
+                int coinQuantity = resultSet.getInt("coinQuantity");
+
+                User user = new User();
+                user.setUserId(userID);
+                user.setUsername(userName);
+                user.setCreateAt(createAt.toLocalDateTime());
+                user.setCoinQuantity(coinQuantity);
+                user.setRole(role);
+
+                listFree.add(user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return listFree;
+    }
+
+    public ArrayList<User> getUsersPremium() {
+        ArrayList<User> listPre = new ArrayList<>();
+        String query = "SELECT userId, userName, createAt, role, coinQuantity FROM Users WHERE role = 'Premium';";
+        try {
+            PreparedStatement statement = connection.prepareStatement(query);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                int userID = resultSet.getInt("userID");
+                String userName = resultSet.getString("userName");
+                java.sql.Timestamp createAt = resultSet.getTimestamp("createAt");
+                String role = resultSet.getString("role");
+                int coinQuantity = resultSet.getInt("coinQuantity");
+
+                User user = new User();
+                user.setUserId(userID);
+                user.setUsername(userName);
+                user.setCreateAt(createAt.toLocalDateTime());
+                user.setCoinQuantity(coinQuantity);
+                user.setRole(role);
+
+                listPre.add(user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return listPre;
+    }
+
+    public ArrayList<User> getUsersAuthor() {
+        ArrayList<User> listAuthor = new ArrayList<>();
+        String query = "SELECT userId, userName, createAt, role, coinQuantity FROM Users WHERE role = 'Author';";
+        try {
+            PreparedStatement statement = connection.prepareStatement(query);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                int userID = resultSet.getInt("userID");
+                String userName = resultSet.getString("userName");
+                java.sql.Timestamp createAt = resultSet.getTimestamp("createAt");
+                String role = resultSet.getString("role");
+                int coinQuantity = resultSet.getInt("coinQuantity");
+
+                User user = new User();
+                user.setUserId(userID);
+                user.setUsername(userName);
+                user.setCreateAt(createAt.toLocalDateTime());
+                user.setCoinQuantity(coinQuantity);
+                user.setRole(role);
+
+                listAuthor.add(user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return listAuthor;
+    }
+
+    public ArrayList<Transaction> getTransaction() {
+        ArrayList<Transaction> listTrac = new ArrayList<>();
+        String query = "SELECT [Id], [Number], [Code], [Bank], [Contend], [Amount], [Dateofpayment], [Status]\n"
+                + "FROM [MangaUniverse].[dbo].[DetailTransactionReport]";
+        try {
+            PreparedStatement statement = connection.prepareStatement(query);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt("Id");
+                String number = resultSet.getString("Number");
+                String code = resultSet.getString("Code");
+                String bank = resultSet.getString("Bank");
+                String contend = resultSet.getString("Contend");
+                double amount = resultSet.getDouble("Amount");
+                Timestamp dateOfpayment = resultSet.getTimestamp("Dateofpayment");
+                String status = resultSet.getString("Status");
+
+                Transaction tran = new Transaction();
+                tran.setId(id);
+                tran.setInvoiceNumber(number);
+                tran.setTransactionCode(code);
+                tran.setBank(bank);
+                tran.setPaymentContent(contend);
+                tran.setAmount(amount);
+
+                // Kiểm tra giá trị dateOfpayment không phải là null trước khi chuyển đổi
+                if (dateOfpayment != null) {
+                    tran.setDateofpayment(dateOfpayment.toLocalDateTime());
+                }
+
+                tran.setStatus(status);
+
+                listTrac.add(tran);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return listTrac;
     }
 
 }

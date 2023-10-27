@@ -322,124 +322,254 @@
 })();
 /*---------------------------------- */
 
+//const fileInput = document.getElementById("postImage");
+//const imagePreview = document.getElementById("imagePreview");
+//const removeImage = document.getElementById("removeImage");
+//const postUrls = document.getElementById("postUrls");
+//const submitButton = document.getElementById("submitButton");
+//const uploadButton = document.getElementById("uploadButton");
+//const spinnerUpload = document.getElementById("spinnerUpload");
+//const feedback = document.getElementById('feedback');
+//const progress = document.getElementById('progress');
+//const progressLabel = document.getElementById('progress-label');
+//const imageGrid = document.getElementById('image-grid');
+//let isImageSelected = false;
+//
+//// Hàm để xử lý sự kiện khi người dùng chọn tệp
+//function handleFileSelection(event) {
+//    imagePreview.remove();
+//    const files = event.target.files;
+//    const totalFiles = files.length;
+//    let uploadedFiles = 0;
+//
+//    // Hiển thị tiến trình ban đầu
+//    progress.value = 0;
+//    progressLabel.textContent = '0%';
+//
+//    for (let i = 0; i < files.length; i++) {
+//        // Upload to Cloud ...
+//        updateSubmitButtonState();
+//        updateSpinnerUploadState();
+//        const file = files[i];
+//
+//        if (file) {
+//            const formData = new FormData();
+//            formData.append("file", file);
+//            formData.append("upload_preset", "demo_manga");
+//
+//            fetch("https://api.cloudinary.com/v1_1/djytvqlon/image/upload", {
+//                method: "POST",
+//                body: formData,
+//            })
+//                    .then((response) => response.json())
+//                    .then((data) => {
+//                        const reader = new FileReader();
+//                        reader.addEventListener('progress', (event) => {
+//                            if (event.lengthComputable) {
+//                                const percentLoaded = (event.loaded / event.total) * 100;
+//                                progress.value = (uploadedFiles + 1) / totalFiles * 100 + percentLoaded / totalFiles;
+//                                progressLabel.textContent = `${Math.round(progress.value)}%`;
+//                            }
+//                        });
+//                        reader.readAsDataURL(file); // Đọc tệp dưới dạng URL dữ liệu
+//
+//                        // Hiển thị ảnh đã tải lên
+//                        const img = document.createElement('img');
+//                        img.src = data.url;
+//                        img.className = 'image-grid-item'; // Để thêm CSS tùy chỉnh
+//                        imageGrid.appendChild(img);
+//                        uploadedFiles++;
+//
+//                        // Thêm link vào input hidden
+//                        const newInput = document.createElement("input");
+//                        newInput.type = "hidden";
+//                        newInput.name = "imageURL";
+//                        newInput.className = "imageURL";
+//                        newInput.value = data.url;
+//                        postUrls.appendChild(newInput);
+//
+//                        isImageSelected = true;
+//                        updateSubmitButtonState();
+//                        updateSpinnerUploadState();
+//                    })
+//                    .catch((error) => {
+//                        console.error("Error:", error);
+//                    });
+//        }
+//    }
+//}
+//
+//// Gắn kết sự kiện nghe cho nút upload
+//uploadButton.addEventListener("click", function () {
+//    fileInput.click(); // Khi nhấn nút "Upload", gọi sự kiện click cho input file
+//});
+//
+//// Gắn kết sự kiện nghe cho input file để xử lý tệp được chọn
+//fileInput.addEventListener("change", handleFileSelection);
+//
+//removeImage.addEventListener("click", function () {
+//    fileInput.value = ''; // Xóa tên tệp đã chọn
+//    fileInput.files = null; // Xóa danh sách tệp đã chọn
+//
+//    // Xóa tất cả ảnh trong imageGrid
+//    while (imageGrid.firstChild) {
+//        imageGrid.removeChild(imageGrid.firstChild);
+//    }
+//
+//    // Xóa tất cả input hidden
+//    while (postUrls.firstChild) {
+//        postUrls.removeChild(postUrls.firstChild);
+//    }
+//
+//    progress.value = 0;
+//    progressLabel.textContent = '0%';
+//    isImageSelected = false;
+//    updateSubmitButtonState();
+//    
+//    // Tải lại trang web
+//    location.reload();
+//});
+//
+//function updateSubmitButtonState() {
+//    if (isImageSelected) {
+//        submitButton.removeAttribute("disabled");
+//    } else {
+//        submitButton.setAttribute("disabled", "disabled");
+//    }
+//}
+//
+//function updateSpinnerUploadState() {
+//    if (isImageSelected) {
+//        spinnerUpload.style.display = "none";
+//    } else {
+//        spinnerUpload.style.display = "inline-block";
+//    }
+//}
 
 
-    const fileInput = document.getElementById("postImage");
-    const imagePreview = document.getElementById("imagePreview");
-    const removeImage = document.getElementById("removeImage");
-    const postUrls = document.getElementById("postUrls");
-    const submitButton = document.getElementById("submitButton");
-    const uploadButton = document.getElementById("uploadButton");
-    const spinnerUpload = document.getElementById("spinnerUpload");
-    const feedback = document.getElementById('feedback');
-    const progress = document.getElementById('progress');
-    const progressLabel = document.getElementById('progress-label');
-    const imageGrid = document.getElementById('image-grid');
-    let isImageSelected = false;
-    uploadButton.addEventListener("click", function () {
-        fileInput.addEventListener("change", function (changeEvent) {
-            imagePreview.remove();
-            const files = fileInput.files;
-            // console.log(files);
-            const totalFiles = files.length;
-            let uploadedFiles = 0;
-            // Hiển thị tiến trình ban đầu
-            progress.value = 0;
-            progressLabel.textContent = '0%';
-            for (let i = 0; i < files.length; i++) {
 
-                // Upload to Cloud ...
-                updateSubmitButtonState();
-                updateSpinnerUploadState();
-                const file = changeEvent.target.files[i];
-                // const file = changeEvent.target.files[0];
-                if (file) {
-                    const formData = new FormData();
-                    formData.append("file", file);
-                    formData.append("upload_preset", "demo_manga");
-                    fetch("https://api.cloudinary.com/v1_1/djytvqlon/image/upload", {
-                        method: "POST",
-                        body: formData,
-                    })
-                            .then((response) => response.json())
-                            .then((data) => {
-                                const reader = new FileReader();
-                                reader.addEventListener('progress', (event) => {
-                                    if (event.lengthComputable) {
-                                        const percentLoaded = (event.loaded / event.total) * 100;
-                                        progress.value = (uploadedFiles + 1) / totalFiles * 100 + percentLoaded / totalFiles;
-                                        progressLabel.textContent = `${Math.round(progress.value)}%`;
-                                    }
-                                });
-                                reader.readAsDataURL(files[i]); // Đọc tệp dưới dạng URL dữ liệu
 
-                                // Hiển thị ảnh đã tải lên
-                                const img = document.createElement('img');
-                                img.src = data.url;
-                                img.className = 'image-grid-item'; // Để thêm CSS tùy chỉnh
-                                imageGrid.appendChild(img);
-                                uploadedFiles++;
-                                if (uploadedFiles === totalFiles) {
-                                    // Tất cả tệp đã được tải lên
-                                    feedback.textContent = `Tất cả ${totalFiles} tệp đã được tải lên.`;
+const fileInput = document.getElementById("postImage");
+const imagePreview = document.getElementById("imagePreview");
+const removeImage = document.getElementById("removeImage");
+const postUrls = document.getElementById("postUrls");
+const submitButton = document.getElementById("submitButton");
+const uploadButton = document.getElementById("uploadButton");
+const spinnerUpload = document.getElementById("spinnerUpload");
+const feedback = document.getElementById('feedback');
+const progress = document.getElementById('progress');
+const progressLabel = document.getElementById('progress-label');
+const imageGrid = document.getElementById('image-grid');
+let isImageSelected = false;
+
+uploadButton.addEventListener("click", function () {
+    fileInput.addEventListener("change", function (changeEvent) {
+        imagePreview.remove();
+        const files = fileInput.files;
+        // console.log(files);
+        const totalFiles = files.length;
+        let uploadedFiles = 0;
+        // Hiển thị tiến trình ban đầu
+        progress.value = 0;
+        progressLabel.textContent = '0%';
+        for (let i = 0; i < files.length; i++) {
+
+            // Upload to Cloud ...
+            updateSubmitButtonState();
+            updateSpinnerUploadState();
+            const file = changeEvent.target.files[i];
+            // const file = changeEvent.target.files[0];
+            if (file) {
+                const formData = new FormData();
+                formData.append("file", file);
+                formData.append("upload_preset", "demo_manga");
+                fetch("https://api.cloudinary.com/v1_1/djytvqlon/image/upload", {
+                    method: "POST",
+                    body: formData,
+                })
+                        .then((response) => response.json())
+                        .then((data) => {
+                            const reader = new FileReader();
+                            reader.addEventListener('progress', (event) => {
+                                if (event.lengthComputable) {
+                                    const percentLoaded = (event.loaded / event.total) * 100;
+                                    progress.value = (uploadedFiles + 1) / totalFiles * 100 + percentLoaded / totalFiles;
+                                    progressLabel.textContent = `${Math.round(progress.value)}%`;
                                 }
-
-                                // Thêm link vào input hidden
-
-                                const newInput = document.createElement("input");
-                                newInput.type = "hidden";
-                                newInput.name = "imageURL";
-                                newInput.className = "imageURL";
-                                newInput.value = data.url;
-                                postUrls.appendChild(newInput);
-                                isImageSelected = true;
-                                updateSpinnerUploadState();
-                                updateSubmitButtonState();
-                            })
-                            .catch((error) => {
-                                console.error("Error:", error);
                             });
-                }
+                            reader.readAsDataURL(files[i]); // Đọc tệp dưới dạng URL dữ liệu
 
+                            // Hiển thị ảnh đã tải lên
+                            const img = document.createElement('img');
+                            img.src = data.url;
+                            img.className = 'image-grid-item'; // Để thêm CSS tùy chỉnh
+                            imageGrid.appendChild(img);
+                            uploadedFiles++;
+//                                if (uploadedFiles === totalFiles) {
+//                                    // Tất cả tệp đã được tải lên
+//                                    feedback.innerHTML = `Tất cả ${totalFiles} tệp đã được tải lên.`;
+//                                }
+
+                            // Thêm link vào input hidden
+
+                            const newInput = document.createElement("input");
+                            newInput.type = "hidden";
+                            newInput.name = "imageURL";
+                            newInput.className = "imageURL";
+                            newInput.value = data.url;
+                            postUrls.appendChild(newInput);
+                            isImageSelected = true;
+                            updateSpinnerUploadState();
+                            updateSubmitButtonState();
+                        })
+                        .catch((error) => {
+                            console.error("Error:", error);
+                        });
             }
 
-        });
-    });
-    removeImage.addEventListener("click", function () {
-        var container = document.getElementById("imageGrid");
-        while (container.firstChild) {
-            container.removeChild(container.firstChild);
         }
 
-        const imgPreview = document.createElement('img');
-        imgPreview.id = "imagePreview";
-        imgPreview.src = "assetsUser/img/no_image.jpg";
-        imgPreview.className = 'image-grid-item'; // Để thêm CSS tùy chỉnh
-        imageGrid.appendChild(imgPreview);
-        // postUrl.value = "";
-        var container = document.getElementById("postUrls");
-        while (container.firstChild) {
-            container.removeChild(container.firstChild);
-        }
-
-        fileInput.value = "";
-        isImageSelected = true;
-        updateSubmitButtonState();
     });
-    function updateSubmitButtonState() {
-        if (isImageSelected) {
-            submitButton.removeAttribute("disabled");
-        } else {
-            submitButton.setAttribute("disabled", "disabled");
-        }
+});
+removeImage.addEventListener("click", function () {
+    fileInput.files = null;
+    
+    var container = document.getElementById("image-grid");
+    while (container.firstChild) {
+        container.removeChild(container.firstChild);
     }
-    function updateSpinnerUploadState() {
-        if (isImageSelected) {
-            spinnerUpload.style.display = "none";
-        } else {
-            spinnerUpload.style.display = "inline-block";
-        }
+
+    const imgPreview = document.createElement('img');
+    imgPreview.id = "imagePreview";
+    imgPreview.src = "assetsUser/img/no_image.jpg";
+    imgPreview.className = 'image-grid-item'; // Để thêm CSS tùy chỉnh
+    imageGrid.appendChild(imgPreview);
+    // postUrl.value = "";
+    var container = document.getElementById("postUrls");
+    while (container.firstChild) {
+        container.removeChild(container.firstChild);
     }
+
+    progress.value = 0;
+    progressLabel.textContent = `0%`;
+    fileInput.value = "";
+    isImageSelected = true;
+    updateSubmitButtonState();
+});
+function updateSubmitButtonState() {
+    if (isImageSelected) {
+        submitButton.removeAttribute("disabled");
+    } else {
+        submitButton.setAttribute("disabled", "disabled");
+    }
+}
+function updateSpinnerUploadState() {
+    if (isImageSelected) {
+        spinnerUpload.style.display = "none";
+    } else {
+        spinnerUpload.style.display = "inline-block";
+    }
+}
 
 
 

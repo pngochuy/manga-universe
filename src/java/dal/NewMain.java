@@ -63,8 +63,8 @@ public class NewMain {
 //        }
 //        System.out.println(mangaDAO.getTop4MangaList().get(1).getUserID());
 //            System.out.println(mangaDAO.getManga(4));
-        Chapter chapter = new Chapter("Chapter 1", "description_1", 4);
-        chapterDAO.create(chapter);
+//        Chapter chapter = new Chapter("Chapter 1", "description_1", 4);
+//        chapterDAO.create(chapter);
         
 //        for (Chapter c : chapterDAO.getAllChaptersByMangaID(5)) {
 //            System.out.println(c);

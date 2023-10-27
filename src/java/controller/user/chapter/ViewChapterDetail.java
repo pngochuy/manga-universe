@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller.user.manga;
+package controller.user.chapter;
 
 import dal.CategoryDAO;
 import dal.ChapterDAO;
@@ -17,16 +17,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import model.Category;
-import model.Chapter;
-import model.Manga;
-import model.User;
+import model.ImageSource;
 
 /**
  *
  * @author PC
  */
-public class MangaDetailServlet extends HttpServlet {
+public class ViewChapterDetail extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,34 +36,21 @@ public class MangaDetailServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//        response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("UTF-8"); // works fine
-        response.setCharacterEncoding("UTF-8");
-        PrintWriter out = response.getWriter();
-        
-        HttpSession mySession = request.getSession();
-        MangaDAO mangaDAO = new MangaDAO();
-        MangaCategoryDAO mangaCategoryDAO = new MangaCategoryDAO();
-        CategoryDAO categoryDAO = new CategoryDAO();
-        ChapterDAO chapterDAO = new ChapterDAO();
-        ImageSourceDAO imageSourceDAO = new ImageSourceDAO();
-        
-        
-        int mangaID = Integer.parseInt(request.getParameter("id"));
-        
-        Manga m = mangaDAO.getManga(mangaID);
-        ArrayList<Category> categoriesByMangaDetail = categoryDAO.getCategoriesByMangaID(mangaID);
-        ArrayList<Chapter> chaptersByMangaDetail = chapterDAO.getAllChaptersByMangaID(mangaID);
-        
-        mySession.setAttribute("mangaDetail", m);
-        mySession.setAttribute("categoriesByMangaDetail", categoriesByMangaDetail);
-        mySession.setAttribute("chaptersByMangaDetail", chaptersByMangaDetail);
-        
-        response.sendRedirect("mangaSinglePage.jsp?mangaId=" + mangaID);
-        
+        response.setContentType("text/html;charset=UTF-8");
+        try ( PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet ViewChapterDetail</title>");            
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet ViewChapterDetail at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -78,7 +62,30 @@ public class MangaDetailServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        
+        //        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8"); // works fine
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+
+        HttpSession mySession = request.getSession();
+        MangaDAO mangaDAO = new MangaDAO();
+        MangaCategoryDAO mangaCategoryDAO = new MangaCategoryDAO();
+        CategoryDAO categoryDAO = new CategoryDAO();
+
+        ChapterDAO chapterDAO = new ChapterDAO();
+        ImageSourceDAO imageSourceDAO = new ImageSourceDAO();
+        
+        String action = request.getParameter("action");
+        
+        if (action.equals("first-manga")) {
+            
+            // get all
+//             ArrayList<ImageSource> list = imageSourceDAO.getAllImageSourcesByChapterID_MangaID(chapterID, mangaID);
+        }
+        
+        int chapterID = Integer.parseInt(request.getParameter("chapterID"));
+        out.println(chapterID);
     }
 
     /**

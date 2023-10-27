@@ -87,29 +87,25 @@
                     <div class="col-lg-12">
 
                         <div class="card">
-                            <div class="card-body card-title">
-                                <h3 class="card-title">${mangaToAddChapter.getTitle()}</h3>
-                                <hr>
-                                <c:if test="${sessionScope.userSession == null}">   
-                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                        <i class="bi bi-exclamation-octagon me-1"></i>
-                                        Please fill in your personal information to access features!
-                                        <!--<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>-->
-                                    </div>
-                                </c:if> 
-                                <c:if test="${sessionScope.userSession != null}">
-                                    <% User u2 = (User) session.getAttribute("userSession");%>
-                                    <% if (u2.getRole().equalsIgnoreCase("Free") || u2.getRole().equalsIgnoreCase("Premium")) {%>
-                                    <div class="alert alert-warning bg-warning border-0 alert-dismissible fade show" role="alert">
-                                        You have no permission to Add Chapter! If you want to be an Author, please click <a href="registerAuthor.jsp">here</a> to register an author!
-                                        <!-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> -->
-                                    </div>
+                            <c:if test="${sessionScope.userSession == null}">   
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <i class="bi bi-exclamation-octagon me-1"></i>
+                                    Please fill in your personal information to access features!
+                                    <!--<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>-->
+                                </div>
+                            </c:if> 
+                            <c:if test="${sessionScope.userSession != null}">
+                                <% User u2 = (User) session.getAttribute("userSession");%>
+                                <% if (u2.getRole().equalsIgnoreCase("Free") || u2.getRole().equalsIgnoreCase("Premium")) {%>
+                                <div class="alert alert-warning bg-warning border-0 alert-dismissible fade show" role="alert">
+                                    You have no permission to Add Chapter! If you want to be an Author, please click <a href="registerAuthor.jsp">here</a> to register an author!
+                                    <!-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> -->
+                                </div>
 
-                                    <% }%>
+                                <% }%>
 
-                                </c:if>
+                            </c:if>
 
-                            </div>
                         </div>
 
                         <c:if test="${sessionScope.userSession != null}">
@@ -119,29 +115,40 @@
                                 <div class="card-body">
                                     <form action="AddChapterServlet" method="POST">
                                         <h5 class="card-title">Chapter Name</h5>
-
                                         <!-- Quill Editor Default -->
                                         <div>
-                                            <input class="form-control" placeholder="Chapter Name" name="title" type="text" value="">
+                                            <input class="form-control" placeholder="Chapter 1,..." name="title" type="text" 
+                                                   value="${titleValue != null ? titleValue : ''}">
+                                            <c:if test="${titleError != null}">
+                                                <small class="small" style="color: red;">${titleError}</small> 
+                                            </c:if>
                                         </div>
                                         <h5 class="card-title">Description</h5>
 
                                         <!-- Quill Editor Default -->
                                         <div>
-                                            <input class="form-control" placeholder="Description" name="description" type="text" value="">
+                                            <input class="form-control" placeholder="description..." name="description" type="text" 
+                                                   value="${descriptionValue != null ? descriptionValue : ''}">
+                                            <c:if test="${descriptionError != null}">
+                                                <small class="small" style="color: red;">${descriptionError}</small> 
+                                            </c:if>
                                         </div>
                                         <h5 class="card-title">Image</h5>
                                         <div class="row mb-3">
                                             <label for="postImage" class="col-md-4 col-lg-3 col-form-label">Post Image</label>
                                             <div class="col-md-8 col-lg-9" id="divSvgContainer">
 
-
                                                 <!-- ----------------- -->
                                                 <div id="feedback"></div>
                                                 <label id="progress-label" for="progress">0%</label>
                                                 <progress id="progress" value="0" max="100"></progress>
                                                 <div id="image-grid" class="image-grid">
-                                                    <img id="imagePreview" src="assetsUser/img/no_image.jpg" alt="Post Image">
+                                                    <c:if test="${imageURLsValue == null}">
+                                                        <img id="imagePreview" src="assetsUser/img/no_image.jpg" alt="Post Image">
+                                                    </c:if>
+                                                    <c:if test="${imageURLsValue != null}">
+
+                                                    </c:if>
                                                 </div>
                                                 <!-- ----------------- -->
 
@@ -158,11 +165,13 @@
                                                         <span class="visually-hidden">Loading...</span>
                                                     </div>
                                                 </div>
-
+                                                <c:if test="${imageURLsError != null}">
+                                                    <small class="small" style="color: red;">${imageURLsError}</small> 
+                                                </c:if>
 
                                             </div>
                                             <div id="postUrls">
-                                                <!--...-->
+                                                <!-- ... -->
                                             </div>
                                         </div>
                                         <!--                                     Quill Editor Full 
@@ -177,12 +186,12 @@
                                                 </div>
 
                                                 <div class="col-sm-9">
-                                                    
+
                                                     <input type="hidden" name="mangaID" value="${mangaToAddChapter.getMangaID()}">
                                                     <button id="submitButton" type="submit" class="btn btn-primary">Add Chapter</button>
-                                                    <c:if test="${messageAdd != null}">
+                                                    <c:if test="${messageAddChapter != null}">
                                                         <br/>
-                                                        <small class="small" style="color: green;">${messageAdd}</small> 
+                                                        <small class="small" style="color: green;">${messageAddChapter}</small> 
                                                     </c:if>
                                                 </div>
                                             </div>

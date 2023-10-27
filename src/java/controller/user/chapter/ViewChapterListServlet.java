@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller.user.manga;
+package controller.user.chapter;
 
 import dal.CategoryDAO;
 import dal.ChapterDAO;
@@ -21,7 +21,7 @@ import model.Manga;
  *
  * @author PC
  */
-public class ViewChapterServlet extends HttpServlet {
+public class ViewChapterListServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -77,7 +77,7 @@ public class ViewChapterServlet extends HttpServlet {
         mySession.setAttribute("mangaToViewChapter", manga);
         mySession.setAttribute("chapterListByManga", chapterDAO.getAllChaptersByMangaID(mangaID));
         
-        response.sendRedirect("viewChapter.jsp");
+        response.sendRedirect("viewChapterList.jsp");
     }
 
     /**

@@ -1,6 +1,12 @@
 <%@page import="java.time.LocalDateTime"%>
 <%@page import="model.UserRegister"%>
 <%@page import="model.User"%>
+<%@page import="dal.UserDAO"%>
+<%@page import="model.User"%>
+<%@page import="java.util.List"%>
+<%@page import="java.sql.Connection"%>
+<%@page import="java.sql.SQLException"%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -228,38 +234,55 @@
                                         </ul>
                                     </div>
 
-                                    <div class="card-body pb-0">
-                                        <h5 class="card-title">List User <span>| Normal Account</span></h5>
-                                        <h1>User List</h1>
-                                        <table>
-                                            <thead>
-                                                <tr>
-                                                    <th>User Name</th>
-                                                    <th>Create At</th>
-                                                    <th>Coins Quantity</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <%
-                                                    ListUserDAO FootballDAO = new ListUserDAO();
-                                                    List<User> player = FootballDAO.getallUsers();
-                                                    for (User play : player) {
-                                                %>
-                                                <tr>
-                                                    <td><%= play.getUsername()%></td>
-                                                    <td><%= play.getCreateAt()%></td>
-                                                    <td><%= play.getCoinQuantity()%></td>
-                                                </tr>
-                                                <%
+                                    <h1>User List</h1>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>User Name</th>
+                                                <th>Create At</th>     
+                                                <th>Coins Quantity</th>
+                                                <th>Role</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <%
+                                                Connection connection = null; // Thiết lập kết nối cơ sở dữ liệu ở đây
+                                                try {
+                                                    UserDAO userDAO = new UserDAO();
+                                                    List<User> userList = userDAO.getUsersData();
+                                                    for (User a : userList) {
+                                            %>
+                                            <tr>
+                                                <td><%= a.getUsername()%></td>
+                                                <td><%= a.getCreateAt()%></td>
+                                                <td><%= a.getCoinQuantity()%></td>
+                                                <td><%= a.getRole()%></td>
+                                            </tr>
+                                        <td>           
+                                            <a href="DeleteUser?Id=<%= a.getUserId()%>">Delete</a>
+                                        </td>
+                                        <%
+
+                                                }
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            } finally {
+                                                // Đảm bảo đóng kết nối sau khi hoàn thành
+                                                try {
+                                                    if (connection != null) {
+                                                        connection.close();
                                                     }
-                                                %>
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                                } catch (SQLException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        %>
+                                        </tbody>
+
+                                    </table>
+
                                 </div>
                             </div>
-
-
                             <!-- Recent Sales -->
                             <div class="col-12">
                                 <div class="card recent-sales overflow-auto">

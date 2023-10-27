@@ -111,7 +111,7 @@
                                                         </div>
                                                         <div class="col-sm-5 row">
                                                             <div class=" col-sm-4 text-center">
-                                                                <a href="ViewChapterServlet?id=${manga.getMangaID()}" class="btn btn-dark">Chapter</a>
+                                                                <a href="ViewChapterListServlet?id=${manga.getMangaID()}" class="btn btn-dark">Chapter</a>
                                                             </div>
                                                             <div class="col-sm-4 text-center">
                                                                 <a href="EditMangaServlet?id=${manga.getMangaID()}" class="btn btn-primary">Edit <i class="bi bi-pencil-square"></i></a>

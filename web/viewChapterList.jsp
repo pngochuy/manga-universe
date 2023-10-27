@@ -48,7 +48,7 @@
     <body>
 
         <%@include file="layouts/layoutUser/headerUser.jsp" %> 
-        
+
         <%@include file="layouts/layoutUser/sidebarUser.jsp" %>
 
         <main id="main" class="main">
@@ -99,67 +99,63 @@
                                         an author!
                                         <!-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> -->
                                     </div>
-                                    
+
                                     <% }%>
                                     <% if (u2.getRole().equalsIgnoreCase("Author")) {%>
                                     <div class="panel-body">
-
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                <div class="custom-alert">
-                                                    <div class="row">
-                                                        <div class="col-sm-4">
-                                                            <button class="btn btn-danger btn-delete">Delete</button>
+                                        <form action="DeleteChapterServlet" method="POST">
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <div class="custom-alert">
+                                                        <div class="row">
+                                                            <div class="col-sm-4">
+                                                                <button class="btn btn-danger btn-delete" id="deleteButton">Delete</button>
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <a href="AddChapterServlet?mangaID=${mangaToViewChapter.getMangaID()}" class="btn btn-primary">New chapter</a>
+                                                            </div>
                                                         </div>
-                                                        <div class="col-sm-4">
-                                                            <a href="AddChapterServlet?mangaID=${mangaToViewChapter.getMangaID()}" class="btn btn-primary">New chapter</a>
-                                                        </div>
-
                                                     </div>
+                                                    <hr class="hr">
                                                 </div>
-                                                <hr class="hr">
                                             </div>
-                                        </div>
-                                        <table class="table table-hover dataTable table-striped width-full" data-plugin="dataTable">
-                                            <thead>
-                                                <tr>
-                                                    <th class="w10" style="text-align: center">
-                                                        <input class="selectAll pointer" type="checkbox" value="Chapters">
-                                                    </th>
-
-                                                    <th>Chapter</th>
-                                                    <th class="w100">Description</th>
-                                                </tr>
-                                            </thead>
-
-
-                                            <tbody class="lstChapters sortable ui-sortable">
-                                                <c:forEach items="${chapterListByManga}" var="chapter">
-                                                    <tr class="chatper-item move" id="item_481217" data-id="481217" data-sort="-550862">
-                                                        <td class="text-center w10">
-                                                            <input type="checkbox" id="" value="true" class="pointer">
-                                                        </td>
-                                                        <td>
-                                                            <a href="">${chapter.getTitle()}</a>
-                                                        </td>
-                                                        <td>${chapter.getDescription()}</td>
-                                                        <td class="text-center">
-                                                            <a href="" class="mr10">
-                                                                <i class="bi bi-pencil-square" class=" "></i>
-                                                            </a>
-                                                        </td>
+                                            <table class="table table-hover dataTable table-striped width-full" data-plugin="dataTable">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="w10" style="text-align: center">
+                                                            <input class="selectAll pointer" type="checkbox" value="Chapters" id="selectAllCheckbox">
+                                                        </th>
+                                                        <th>Chapter</th>
+                                                        <th class="w100">Description</th>
                                                     </tr>
-                                                </c:forEach>
-
-
-                                            </tbody>
-                                        </table>
+                                                </thead>
+                                                <tbody class="lstChapters sortable ui-sortable">
+                                                    <c:forEach items="${chapterListByManga}" var="chapter">
+                                                        <tr class="chatper-item move" id="item_${chapter.getChapterID()}" data-id="${chapter.getChapterID()}" data-sort="${chapter.getChapterID() * -1}">
+                                                            <td class="text-center w10">
+                                                                <input type="hidden" name="mangaID" value="${mangaToViewChapter.getMangaID()}">
+                                                                <input type="checkbox" name="selectedChapters" value="${chapter.getChapterID()}" class="pointer">
+                                                            </td>
+                                                            <td>
+                                                                <a href="">${chapter.getTitle()}</a>
+                                                            </td>
+                                                            <td>${chapter.getDescription()}</td>
+                                                            <td class="text-center">
+                                                                <a href="" class="mr10">
+                                                                    <i class="bi bi-pencil-square"></i>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    </c:forEach>
+                                                </tbody>
+                                            </table>
+                                        </form>
                                     </div>
-                                    
+
                                     <%}%>
                                 </c:if>
 
-                                
+
                             </div>
                         </div>
                     </div>
@@ -171,6 +167,38 @@
 
         <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
                 class="bi bi-arrow-up-short"></i></a>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('#selectAllCheckbox').change(function () {
+                    $('.lstChapters input[type="checkbox"]').prop('checked', this.checked);
+                });
+
+//                $('#deleteButton').click(function () {
+//                    const selectedChapterCheckboxes = $('.lstChapters input[type="checkbox"]:checked');
+//                    const selectedChapterIds = selectedChapterCheckboxes.map(function () {
+//                        return $(this).val(); // Lấy giá trị value của checkbox
+//                    }).get();
+//                    //                    console.log(JSON.stringify(selectedChapterIds));
+//
+//                    $.ajax({
+//                        type: 'POST',
+//                        url: '/MangaUniverse/DeleteChapterServlet',
+//                        data: JSON.stringify(selectedChapterIds),
+//                        contentType: 'application/json; charset=utf-8',
+//                        success: function (data) {
+//                            // Xử lý phản hồi từ servlet ở đây
+//                            console.log(data);
+//                        },
+//                        error: function (xhr, status, error) {
+//                            console.log("Lỗi: " + error);
+//                        }
+//                    });
+//                });
+            });
+
+        </script>
 
         <!-- Vendor JS Files -->
         <script src="assetsUser/vendor/apexcharts/apexcharts.min.js"></script>

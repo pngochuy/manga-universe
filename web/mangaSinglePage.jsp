@@ -1,3 +1,5 @@
+<%@page import="dal.ChapterDAO"%>
+<%@page import="model.Chapter"%>
 <%@page import="dal.UserDAO"%>
 <%@page import="dal.CategoryDAO"%>
 <%@page import="dal.MangaDAO"%>
@@ -51,25 +53,23 @@
             MangaDAO mangaDAO = new MangaDAO();
             CategoryDAO categoryDAO = new CategoryDAO();
             UserDAO userDAO = new UserDAO();
-            String id = request.getParameter("id");
+            ChapterDAO chapterDAO = new ChapterDAO();
+            String id = request.getParameter("mangaId");
 
             if (id != null) {
-                int mangaID = Integer.parseInt(request.getParameter("id"));
+                int mangaID = Integer.parseInt(request.getParameter("mangaId"));
                 Manga m = mangaDAO.getManga(mangaID);
                 ArrayList<Category> categoriesByMangaDetail = categoryDAO.getCategoriesByMangaID(mangaID);
                 int userID = mangaDAO.getUserIDByMangaID(mangaID);
                 String username = userDAO.getUserById(userID).getUsername();
+                ArrayList<Chapter> chaptersByMangaDetail = chapterDAO.getAllChaptersByMangaID(mangaID);
 
                 session.setAttribute("mangaDetail", m);
                 session.setAttribute("usernameDetail", username);
                 session.setAttribute("categoriesByMangaDetail", categoriesByMangaDetail);
                 session.setAttribute("mangaListTop4", mangaDAO.getTop4MangaList());
-                int index = 0;
-                request.setAttribute("index", index);
-//                session.setAttribute("cate1", categoryDAO.getCategoriesByMangaID(mangaDAO.getTop4MangaList().get(0).getUserID()));
-//                session.setAttribute("cate2", categoryDAO.getCategoriesByMangaID(mangaDAO.getTop4MangaList().get(1).getUserID()));
-//                session.setAttribute("cate3", categoryDAO.getCategoriesByMangaID(mangaDAO.getTop4MangaList().get(2).getUserID()));
-//                session.setAttribute("cate4", categoryDAO.getCategoriesByMangaID(mangaDAO.getTop4MangaList().get(3).getUserID()));
+                session.setAttribute("chaptersByMangaDetail", chaptersByMangaDetail);
+
             }
 
         %>
@@ -180,8 +180,8 @@
                                                 <p>${usernameDetail} </p>
                                             </li>
                                             <li class="d-flex flex-wrap watch">
-                                                <a class="mr-2" href="chapter/chapter.jsp">Read First</a><a
-                                                    href="chapter/chapter.jsp">Read Last</a>
+                                                <a class="mr-2" href="ViewChapterDetail?action=first-chapter">Read First</a><a
+                                                    href="ViewChapterDetail?action=last-chapter">Read Last</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -256,22 +256,22 @@
                                     </div>
                                     <div class="manga_info">
                                         <div class="section-tittle mt-30 mb-30">
-                                            <h3>LATEST MANGA RELEASES</h3>
+                                            <h3>LATEST CHAPTER RELEASES</h3>
                                         </div>
                                         <ul class="chapter mb-3">
-                                            <li>
-                                                <a href="chapter/chapter.jsp"
-                                                   class="d-flex flex-wrap justify-content-between">
-                                                    <span>Chapter 0 - Introduction</span><span>07/19/2020 </span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="chapter/chapter.jsp"
-                                                   class="d-flex flex-wrap justify-content-between">
-                                                    <span>Chapter 1 - The Beginning of Everything </span><span>07/19/2020
-                                                    </span>
-                                                </a>
-                                            </li>
+                                            <c:forEach items="${chaptersByMangaDetail}" var="chapter" varStatus="loop">
+                                                <c:if test="${loop.index < 2}">
+                                                    <li>
+                                                        <a href="chapter/chapter.jsp"
+                                                           class="d-flex flex-wrap justify-content-between">
+                                                            <span>${chapter.getTitle()} - ${chapter.getDescription()}</span><span>${chapter.getCreateAtFormat()} </span>
+                                                        </a>
+                                                    </li>
+                                                </c:if>
+
+                                            </c:forEach>
+
+
 
                                             <!--<i class="bi bi-lock-fill"></i>-->
                                             <c:if test="${sessionScope.userSession != null}">
@@ -283,138 +283,46 @@
                                                         <span>Chapter 2 - Friends and Relatives <i class="bi bi-lock-fill"></i></span><span>07/19/2020 </span>
                                                     </a>  
                                                 </li>
+                                                <c:forEach items="${chaptersByMangaDetail}" var="chapter" varStatus="loop">
+                                                    <c:if test="${loop.index >= 2}">
+                                                        <li>
+                                                            <a href="chapter/chapter.jsp"
+                                                               class="d-flex flex-wrap justify-content-between disabled-link">
+                                                                <span>${chapter.getTitle()} - ${chapter.getDescription()} <i class="bi bi-lock-fill"></i></span><span>${chapter.getCreateAtFormat()} </span>
+                                                            </a>
+                                                        </li>
+                                                    </c:if>
+
+                                                </c:forEach>
 
                                                 <% } else if (u4.getRole().equalsIgnoreCase("Premium") || u4.getRole().equalsIgnoreCase("Author")) {%>
-                                                <li>
-                                                    <a href="chapter/chapter.jsp"
-                                                       class="d-flex flex-wrap justify-content-between">
-                                                        <span>Chapter 2 - Friends and Relatives</span><span>07/19/2020 </span>
-                                                    </a>  
-                                                </li>
+                                                <c:forEach items="${chaptersByMangaDetail}" var="chapter" varStatus="loop">
+                                                    <c:if test="${loop.index >= 2}">
+                                                        <li>
+                                                            <a href="chapter/chapter.jsp"
+                                                               class="d-flex flex-wrap justify-content-between">
+                                                                <span>${chapter.getTitle()} - ${chapter.getDescription()}</span><span>${chapter.getCreateAtFormat()} </span>
+                                                            </a>
+                                                        </li>
+                                                    </c:if>
+
+                                                </c:forEach>
                                                 <% }%>
                                             </c:if>
                                             <c:if test="${sessionScope.userSession == null}">
-                                                <li>
-                                                    <a href="chapter/chapter.jsp"
-                                                       class="d-flex flex-wrap justify-content-between disabled-link">
-                                                        <span>Chapter 2 - Friends and Relatives <i class="bi bi-lock-fill"></i></span><span>07/19/2020 </span>
-                                                    </a>  
-                                                </li>
+                                                <c:forEach items="${chaptersByMangaDetail}" var="chapter" varStatus="loop">
+                                                    <c:if test="${loop.index >= 2}">
+                                                        <li>
+                                                            <a href="chapter/chapter.jsp"
+                                                               class="d-flex flex-wrap justify-content-between disabled-link">
+                                                                <span>${chapter.getTitle()} - ${chapter.getDescription()} <i class="bi bi-lock-fill"></i></span><span>${chapter.getCreateAtFormat()} </span>
+                                                            </a>
+                                                        </li>
+                                                    </c:if>
+
+                                                </c:forEach>
                                             </c:if>
 
-
-
-                                            <c:if test="${sessionScope.userSession != null}">
-                                                <% User u4 = (User) session.getAttribute("userSession");%>
-                                                <% if (u4.getRole().equalsIgnoreCase("Free")) {%>
-                                                <li>
-                                                    <a href="chapter/chapter.jsp"
-                                                       class="d-flex flex-wrap justify-content-between disabled-link">
-                                                        <span>Chapter 3 - Friends and Relatives <i class="bi bi-lock-fill"></i></span><span>07/19/2020 </span>
-                                                    </a>  
-                                                </li>
-
-                                                <% } else if (u4.getRole().equalsIgnoreCase("Premium") || u4.getRole().equalsIgnoreCase("Author")) {%>
-                                                <li>
-                                                    <a href="chapter/chapter.jsp"
-                                                       class="d-flex flex-wrap justify-content-between">
-                                                        <span>Chapter 3 - Friends and Relatives</span><span>07/19/2020 </span>
-                                                    </a>  
-                                                </li>
-                                                <% }%>
-                                            </c:if>
-                                            <c:if test="${sessionScope.userSession == null}">
-                                                <li>
-                                                    <a href="chapter/chapter.jsp"
-                                                       class="d-flex flex-wrap justify-content-between disabled-link">
-                                                        <span>Chapter 3 - Friends and Relatives <i class="bi bi-lock-fill"></i></span><span>07/19/2020 </span>
-                                                    </a>  
-                                                </li>
-                                            </c:if>
-
-                                            <c:if test="${sessionScope.userSession != null}">
-                                                <% User u5 = (User) session.getAttribute("userSession");%>
-                                                <% if (u5.getRole().equalsIgnoreCase("Free")) {%>
-                                                <li>
-                                                    <a href="chapter/chapter.jsp"
-                                                       class="d-flex flex-wrap justify-content-between disabled-link">
-                                                        <span>Chapter 4 - Friends and Relatives <i class="bi bi-lock-fill"></i></span><span>07/19/2020 </span>
-                                                    </a>  
-                                                </li>
-
-                                                <% } else if (u5.getRole().equalsIgnoreCase("Premium") || u5.getRole().equalsIgnoreCase("Author")) {%>
-                                                <li>
-                                                    <a href="chapter/chapter.jsp"
-                                                       class="d-flex flex-wrap justify-content-between">
-                                                        <span>Chapter 4 - Friends and Relatives</span><span>07/19/2020 </span>
-                                                    </a>  
-                                                </li>
-                                                <% }%>
-                                            </c:if>
-                                            <c:if test="${sessionScope.userSession == null}">
-                                                <li>
-                                                    <a href="chapter/chapter.jsp"
-                                                       class="d-flex flex-wrap justify-content-between disabled-link">
-                                                        <span>Chapter 4 - Friends and Relatives <i class="bi bi-lock-fill"></i></span><span>07/19/2020 </span>
-                                                    </a>  
-                                                </li>
-                                            </c:if>
-
-                                            <c:if test="${sessionScope.userSession != null}">
-                                                <% User u6 = (User) session.getAttribute("userSession");%>
-                                                <% if (u6.getRole().equalsIgnoreCase("Free")) {%>
-                                                <li>
-                                                    <a href="chapter/chapter.jsp"
-                                                       class="d-flex flex-wrap justify-content-between disabled-link">
-                                                        <span>Chapter 5 - Friends and Relatives <i class="bi bi-lock-fill"></i></span><span>07/19/2020 </span>
-                                                    </a>  
-                                                </li>
-
-                                                <% } else if (u6.getRole().equalsIgnoreCase("Premium") || u6.getRole().equalsIgnoreCase("Author")) {%>
-                                                <li>
-                                                    <a href="chapter/chapter.jsp"
-                                                       class="d-flex flex-wrap justify-content-between">
-                                                        <span>Chapter 5 - Friends and Relatives</span><span>07/19/2020 </span>
-                                                    </a>  
-                                                </li>
-                                                <% }%>
-                                            </c:if>
-                                            <c:if test="${sessionScope.userSession == null}">
-                                                <li>
-                                                    <a href="chapter/chapter.jsp"
-                                                       class="d-flex flex-wrap justify-content-between disabled-link">
-                                                        <span>Chapter 5 - Friends and Relatives <i class="bi bi-lock-fill"></i></span><span>07/19/2020 </span>
-                                                    </a>  
-                                                </li>
-                                            </c:if>
-
-                                            <c:if test="${sessionScope.userSession != null}">
-                                                <% User u7 = (User) session.getAttribute("userSession");%>
-                                                <% if (u7.getRole().equalsIgnoreCase("Free")) {%>
-                                                <li>
-                                                    <a href="chapter/chapter.jsp"
-                                                       class="d-flex flex-wrap justify-content-between disabled-link">
-                                                        <span>Chapter 6 - Friends and Relatives <i class="bi bi-lock-fill"></i></span><span>07/19/2020 </span>
-                                                    </a>  
-                                                </li>
-
-                                                <% } else if (u7.getRole().equalsIgnoreCase("Premium") || u7.getRole().equalsIgnoreCase("Author")) {%>
-                                                <li>
-                                                    <a href="chapter/chapter.jsp"
-                                                       class="d-flex flex-wrap justify-content-between">
-                                                        <span>Chapter 6 - Friends and Relatives</span><span>07/19/2020 </span>
-                                                    </a>  
-                                                </li>
-                                                <% }%>
-                                            </c:if>
-                                            <c:if test="${sessionScope.userSession == null}">
-                                                <li>
-                                                    <a href="chapter/chapter.jsp"
-                                                       class="d-flex flex-wrap justify-content-between disabled-link">
-                                                        <span>Chapter 6 - Friends and Relatives <i class="bi bi-lock-fill"></i></span><span>07/19/2020 </span>
-                                                    </a>  
-                                                </li>
-                                            </c:if>
                                         </ul>
                                     </div>
                                 </div>
@@ -442,7 +350,7 @@
                                                             <%
                                                                 Manga manga = (Manga) pageContext.getAttribute("manga");
                                                                 request.setAttribute("cate", categoryDAO.getCategoriesByMangaID(manga.getMangaID()));
-                                                                
+
                                                             %>
                                                             <c:forEach items="${cate}" var="category" varStatus="loop">
                                                                 <li>${category.getType()}</li>

@@ -26,8 +26,8 @@ public class ChapterDAO extends DBContext {
         int generatedPostID = -1; // Giá trị mặc định nếu không có chapterID được tạo
         try {
 
-            String sql = "INSERT INTO [Chapter] (title, description, mangaID) "
-                    + "VALUES (?, ?, ?);";
+            String sql = "INSERT INTO [Chapter] (title, description, mangaID, createAt) "
+                    + "VALUES (?, ?, ?, ?);";
 
             // Sử dụng PreparedStatement với RETURN_GENERATED_KEYS để lấy postID
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -35,6 +35,7 @@ public class ChapterDAO extends DBContext {
             ps.setNString(1, chapter.getTitle());
             ps.setNString(2, chapter.getDescription());
             ps.setInt(3, chapter.getMangaID());
+            ps.setTimestamp(4, Timestamp.valueOf(chapter.getCreateAt()));
 
             // Thực hiện lệnh SQL
             int affectedRows = ps.executeUpdate();
@@ -62,7 +63,8 @@ public class ChapterDAO extends DBContext {
             String sql = "UPDATE [Chapter]\n"
                     + "SET title = ?,\n"
                     + "    description = ?,\n"
-                    + "    mangaID = ?\n"
+                    + "    mangaID = ?,\n"
+                    + "    createAt = ?\n"
                     + "WHERE chapterID = ?;";
 
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -70,7 +72,8 @@ public class ChapterDAO extends DBContext {
             ps.setNString(1, chapter.getTitle());
             ps.setNString(2, chapter.getDescription());
             ps.setInt(3, chapter.getMangaID());
-            ps.setInt(4, chapter.getChapterID());
+            ps.setTimestamp(4, Timestamp.valueOf(chapter.getCreateAt()));
+            ps.setInt(5, chapter.getChapterID());
 
             ps.execute();
 
@@ -81,8 +84,29 @@ public class ChapterDAO extends DBContext {
         }
     }
 
+//    // delete
+//    public void delete(int chapterID) {
+//
+//        // KHI ADD IMAGE THÌ COI LẠI CÓ NÊN XÓA BÊN BẢNG IMAGESOURCE TRƯỚC 
+//        // RỒI TỚI BẢNG CHAPTER XÓA HAY KHÔNG?
+//        try {
+//            String sql = "DELETE FROM [Chapter] "
+//                    + "WHERE chapterID = ?;";
+//
+//            PreparedStatement ps = connection.prepareStatement(sql);
+//
+//            ps.setInt(1, chapterID);
+//
+//            ps.execute();
+//
+//            ps.close();
+//
+//        } catch (SQLException ex) {
+//            Logger.getLogger(ChapterDAO.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
     // delete
-    public void delete(int chapterID) {
+    public String delete(int chapterID) {
 
         // KHI ADD IMAGE THÌ COI LẠI CÓ NÊN XÓA BÊN BẢNG IMAGESOURCE TRƯỚC 
         // RỒI TỚI BẢNG CHAPTER XÓA HAY KHÔNG?
@@ -93,14 +117,19 @@ public class ChapterDAO extends DBContext {
             PreparedStatement ps = connection.prepareStatement(sql);
 
             ps.setInt(1, chapterID);
+            int rowsDeleted = ps.executeUpdate();
 
-            ps.execute();
+            if (rowsDeleted > 0) {
+                return "DELETED CHAPTER SUCCESSFULLY!";
+            }
 
             ps.close();
 
         } catch (SQLException ex) {
             Logger.getLogger(ChapterDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        return "FAILED DELETED CHAPTER!";
     }
 
     // get all chapters
@@ -119,6 +148,7 @@ public class ChapterDAO extends DBContext {
                 chapter.setTitle(res.getNString("title"));
                 chapter.setDescription(res.getNString("description"));
                 chapter.setMangaID(res.getInt("mangaID"));
+                chapter.setCreateAt(res.getTimestamp("createAt").toLocalDateTime());
 
                 list.add(chapter);
             }
@@ -134,6 +164,7 @@ public class ChapterDAO extends DBContext {
 
         return null;
     }
+
     // get all chapters by MangaID
     public ArrayList<Chapter> getAllChaptersByMangaID(int mangaID) {
         try {
@@ -152,6 +183,7 @@ public class ChapterDAO extends DBContext {
                 chapter.setTitle(res.getNString("title"));
                 chapter.setDescription(res.getNString("description"));
                 chapter.setMangaID(res.getInt("mangaID"));
+                chapter.setCreateAt(res.getTimestamp("createAt").toLocalDateTime());
 
                 list.add(chapter);
             }
@@ -182,6 +214,7 @@ public class ChapterDAO extends DBContext {
                 chapter.setTitle(res.getNString("title"));
                 chapter.setDescription(res.getNString("description"));
                 chapter.setMangaID(res.getInt("mangaID"));
+                chapter.setCreateAt(res.getTimestamp("createAt").toLocalDateTime());
             }
 
             res.close();
@@ -191,7 +224,65 @@ public class ChapterDAO extends DBContext {
         } catch (SQLException ex) {
             Logger.getLogger(ChapterDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        return null;    
+
+        return null;
+    }
+
+    // get first chapter
+    public Chapter getFirstChapter(int chapterID) {
+        try {
+            String sql = "SELECT TOP 1 * FROM [Chapter]\n"
+                    + "  WHERE mangaID = ?\n"
+                    + "  ORDER BY chapterID ASC;";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, chapterID);
+
+            ResultSet res = ps.executeQuery();
+            Chapter chapter = new Chapter();
+            if (res.next()) {
+                chapter.setChapterID(res.getInt("chapterID"));
+                chapter.setTitle(res.getNString("title"));
+                chapter.setDescription(res.getNString("description"));
+                chapter.setMangaID(res.getInt("mangaID"));
+                chapter.setCreateAt(res.getTimestamp("createAt").toLocalDateTime());
+            }
+
+            res.close();
+            ps.close();
+
+            return chapter;
+        } catch (SQLException ex) {
+            Logger.getLogger(ChapterDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
+    }
+
+    // get last chapter
+    public Chapter getLastChapter(int chapterID) {
+        try {
+            String sql = "SELECT * FROM [Chapter];";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, chapterID);
+
+            ResultSet res = ps.executeQuery();
+            Chapter chapter = new Chapter();
+            if (res.next()) {
+                chapter.setChapterID(res.getInt("chapterID"));
+                chapter.setTitle(res.getNString("title"));
+                chapter.setDescription(res.getNString("description"));
+                chapter.setMangaID(res.getInt("mangaID"));
+                chapter.setCreateAt(res.getTimestamp("createAt").toLocalDateTime());
+            }
+
+            res.close();
+            ps.close();
+
+            return chapter;
+        } catch (SQLException ex) {
+            Logger.getLogger(ChapterDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
     }
 }

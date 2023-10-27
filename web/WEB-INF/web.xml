@@ -89,8 +89,8 @@
         <servlet-class>controller.user.manga.DeleteMangaServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ViewChapterServlet</servlet-name>
-        <servlet-class>controller.user.manga.ViewChapterServlet</servlet-class>
+        <servlet-name>ViewChapterListServlet</servlet-name>
+        <servlet-class>controller.user.chapter.ViewChapterListServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AjaxPaymentServlet</servlet-name>
@@ -103,6 +103,18 @@
     <servlet>
         <servlet-name>AddChapterServlet</servlet-name>
         <servlet-class>controller.user.chapter.AddChapterServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteChapterServlet</servlet-name>
+        <servlet-class>controller.user.chapter.DeleteChapterServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewChapterDetail</servlet-name>
+        <servlet-class>controller.user.chapter.ViewChapterDetail</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteUserServlet</servlet-name>
+        <servlet-class>controller.admin.DeleteUserServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
@@ -197,8 +209,8 @@
         <url-pattern>/DeleteMangaServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ViewChapterServlet</servlet-name>
-        <url-pattern>/ViewChapterServlet</url-pattern>
+        <servlet-name>ViewChapterListServlet</servlet-name>
+        <url-pattern>/ViewChapterListServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>AjaxPaymentServlet</servlet-name>
@@ -211,6 +223,18 @@
     <servlet-mapping>
         <servlet-name>AddChapterServlet</servlet-name>
         <url-pattern>/AddChapterServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteChapterServlet</servlet-name>
+        <url-pattern>/DeleteChapterServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewChapterDetail</servlet-name>
+        <url-pattern>/ViewChapterDetail</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteUserServlet</servlet-name>
+        <url-pattern>/DeleteUserServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

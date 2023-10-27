@@ -25,12 +25,17 @@
                 <i class="fa fa-check"></i><span>Verify </span><i class="bi"></i>
             </a>
         </li>
-        
+
         </li>
 
-       <li class="nav-item">
+        <li class="nav-item">
             <a class="nav-link collapsed" href="listUser.jsp">
                 <i class="bi bi-list"></i><span>User List </span><i class="bi"></i>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="Transaction.jsp">
+                <i class="bi bi-list"></i><span>Transaction List </span><i class="bi"></i>
             </a>
         </li>
 
