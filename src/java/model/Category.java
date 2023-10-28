@@ -9,19 +9,30 @@ package model;
  * @author ADMIN
  */
 public class Category {
-    public int categoryID;
-    public String type, description;
-    public int mangaID;
+    private int categoryID;
+    private String type, description;
+    
 
     public Category() {
     }
 
-    public Category(int categoryID, String type, String description, int mangaID) {
+    public Category(int categoryID, String type, String description) {
         this.categoryID = categoryID;
         this.type = type;
         this.description = description;
-        this.mangaID = mangaID;
+        
     }
+
+    public Category(String type, String description) {
+        this.type = type;
+        this.description = description;
+    }
+
+    public Category(String type) {
+        this.type = type;
+    }
+    
+    
 
     public int getCategoryID() {
         return categoryID;
@@ -47,17 +58,14 @@ public class Category {
         this.description = description;
     }
 
-    public int getMangaID() {
-        return mangaID;
-    }
-
-    public void setMangaID(int mangaID) {
-        this.mangaID = mangaID;
-    }
-
     @Override
     public String toString() {
-        return "Category{" + "categoryID=" + categoryID + ", type=" + type + ", description=" + description + ", mangaID=" + mangaID + '}';
+        return "Category{" + "categoryID=" + categoryID + ", type=" + type + ", description=" + description + '}';
     }
-    
+
+
+
+ 
+
+
 }

@@ -31,11 +31,10 @@ public class ImageSourceDAO extends DBContext{
             while(res.next()){
                 Integer id = res.getInt("imageID");
                 String imgUrl = res.getString("imageUrl");
-                String description = res.getString("description");
                 Integer chapterId = res.getInt("chapterID");
                 Integer mangaId = res.getInt("mangaID");
                 
-                ImageSource imageSource = new ImageSource(id,imgUrl,description,chapterId,mangaId);
+                ImageSource imageSource = new ImageSource(id,imgUrl,chapterId,mangaId);
                 listOfImageS.add(imageSource);
             }
             

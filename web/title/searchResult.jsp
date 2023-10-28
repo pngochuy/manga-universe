@@ -1,5 +1,3 @@
-<%@page import="model.Category"%>
-<%@page import="dal.CategoryDAO"%>
 <%@page import="model.User"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -80,12 +78,12 @@
                                                 class="fa fa-solid fa-list"></i></a> Showing 3 out of 5000
                                         Manga</span></h2>
                             </div>
-
+                            
                             <div class="container">
                                 <div class="row justify-content-center">
                                     <div class="col-12 col-md-10 col-lg-8">
                                         <form class="card card-sm" action="../SearchController?index=1" method="post">
-
+                                            
                                             <div class="card-body row no-gutters align-items-center" style="padding: 20px;">
                                                 <div class="col-auto">
                                                     <i class="bi bi-search-heart" style="font-size: 30px"></i>
@@ -106,45 +104,51 @@
                                 </div>
                             </div>
 
-
                             <ul class="filter-block style-2">
                                 <li>
                                     <a href="#" class="anime-btn btn-dark dropdown-toggle" id="genre"
-                                       data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" >
+                                       data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                                         Category <span><i class="fa fa-chevron-down"></i></span>
                                     </a>
-
                                     <ul class="dropdown-menu" aria-labelledby="genre">
-                                        <%
-                                            CategoryDAO manageCate = new CategoryDAO();
-                                            for (Category cate : manageCate.getAllCategorys()) {
-                                        %>
                                         <li>
                                             <div class="custom-control custom-checkbox">
                                                 <div class="custom-control-label-container">
-                                                    <span class="custom-control-label"  >
-                                                        <a href="../SearchController?type=<%= cate.getType() %>"> <%= cate.getType()%></a> </span>
+                                                    <span class="custom-control-label" >Action</span>
                                                 </div>
 
                                             </div>
                                         </li>
-                                        <%
-
-                                            }
-                                        %>
+                                        <li>
+                                            <div class="custom-control custom-checkbox">
+                                                <div class="custom-control-label-container">
+                                                    <span class="custom-control-label" >Action</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="custom-control custom-checkbox">
+                                                <div class="custom-control-label-container">
+                                                    <span class="custom-control-label" >Action</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="custom-control custom-checkbox">
+                                                <div class="custom-control-label-container">
+                                                    <span class="custom-control-label" >Action</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="custom-control custom-checkbox">
+                                                <div class="custom-control-label-container">
+                                                    <span class="custom-control-label" >Action</span>
+                                                </div>
+                                            </div>
+                                        </li>
                                     </ul>
                                 </li>
-                                <script>
-                                    $(document).ready(function () {
-                                        $(".dropdown-menu li").click(function () {
-                                            var selectedCategory = $(this).find("span").text();
-                                            $("#genre").text(selectedCategory);
-                                            
-                                        });
-                                    });
-      
-                                </script>
-
 
                                 <!--dùng JS de du doan mua trong nam theo thang-->
                                 <li>
@@ -318,16 +322,22 @@
                                     </ul>
                                 </li>
                             </ul>
-
+                            <ul class="filter-block">
+                                <li class="mb-0">
+                                    <a href="#" class="anime-btn btn-dark border-change">Filter Now</a>
+                                </li>
+                            </ul>
                         </div>
                     </section>
                     <!-- ======= Filter Area End ======= -->
 
                     <div class="mb-5">
                         <div class="title">
-                            <h2 class="fw-bold"></h2>
+                            <h2 class="fw-bold">Manga Found by Title</h2>
                             <div class="row mt-2">
-                                <c:forEach var="s" items="${listSM}" varStatus="loop"> 
+
+                             <c:forEach var="s" items="${listSM}" varStatus="loop"> 
+                                 
                                     <div class="col-lg-2 col-md-4 col-sm-6">
                                         <a href="mangaSPServlet?id=${s.mangaID}">
                                             <div class="product-card grow-box">
@@ -348,92 +358,56 @@
                                             </div>
                                         </a>
                                     </div>
-                                </c:forEach> 
-                                <div class="col-lg-2 col-md-4 col-sm-6">
-                                    <a href="../mangaSinglePage.jsp">
-                                        <div class="product-card grow-box">
-                                            <div class="img-con set-bg"
-                                                 style="background-image: url('../assetsMain/img/manga.jpg');"
-                                                 data-setbg="../assetsMain/img/manga.jpg">
-                                                <div class="ep">18/20</div>
-                                                <div class="comment"><i class="bi bi-chat"></i> 21</div>
-                                                <div class="view"><i class="bi bi-eye"></i> 7141</div>
-                                            </div>
-                                            <div class="product-card-con">
-                                                <ul>
-                                                    <li>Active</li>
-                                                    <li>Movie</li>
-                                                </ul>
-                                                <h5>Kaguya-sama wa Kokurasetai: First Kiss wa Owaranai</h5>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="col-lg-2 col-md-4 col-sm-6">
-                                    <a href="../mangaSinglePage.jsp">
-                                        <div class="product-card grow-box">
-                                            <div class="img-con set-bg"
-                                                 style="background-image: url('../assetsMain/img/manga.jpg');"
-                                                 data-setbg="../assetsMain/img/manga.jpg">
-                                                <div class="ep">18/20</div>
-                                                <div class="comment"><i class="bi bi-chat"></i> 21</div>
-                                                <div class="view"><i class="bi bi-eye"></i> 7141</div>
-                                            </div>
-                                            <div class="product-card-con">
-                                                <ul>
-                                                    <li>Active</li>
-                                                    <li>Movie</li>
-                                                </ul>
-                                                <h5>Kaguya-sama wa Kokurasetai: First Kiss wa Owaranai</h5>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="col-lg-2 col-md-4 col-sm-6">
-                                    <a href="../mangaSinglePage.jsp">
-                                        <div class="product-card grow-box">
-                                            <div class="img-con set-bg"
-                                                 style="background-image: url('../assetsMain/img/manga.jpg');"
-                                                 data-setbg="../assetsMain/img/manga.jpg">
-                                                <div class="ep">18/20</div>
-                                                <div class="comment"><i class="bi bi-chat"></i> 21</div>
-                                                <div class="view"><i class="bi bi-eye"></i> 7141</div>
-                                            </div>
-                                            <div class="product-card-con">
-                                                <ul>
-                                                    <li>Active</li>
-                                                    <li>Movie</li>
-                                                </ul>
-                                                <h5>Kaguya-sama wa Kokurasetai: First Kiss wa Owaranai</h5>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
+                                  </c:forEach> 
+                            <h2 class="fw-bold">Manga Found by Category</h2>
+                            <div class="row mt-2">
 
-                            </div>
-                        </div>
+                             <c:forEach var="mc" items="${listMbyCate}" varStatus="loop"> 
+                                 
+                                    <div class="col-lg-2 col-md-4 col-sm-6">
+                                        <a href="mangaSPServlet?id=${mc.mangaID}">
+                                            <div class="product-card grow-box">
+                                                <div class="img-con set-bg"
+                                                     style="background-image: url('${mc.coverImage}');"
+                                                     data-setbg="assetsMain/img/manga.jpg">
+                                                    <div class="ep">18/20</div>
+                                                    <div class="comment"><i class="bi bi-chat"></i> 21</div>
+                                                    <div class="view"><i class="bi bi-eye"></i> 7141</div>
+                                                </div>
+                                                <div class="product-card-con">
+                                                    <ul>
+                                                        <li>Active</li>
+                                                        <li>Movie</li>
+                                                    </ul>
+                                                    <h5>${mc.title}</h5>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                  </c:forEach> 
+                                
                     </div>
 
                     <div class="pagination-wrape">
                         <ul class="pagination">
                             <c:if test ="${tag > 1}">
-                                <li class="page-item">
-                                    <a href="SearchController?index=${tag-1}&txtSearch=${save}" class="page-link arrow" aria-label="Previous">
-                                        <i class="bi bi-caret-left-fill"></i>
-                                    </a>
-                                </li>
+                            <li class="page-item">
+                                <a href="SearchController?index=${tag-1}&txtSearch=${save}" class="page-link arrow" aria-label="Previous">
+                                    <i class="bi bi-caret-left-fill"></i>
+                                </a>
+                            </li>
                             </c:if>
                             <c:forEach var="j" begin="1" step="1" end="${endS}">  
-                                <li class="page-item">
-                                    <a href="SearchController?index=${j}&txtSearch=${save}" class="${tag == j?"active":""} page-link current">${j}</a>
-                                </li>
+                            <li class="page-item">
+                                <a href="SearchController?index=${j}&txtSearch=${save}" class="${tag == j?"active":""} page-link current">${j}</a>
+                            </li>
                             </c:forEach>
                             <c:if test ="${tag < endS}">
-                                <li class="page-item">
-                                    <a href="SearchController?index=${tag+1}&txtSearch=${save}" class=" page-link arrow" aria-label="next">
-                                        <i class="bi bi-caret-right-fill"></i>
-                                    </a>
-                                </li>
+                            <li class="page-item">
+                                <a href="SearchController?index=${tag+1}&txtSearch=${save}" class=" page-link arrow" aria-label="next">
+                                    <i class="bi bi-caret-right-fill"></i>
+                                </a>
+                            </li>
                             </c:if>
                         </ul>
                     </div>

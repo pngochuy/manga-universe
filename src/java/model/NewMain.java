@@ -4,6 +4,7 @@
  */
 package model;
 
+import dal.MangaDAO;
 import java.time.format.DateTimeFormatter;
 
 
@@ -16,9 +17,10 @@ public class NewMain {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-        String name = "phạm ngọc huy";
-        System.out.println(name);
+    public static void main(String[] args) throws Exception {
+        MangaDAO dao = new MangaDAO();
+        
+        System.out.println(dao.searchCategoryByID(1));
     }
     
 }

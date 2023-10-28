@@ -537,7 +537,7 @@
                                                 <p>Author(s) Huy Handsome </p>
                                             </li>
                                             <li class="d-flex flex-wrap watch">
-                                                <a class="mr-2" href="chapter/chapter.jsp">Read First</a><a
+                                                <a class="mr-2" href="ChapterServlet?cid=${1}&mid=<%= id%>">Read First</a><a
                                                     href="chapter/chapter.jsp">Read Last</a>
                                             </li>
                                         </ul>

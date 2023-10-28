@@ -32,8 +32,9 @@ public class NewMain {
 //        int userId = userDAO.getUserId("demo", "123", "demo123@gmail.com");
 //        userDAO.update(user, userId);
 //        userDAO.delete(12);
-
-          System.out.println("han dp");
+          CategoryDAO cate = new CategoryDAO();
+          System.out.println(cate.getAllCategorys());
+        
         
 //        System.out.println(encryptPassword.toSHA1("123"));
         

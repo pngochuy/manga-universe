@@ -4,11 +4,9 @@
  */
 package controller.manga;
 
-import dal.ChapterDAO;
 import dal.MangaDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,16 +14,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import model.Category;
-import model.Chapter;
 import model.Manga;
 
 /**
  *
  * @author OS
  */
-public class mangaSPServlet extends HttpServlet {
+public class SearchController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,19 +32,43 @@ public class mangaSPServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, Exception {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet mangaSPServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet mangaSPServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+            String txtSearch = request.getParameter("txtSearch");
+            String indexString = request.getParameter("index");
+            String type = request.getParameter("type");
+//            out.print(indexString);
+            if (indexString == null) {
+                indexString = "1";
+            }
+            int index = Integer.parseInt(indexString);
+
+            MangaDAO dao = new MangaDAO();
+            int countSearch = dao.getCountSearch(txtSearch);
+//            out.print(countSearch);
+            int pageSize = 6;
+            int endPage = countSearch / pageSize;
+            if (countSearch % pageSize != 0) {
+                endPage++;
+
+            }
+            List<Manga> listMbyCate = dao.searchMangaByCategory(type);
+            out.print(listMbyCate);
+
+           List<Manga> listSearch = dao.searchMangaByTitle(txtSearch,index,pageSize);
+//            if(listSearch.size() == 0){
+//                out.println("ko có danh sách");
+//            }else out.println("hank DP");
+//            out.print(listSearch);
+            request.setAttribute("endS", endPage);
+            request.setAttribute("listSM", listSearch);
+            request.setAttribute("listMbyCate", listMbyCate);
+            request.setAttribute("save", txtSearch);
+            request.setAttribute("tag", index);
+
+            request.getRequestDispatcher("title/searchResult.jsp").forward(request, response);
+
         }
     }
 
@@ -65,50 +84,11 @@ public class mangaSPServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
         try {
-            HttpSession mySession = request.getSession();
-            
-            PrintWriter out = response.getWriter();
-
-            MangaDAO daoM = new MangaDAO();
-//            List<Manga> listM = daoM.getAllMangas();
-////            System.out.println(listM);
-//            request.setAttribute("listM", listM);
-            
-            String id = request.getParameter("id");
-            out.println(id);
-            out.println(daoM.searchCategoryByID(Integer.parseInt(id)));
-            
-
-            List<Category> listCate = daoM.searchCategoryByID(Integer.parseInt(id));
-//            if(listCate.size() == 0){
-//                out.println("Khong co danh sach the loai");
-//                
-//            } else out.print("Han DP");
-//            
-//            out.println(cate);
-//            for(Category c: cate){
-//                out.println(c.getType());
-//            }
-
-            ChapterDAO daoC = new ChapterDAO();
-               
-            List<Chapter> list = daoC.getChapterByID(Integer.parseInt(id));
-//            out.println(list);
-
-            request.setAttribute("cateL", listCate);
-//            System.out.println(listCate);
-//            mySession.setAttribute("cateL", cate);
-            mySession.setAttribute("listC", list);
-            request.getRequestDispatcher("mangaSinglePage.jsp").forward(request,response);
-//            response.sendRedirect("mangaSinglePage.jsp");
-                    
-       
+            processRequest(request, response);
         } catch (Exception ex) {
-            Logger.getLogger(mangaSPServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SearchController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
     }
 
     /**
@@ -122,7 +102,11 @@ public class mangaSPServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (Exception ex) {
+            Logger.getLogger(SearchController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

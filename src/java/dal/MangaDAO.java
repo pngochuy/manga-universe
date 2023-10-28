@@ -18,6 +18,7 @@ import model.Manga;
 
 public class MangaDAO extends DBContext implements mangaInterface  {
     List<Manga> listOfMangas = new ArrayList<>();
+    List<Category> listOfCategorys = new ArrayList<>();
     
     @Override
     public List<Manga> getAllMangas() {
@@ -26,7 +27,7 @@ public class MangaDAO extends DBContext implements mangaInterface  {
         ResultSet res = null;
         try{
             cnt = connection;
-            String sql = "select * from Manga";
+            String sql = "SELECT * FROM MANGA";
             stm = cnt.prepareStatement(sql);    
             res = stm.executeQuery();
             while(res.next()){
@@ -225,34 +226,34 @@ public class MangaDAO extends DBContext implements mangaInterface  {
 //
 //        return product;
 //    }
-//    public int getTotalRows() throws Exception {
-//        int rows = 0;
-//        Connection conn = null;
-//        PreparedStatement ps = null; 
-//        ResultSet rs = null;
-//
-//        String query = "select count(*) from product";
-//
-//        try {
-//            conn = connection;
-//            ps = conn.prepareStatement(query);
-//            rs = ps.executeQuery();
-//            while (rs.next()) {
-//                rows = rs.getInt(1);
-//            }
-//        } catch (Exception ex) {
-//            throw ex;
-//        } finally {
-//            DBContext.close(conn, ps, rs);
-//        }
-//        return rows;
-//    }
+    public int getTotalRows() throws Exception {
+        int rows = 0;
+        Connection conn = null;
+        PreparedStatement ps = null; 
+        ResultSet rs = null;
+
+        String query = "select count(*) from Manga";
+
+        try {
+            conn = connection;
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                rows = rs.getInt(1);
+            }
+        } catch (Exception ex) {
+            throw ex;
+        } finally {
+            DBContext.close(conn, ps, rs);
+        }
+        return rows;
+    }
     public List<Manga> getMangaPaging(int index) throws
             Exception {
         
         List<Manga> products = new ArrayList<>();
-        String query = "SELECT * FROM product \n" 
-                + "ORDER BY product_id \n" 
+        String query = "SELECT * FROM Manga \n" 
+                + "ORDER BY mangaID \n" 
                 + "OFFSET ? ROWS FETCH NEXT 8 ROWS ONLY;";
 
         Connection conn = null;
@@ -291,7 +292,7 @@ public class MangaDAO extends DBContext implements mangaInterface  {
         PreparedStatement ps = null; 
         ResultSet rs = null;
 
-        String query = "select count(*) from product where product_name like ?";
+        String query = "select count(*) from Manga where title like ?";
 
         try {
             conn = connection;
@@ -303,12 +304,10 @@ public class MangaDAO extends DBContext implements mangaInterface  {
             }
         } catch (Exception ex) {
             throw ex;
-        } finally {
-            DBContext.close(conn, ps, rs);
-        }
+        } 
         return 0;
     }
-//                                                        , int index, int size
+//                                                        
     public List<Manga> searchMangaByTitle(String txtSearch, int index, int size) throws
             Exception {
 
@@ -340,14 +339,17 @@ public class MangaDAO extends DBContext implements mangaInterface  {
                 Boolean isCopyright = rs.getBoolean(7);
                 Boolean isFree = rs.getBoolean(8);
                 String coverImage = rs.getString(9);
-                listOfMangas.add(new Manga(id, title, description, userID, createdAt, isCopyright, isFree,coverImage));
+                list.add(new Manga(id, title, description, userID, createdAt, isCopyright, isFree,coverImage));
             }
             return list;
-        } catch (Exception ex) {
-            throw ex;
-        } finally {
-            DBContext.close(conn, ps, rs);
+        } catch (SQLException e) {
+            // Xử lý lỗi SQL
+                e.printStackTrace();
+            throw new Exception("SQL Error: " + e.getMessage());
         }
+        catch (Exception ex) {
+            throw ex;
+        } 
 
     }
     public List<Manga> searchMangaByCategory(String cate) throws Exception {
@@ -356,10 +358,11 @@ public class MangaDAO extends DBContext implements mangaInterface  {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        String query = "SELECT Manga.*\n"
-                + "FROM Manga\n"
-                + "JOIN Category ON Manga.mangaID = Category.mangaID\n"
-                + "WHERE Category.type = ?";
+        String query = "SELECT *\n" +
+                    "FROM Manga\n" +
+                    "INNER JOIN MangaCategory ON Manga.MangaID = MangaCategory.MangaID\n" +
+                    "INNER JOIN Category ON MangaCategory.CategoryID = Category.CategoryID\n" +
+                    "WHERE Category.type = ?";
         try {
             conn = connection;
             ps = conn.prepareStatement(query);
@@ -370,31 +373,56 @@ public class MangaDAO extends DBContext implements mangaInterface  {
                         rs.getDate(5), rs.getBoolean(6), rs.getBoolean(7),rs.getString(8)));
             }
         } catch (Exception e) {
-
+             e.printStackTrace(); // In ra lỗi để bạn biết vấn đề là gì.
         }
+    
         return mg;
     }
     
-    public ArrayList<Category> searchCategoryByID(String id) throws Exception {
+    public ArrayList<Category> searchCategoryByID(int id) throws Exception {
         ArrayList<Category> cate = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        String query = "SELECT *\n"
-                + "FROM Category\n"
-                + "WHERE mangaID = ?";
+        String query = "SELECT *\n" +
+                        "FROM MangaCategory\n" +
+                        "INNER JOIN Category ON MangaCategory.CategoryID = Category.CategoryID\n" +
+                        "WHERE MangaCategory.MangaID = ?";
         try {
             conn = connection;
             ps = conn.prepareStatement(query);
-            ps.setString(1, id);
+            ps.setInt(1, id);
             rs = ps.executeQuery();
             while (rs.next()) {
-                cate.add(new Category(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4)));
+                cate.add(new Category( rs.getInt("categoryID"),rs.getString("type"),
+                        rs.getString("description")));
             }
         } catch (Exception e) {
 
         }
         return cate;
+    }
+     public static void main(String[] args) throws Exception {
+//        LocalDateTime dateCreated = LocalDateTime.now();
+//        UserDAO userDAO = new UserDAO();
+//        EncryptPassword encryptPassword = new EncryptPassword();
+        
+//        userDAO.create(new User("image/3.png", "fpt", "123", "", "sieunhangao@gmail.com", "", 
+//                false, "Author", dateCreated, 9999, dateCreated));
+//        User user = new User("", "demo", encryptPassword.toSHA1("123"), "", "demo123@gmail.com", "", true, "Author", dateCreated, 0, dateCreated);
+//        userDAO.create(user);
+//        int userId = userDAO.getUserId("demo", "123", "demo123@gmail.com");
+//        userDAO.update(user, userId);
+//        userDAO.delete(12);
+          MangaDAO dao = new MangaDAO();
+          dao.getCountSearch("Boku");
+          System.out.println(dao.searchCategoryByID(1));
+          System.out.println(dao.searchMangaByTitle("Boku", 1, 2));
+          System.out.println(dao.searchMangaByCategory("Action"));
+        
+//        System.out.println(encryptPassword.toSHA1("123"));
+        
+        
     }
 }

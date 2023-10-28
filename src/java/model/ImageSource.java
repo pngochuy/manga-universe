@@ -11,21 +11,19 @@ package model;
 public class ImageSource {
     public int imageID;
     public String imageURL;
-    public String description;
     public int chapterID;
     public int mangaID;
 
-    public ImageSource(int imageID, String imageURL, String description, int chapterID, int mangaID) {
+    public ImageSource(int imageID, String imageURL, int chapterID, int mangaID) {
         this.imageID = imageID;
         this.imageURL = imageURL;
-        this.description = description;
         this.chapterID = chapterID;
         this.mangaID = mangaID;
     }
 
-    public ImageSource(String imageURL, String description, int chapterID, int mangaID) {
+    public ImageSource(String imageURL, int chapterID, int mangaID) {
         this.imageURL = imageURL;
-        this.description = description;
+      
         this.chapterID = chapterID;
         this.mangaID = mangaID;
     }
@@ -50,13 +48,7 @@ public class ImageSource {
         this.imageURL = imageURL;
     }
 
-    public String getDescription() {
-        return description;
-    }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
     public int getChapterID() {
         return chapterID;
@@ -76,8 +68,10 @@ public class ImageSource {
 
     @Override
     public String toString() {
-        return "ImageSource{" + "imageID=" + imageID + ", imageURL=" + imageURL + ", description=" + description + ", chapterID=" + chapterID + ", mangaID=" + mangaID + '}';
+        return "ImageSource{" + "imageID=" + imageID + ", imageURL=" + imageURL + ", chapterID=" + chapterID + ", mangaID=" + mangaID + '}';
     }
+
+
 
 
 
