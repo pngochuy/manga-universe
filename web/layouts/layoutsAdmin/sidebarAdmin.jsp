@@ -38,6 +38,11 @@
                 <i class="bi bi-list"></i><span>Transaction List </span><i class="bi"></i>
             </a>
         </li>
+                <li class="nav-item">
+            <a class="nav-link collapsed" href="listReport.jsp">
+                <i class="bi bi-list"></i><span>List Report </span><i class="bi"></i>
+            </a>
+        </li>
 
 
 

@@ -32,6 +32,7 @@ public class NewMain {
         CategoryDAO categoryDAO = new CategoryDAO();
         ChapterDAO chapterDAO = new ChapterDAO();
         EncryptPassword encryptPassword = new EncryptPassword();
+        userDAO.deleteManga(1);
 
 //        userDAO.create(new User("image/3.png", "fpt", "123", "", "sieunhangao@gmail.com", "", 
 //                false, "Author", dateCreated, 9999, dateCreated));

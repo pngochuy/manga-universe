@@ -13,49 +13,7 @@
 
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<script>
-    $(document).ready(function () {
-        // Bắt sự kiện khi nhấn vào liên kết "Free Account," "Premium Account," hoặc "Author Account"
-        $(".filter-link").click(function (e) {
-            e.preventDefault(); // Ngăn chặn mặc định của liên kết
 
-            var filterValue = $(this).data("filter");
-
-            // Ẩn/hiển thị các phần tử dựa trên lớp CSS
-            if (filterValue === "All") {
-                // Hiển thị tất cả các phần tử
-                $(".free-account, .premium-account, .author-account").show();
-            } else {
-                // Ẩn tất cả các phần tử
-                $(".free-account, .premium-account, .author-account").hide();
-
-                // Hiển thị chỉ các phần tử có lớp CSS tương ứng
-                $("." + filterValue.toLowerCase() + "-account").show();
-            }
-        });
-    });
-</script>
-<script>
-    $(document).ready(function () {
-        // Bắt sự kiện khi nhấn vào liên kết "All Account", "Free Account", "Premium Account" hoặc "Author Account"
-        $(".filter-link").click(function (e) {
-            e.preventDefault(); // Ngăn chặn mặc định của liên kết
-
-            var filterValue = $(this).data("filter");
-
-            // Ẩn tất cả các hàng trước khi lọc
-            $("tr").hide();
-
-            if (filterValue === "All") {
-                // Hiển thị tất cả các hàng
-                $("tr").show();
-            } else {
-                // Hiển thị chỉ các hàng có vai trò tương ứng
-                $("tr." + filterValue).show();
-            }
-        });
-    });
-</script>
 <%
 
     if (session.getAttribute("userSession") == null) {
@@ -114,7 +72,7 @@
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="home.jsp">Home</a></li>
                         <li class="breadcrumb-item ">Dashboard</li>
-                        <li class="breadcrumb-item active">List Transactions</li>
+                        <li class="breadcrumb-item active">List User</li>
                     </ol>
                 </nav>
             </div><!-- End Page Title -->
@@ -136,44 +94,59 @@
                                                     <li class="dropdown-header text-start">
                                                         <h6>Filter</h6>
                                                     </li>
-                                                    <li><a class="dropdown-item filter-link" href="#" data-filter="All">All Transactions</a></li>                                                  
+                                                    <li><a class="dropdown-item filter-link" href="#" data-filter="All">All Account</a></li>
+                                                    <li><a class="dropdown-item filter-link" href="#" data-filter="Free">Free Account</a></li>
+                                                    <li><a class="dropdown-item filter-link" href="#" data-filter="Premium">Premium Account</a></li>
+                                                    <li><a class="dropdown-item filter-link" href="#" data-filter="Author">Author Account</a></li>
                                                 </ul>
                                             </div>
 
                                             <div class="card-body pb-0">
-                                                <h5 class="card-title">List Transactions<span></span></h5>
+                                                <h5 class="card-title">List User <span></span></h5>
 
                                                 <table class="table table-bordered table-striped">
-                                                    
-                                                    <tr>
-                                        <th>ID</th>
-                                        <th>Số hóa đơn</th>
-                                        <th>Mã giao dịch</th>
-                                        <th>Ngân hàng</th>
-                                        <th>Nội dung thanh toán</th>
-                                        <th>Số tiền</th>
-                                        <th>Ngày tạo</th>
-                                        <th>Trạng thái</th>
-                                    </tr>
-                                    <%
-                                        UserDAO transactionDAO = new UserDAO();
-                                        List<Transaction> transactionList = transactionDAO.getTransaction();
-                                        for (Transaction transaction : transactionList) {
-                                    %>
-                                    <tr>
-                                        <td><%= transaction.getId()%></td>
-                                        <td><%= transaction.getInvoiceNumber()%></td>
-                                        <td><%= transaction.getTransactionCode()%></td>
-                                        <td><%= transaction.getBank()%></td>
-                                        <td><%= transaction.getPaymentContent()%></td>
-                                        <td><%= transaction.getAmount()%></td>
-                                        <td><%= transaction.getDateofpayment()%></td>
-                                        <td><%= transaction.getStatus()%></td>
-                                    </tr>
-                                    <%
-                                        }
-                                    %>
-                                </table>
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">UserName</th>
+                                                            <th scope="col">Create AT</th>
+                                                            <th scope="col">Coin Quantity</th>
+                                                            <th scope="col">Role</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <%
+                                                            Connection connection = null; // Thiết lập kết nối cơ sở dữ liệu ở đây
+                                                            try {
+                                                                UserDAO userDAO = new UserDAO();
+                                                                List<User> userList = userDAO.getUsersData();
+                                                                for (User a : userList) {
+                                                        %>
+                                                        <tr class="<%= a.getRole()%>">
+                                                            <td><%= a.getUsername()%></td>
+                                                            <td><%= a.getCreateAt()%></td>
+                                                            <td><%= a.getCoinQuantity()%></td>
+                                                            <td><%= a.getRole()%></td>
+                                                            <td>
+                                                                <a href="DeleteUserServlet?userId=<%= a.getUserId()%>">Delete</a>
+                                                            </td>
+                                                        </tr>
+                                                        <%
+                                                                }
+                                                            } catch (Exception e) {
+                                                                e.printStackTrace();
+                                                            } finally {
+                                                                // Đảm bảo đóng kết nối sau khi hoàn thành
+                                                                try {
+                                                                    if (connection != null) {
+                                                                        connection.close();
+                                                                    }
+                                                                } catch (SQLException e) {
+                                                                    e.printStackTrace();
+                                                                }
+                                                            }
+                                                        %>
+                                                    </tbody>
+                                                </table>
 
                                             </div>
 
@@ -184,7 +157,8 @@
                         </div>
                     </div>                                             
 
-                   
+                  
+
 
             </section>
 

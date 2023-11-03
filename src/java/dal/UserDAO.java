@@ -4,15 +4,20 @@
  */
 package dal;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Report;
 import model.Transaction;
 import model.User;
+import static org.apache.http.client.methods.RequestBuilder.post;
 
 /**
  *
@@ -562,5 +567,89 @@ public class UserDAO extends DBContext {
 
         return listTrac;
     }
+     public ArrayList<Report> getReportData() {
+        ArrayList<Report> userrp = new ArrayList<>();
+        String query = "SELECT reportID, userID, mangaID, reason, createAT FROM [MangaUniverse].[dbo].[Report];";
+        try {
+            PreparedStatement statement = connection.prepareStatement(query);
+            ResultSet resultSet = statement.executeQuery();
 
+            while (resultSet.next()) {
+                int reportID = resultSet.getInt("reportID");
+                int userID = resultSet.getInt("userID");
+                int mangaID = resultSet.getInt("mangaID");
+                String reason = resultSet.getString("reason");
+                java.sql.Timestamp createAt = resultSet.getTimestamp("createAt");
+                
+
+                Report rp = new Report();
+                rp.setReportID(reportID);
+                rp.setUserID(userID);
+                rp.setMangaID(mangaID);
+                rp.setReason(reason);
+                rp.setDateofreport(createAt.toLocalDateTime());
+
+                userrp.add(rp);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return userrp;
+    }
+      public void deleteRp(int reportID) {
+        try {
+            String sql = "DELETE FROM Report WHERE reportId = ?";
+
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            ps.setInt(1, reportID);
+
+            ps.executeUpdate();
+
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+      public void deleteManga(int mangaID) {
+        try {
+            String sql = "DELETE FROM Manga WHERE mangaID = ?";
+
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            ps.setInt(1, mangaID);
+
+            ps.executeUpdate();
+
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+       public boolean addReport(int userId, int mangaID, String reportReason) {
+        String insertSQL = "INSERT INTO Report (userID, mangaID, reason, createAt) VALUES (?, ?, ?, ?)";
+        LocalDateTime dateReport = LocalDateTime.now();
+        Timestamp timestamp = Timestamp.valueOf(dateReport);
+        
+        try (Connection connection = getConnection(); // Sử dụng phương thức kế thừa từ DBContext để lấy kết nối
+             PreparedStatement preparedStatement = connection.prepareStatement(insertSQL)) {
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2, mangaID);
+            preparedStatement.setString(3, reportReason);
+            preparedStatement.setTimestamp(4, timestamp);
+
+            int rowsInserted = preparedStatement.executeUpdate();
+            return rowsInserted > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private Connection getConnection() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+   
 }
