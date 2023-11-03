@@ -13,14 +13,9 @@
 
 
 <%
-    User userSession = (User) session.getAttribute("userSession");
 
-    if (userSession == null) {
+    if (session.getAttribute("userSession") == null) {
         response.sendRedirect("login.jsp");
-    } else {
-        if (userSession.getUsername().equals("admin") == false) {
-            response.sendRedirect("login.jsp");
-        }
     }
 
 

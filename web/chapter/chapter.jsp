@@ -36,7 +36,10 @@
 
         <!-- Template Main CSS File -->
         <link href="../assetsMain/css/style.css" rel="stylesheet">
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+                integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     </head>
 
     <body>
@@ -123,8 +126,8 @@
                             <div class="row">
                                 <c:forEach items="${imageSourcelistToView}" var="imageSource">
                                     <div class="col-12">
-                                        <img class="w-100 img-fluid align-items-center"
-                                             src="${imageSource.getImageURL()}" alt="">
+                                        <img class="w-100 img-fluid align-items-center watermark_image"
+                                             src="${imageSource.getImageURL()}" alt="" >
                                     </div>
                                 </c:forEach>
 
@@ -183,8 +186,10 @@
                                         <!--                                        <div class="fb-comments" data-href="https://developers.facebook.com/docs/plugins/comments#configurator" 
                                                                                      data-width="700" data-numposts="5"></div>-->
 
-                                        <div class="fb-comments" data-href="chapter.jsp" 
+                                        <div class="fb-comments" data-href="chapter.jsp?mangaID=${mangaDetail.getMangaID()}&chapterID=${chapterToView.getChapterID()}" 
                                              data-width="700" data-numposts="5"></div>
+<!--                                        <div class="fb-comments" data-href="http://localhost:8080/MangaUniverse/chapter/chapter.jsp?mangaID=${mangaDetail.getMangaID()}&chapterID=${chapterToView.getChapterID()}" 
+                                             data-width="700" data-numposts="5"></div>-->
                                     </div>
 
                                     <!-- Comments Area -->
@@ -347,41 +352,54 @@
         >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
                 </div>
             </section>
-        </main>
+        </main> 
 
+        <script src="../assetsMain/js/jquery.watermark.min.js"></script>
         <script>
-            function handleSelect(elm) {
-                window.location = elm.value; // Điều hướng đến URL được chọn
-            }
+                                                $(function () {
+                                                    $('img.watermark_image').watermark({
+                                                        path: '../assetsMain/img/logo.png',
+                                                        textWidth: 300,
+                                                        gravity: 'se',
+                                                        opacity: 0.6,
+                                                        margin: 12,
+                                                        textSize: 20
+                                                    });
+                                                });
 
-            // Lấy danh sách tất cả các options trong select
-            var options = document.querySelectorAll('select option');
+                                                function handleSelect(elm) {
+                                                    window.location = elm.value; // Redirect to the selected URL
+                                                }
 
-            // Lấy index của option hiện tại (chương hiện tại)
-            var currentIndex = 0;
-            for (var i = 0; i < options.length; i++) {
-                if (options[i].selected) {
-                    currentIndex = i;
-                    break;
-                }
-            }
+                                                // Get a list of all options in the select element
+                                                var options = document.querySelectorAll('select option');
 
-            // Bắt đầu tại option hiện tại, cập nhật index và điều hướng
-            function navigateChapters(direction) {
-                currentIndex += direction;
-                if (currentIndex < 0) {
-                    currentIndex = 0; // Đảm bảo không thể đi lùi hơn chương đầu tiên
-                }
-                if (currentIndex >= options.length) {
-                    currentIndex = options.length - 1; // Đảm bảo không thể đi tiến hơn chương cuối cùng
-                }
+                                                // Get the index of the currently selected option (the current chapter)
+                                                var currentIndex = 0;
+                                                for (var i = 0; i < options.length; i++) {
+                                                    if (options[i].selected) {
+                                                        currentIndex = i;
+                                                        break;
+                                                    }
+                                                }
 
-                var nextOption = options[currentIndex];
-                if (nextOption) {
-                    window.location = nextOption.value;
-                }
-            }
+                                                // Starting from the current option, update the index and navigate
+                                                function navigateChapters(direction) {
+                                                    currentIndex += direction;
+                                                    if (currentIndex < 0) {
+                                                        currentIndex = 0; // Ensure it cannot go back before the first chapter
+                                                    }
+                                                    if (currentIndex >= options.length) {
+                                                        currentIndex = options.length - 1; // Ensure it cannot go forward beyond the last chapter
+                                                    }
+
+                                                    var nextOption = options[currentIndex];
+                                                    if (nextOption) {
+                                                        window.location = nextOption.value;
+                                                    }
+                                                }
         </script>
+
 
 
         <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i

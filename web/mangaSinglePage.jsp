@@ -88,7 +88,7 @@
                                     <nav aria-label="breadcrumb">
                                         <ol class="breadcrumb">
                                             <li class="breadcrumb-item"><a href="home.jsp">Home</a></li>
-                                            <li class="breadcrumb-item"><a href="../manga_all.jsp">All Manga</a></li>
+                                            <li class="breadcrumb-item"><a href="home.jsp">All Manga</a></li>
                                             <li class="breadcrumb-item active">${mangaDetail.getTitle()}</li>
                                         </ol>
                                     </nav>

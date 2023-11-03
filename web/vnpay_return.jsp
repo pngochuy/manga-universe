@@ -1,9 +1,12 @@
+<%@page import="dal.UserDAO"%>
+<%@page import="model.User"%>
+<%@page import="dal.Config"%>
 <%@page import="java.net.URLEncoder"%>
 <%@page import="java.nio.charset.StandardCharsets"%>
-<%@page import="dal.Config"%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page import="java.util.Iterator"%>
 <%@page import="java.util.Collections"%>
 <%@page import="java.util.List"%>
@@ -22,11 +25,82 @@
         <meta name="description" content="">
         <meta name="author" content="">
         <title>KẾT QUẢ THANH TOÁN</title>
-        <!-- Bootstrap core CSS -->
-        <link href="/vnpay_jsp/assets/bootstrap.min.css" rel="stylesheet"/>
-        <!-- Custom styles for this template -->
-        <link href="/vnpay_jsp/assets/jumbotron-narrow.css" rel="stylesheet"> 
-        <script src="/vnpay_jsp/assets/jquery-1.11.3.min.js"></script>
+
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f5f5f5;
+                margin: 0;
+                padding: 0;
+            }
+
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 20px;
+                background-color: #fff;
+                border: 1px solid #e1e1e1;
+                border-radius: 5px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .header {
+                background-color: #007bff;
+                color: #fff;
+                padding: 10px;
+                text-align: center;
+            }
+
+            h3 {
+                font-size: 24px;
+            }
+
+            .table-responsive {
+                margin-top: 20px;
+            }
+
+            .form-group {
+                margin-bottom: 15px;
+            }
+
+            label {
+                font-weight: bold;
+            }
+
+            label, div.form-group label {
+                display: inline-block;
+                width: 200px;
+            }
+
+            label + label {
+                margin-left: 10px;
+            }
+
+            .form-group label {
+                width: auto;
+                margin-left: 0;
+            }
+
+            button {
+                background-color: #007bff;
+                color: #fff;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+            footer {
+                background-color: #f5f5f5;
+                color: #333;
+                text-align: center;
+                padding: 10px;
+                margin-top: 20px;
+                border-radius: 0 0 5px 5px;
+            }
+        </style>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     </head>
     <body>
         <%
@@ -62,16 +136,11 @@
                 </div>    
                 <div class="form-group">
                     <label >Số tiền:</label>
-                    <label>
-                        <%
-                            String at = request.getParameter("vnp_Amount");
-                            if (at.equals("10000")) {
-                                request.setAttribute("amount", at);
-                            }
-                        %>
-                        
-                        ${amount}
-                    </label>
+                    <label><%=request.getParameter("vnp_Amount")%></label>
+                </div>  
+                <div class="form-group">
+                    <label >User:</label>
+                    <label>${userPaymentSuccess.getUsername()}</label>
                 </div>  
                 <div class="form-group">
                     <label >Mô tả giao dịch:</label>
@@ -100,6 +169,14 @@
                             if (signValue.equals(vnp_SecureHash)) {
                                 if ("00".equals(request.getParameter("vnp_TransactionStatus"))) {
                                     out.print("Thành công");
+
+                                    UserDAO userDAO = new UserDAO();
+                                    User u = (User) session.getAttribute("userPaymentSuccess");
+                                    u.setRole("Premium");
+                                    userDAO.update(u);
+
+                                    out.println("<i class=\"bi bi-arrow-right-circle-fill\"></i>");
+                                    out.print("<a href=\"LogoutServlet\">Về trang login</a>");
                                 } else {
                                     out.print("Không thành công");
                                 }
@@ -109,12 +186,13 @@
                             }
                         %></label>
                 </div> 
+
             </div>
             <p>
                 &nbsp;
             </p>
             <footer class="footer">
-                <p>&copy; VNPAY 2020</p>
+                <p>&copy; VNPAY 2023</p>
             </footer>
         </div>  
     </body>

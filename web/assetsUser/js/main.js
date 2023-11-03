@@ -462,9 +462,12 @@ const progressLabel = document.getElementById('progress-label');
 const imageGrid = document.getElementById('image-grid');
 let isImageSelected = false;
 
+
 uploadButton.addEventListener("click", function () {
+
     fileInput.addEventListener("change", function (changeEvent) {
         imagePreview.remove();
+
         const files = fileInput.files;
         // console.log(files);
         const totalFiles = files.length;
@@ -533,7 +536,7 @@ uploadButton.addEventListener("click", function () {
 });
 removeImage.addEventListener("click", function () {
     fileInput.files = null;
-    
+
     var container = document.getElementById("image-grid");
     while (container.firstChild) {
         container.removeChild(container.firstChild);

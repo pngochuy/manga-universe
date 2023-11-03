@@ -1,3 +1,5 @@
+<%@page import="dal.ChapterDAO"%>
+<%@page import="model.Chapter"%>
 <%@page import="model.User"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -67,6 +69,13 @@
         <%@include file="layouts/layoutUser/headerUser.jsp" %> 
         <%@include file="layouts/layoutUser/sidebarUser.jsp" %>
 
+        <%
+            int chapterID = Integer.parseInt(request.getParameter("chapterID"));
+            ChapterDAO chapterDAO = new ChapterDAO();
+            Chapter chapter = chapterDAO.getChapter(chapterID);
+            session.setAttribute("chapterToEdit", chapter);
+        %>
+
         <main id="main" class="main">
 
             <div class="pagetitle">
@@ -76,8 +85,8 @@
                         <li class="breadcrumb-item"><a href="home.jsp">Home</a></li>
                         <li class="breadcrumb-item"><a href="userProfile.jsp">User</a></li>
                         <li class="breadcrumb-item"><a href="viewMangaList.jsp">My Manga List</a></li>
-                        <li class="breadcrumb-item">${mangaToAddChapter.getTitle()}</li>
-                        <li class="breadcrumb-item active">Add Chapter</li>
+                        <li class="breadcrumb-item">${mangaToChapterToEdit.getTitle()}</li>
+                        <li class="breadcrumb-item active">Edit Chapter</li>
                     </ol>
                 </nav>
             </div><!-- End Page Title -->
@@ -113,12 +122,12 @@
                             <% if (u3.getRole().equalsIgnoreCase("Author")) {%>
                             <div class="card">
                                 <div class="card-body">
-                                    <form action="AddChapterServlet" method="POST">
+                                    <form action="EditChapterServlet" method="POST">
                                         <h5 class="card-title">Chapter Name</h5>
                                         <!-- Quill Editor Default -->
                                         <div>
                                             <input class="form-control" placeholder="Chapter 1,..." name="title" type="text" 
-                                                   value="${titleValue != null ? titleValue : ''}">
+                                                   value="${titleValue != null ? titleValue : chapterToEdit.getTitle()}">
                                             <c:if test="${titleError != null}">
                                                 <small class="small" style="color: red;">${titleError}</small> 
                                             </c:if>
@@ -128,7 +137,7 @@
                                         <!-- Quill Editor Default -->
                                         <div>
                                             <input class="form-control" placeholder="description..." name="description" type="text" 
-                                                   value="${descriptionValue != null ? descriptionValue : ''}">
+                                                   value="${descriptionValue != null ? descriptionValue : chapterToEdit.getDescription()}">
                                             <c:if test="${descriptionError != null}">
                                                 <small class="small" style="color: red;">${descriptionError}</small> 
                                             </c:if>
@@ -144,7 +153,10 @@
                                                 <progress id="progress" value="0" max="100"></progress>
                                                 <div id="image-grid" class="image-grid">
                                                     <c:if test="${imageURLsValue == null}">
-                                                        <img id="imagePreview" src="assetsUser/img/no_image.jpg" alt="Post Image">
+                                                        <!--<img id="imagePreview" src="assetsUser/img/no_image.jpg" alt="Post Image">-->
+                                                        <c:forEach items="${imageSourceListToEdit}" var="imageSource">
+                                                            <img id="imagePreview" src="${imageSource.getImageURL()}" alt="Post Image" class="image-grid-item">
+                                                        </c:forEach>
                                                     </c:if>
                                                     <c:if test="${imageURLsValue != null}">
 
@@ -171,6 +183,14 @@
 
                                             </div>
                                             <div id="postUrls">
+                                                <c:if test="${imageURLsValue == null}">
+                                                    <c:forEach items="${imageSourceListToEdit}" var="imageSource">
+                                                        <input type="hidden" name="imageURL" class="imageURL" value="${imageSource.getImageURL()}">
+                                                    </c:forEach>
+                                                </c:if>
+                                                <c:if test="${imageURLsValue != null}">
+
+                                                </c:if>
                                                 <!-- ... -->
                                             </div>
                                         </div>
@@ -182,11 +202,12 @@
 
                                                 <div class="col-sm-9">
 
-                                                    <input type="hidden" name="mangaID" value="${mangaToAddChapter.getMangaID()}">
-                                                    <button id="submitButton" type="submit" class="btn btn-primary">Add Chapter</button>
-                                                    <c:if test="${messageAddChapter != null}">
+                                                    <input type="hidden" name="mangaID" value="${mangaToChapterToEdit.getMangaID()}">
+                                                    <input type="hidden" name="chapterID" value="${chapterToEdit.getChapterID()}">
+                                                    <button id="submitButton" type="submit" class="btn btn-primary">Edit Chapter</button>
+                                                    <c:if test="${messageEditChapter != null}">
                                                         <br/>
-                                                        <small class="small" style="color: green;">${messageAddChapter}</small> 
+                                                        <small class="small" style="color: green;">${messageEditChapter}</small> 
                                                     </c:if>
                                                 </div>
                                             </div>

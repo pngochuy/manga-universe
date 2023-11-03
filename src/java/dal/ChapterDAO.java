@@ -201,6 +201,34 @@ public class ChapterDAO extends DBContext {
     }
 
     // get chapter
+    public Chapter getChapter(int chapterID) {
+        try {
+            String sql = "SELECT * FROM [Chapter]"
+                    + "WHERE chapterID = ?\n";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, chapterID);
+
+            ResultSet res = ps.executeQuery();
+            Chapter chapter = new Chapter();
+            if (res.next()) {
+                chapter.setChapterID(res.getInt("chapterID"));
+                chapter.setTitle(res.getNString("title"));
+                chapter.setDescription(res.getNString("description"));
+                chapter.setMangaID(res.getInt("mangaID"));
+                chapter.setCreateAt(res.getTimestamp("createAt").toLocalDateTime());
+            }
+
+            res.close();
+            ps.close();
+
+            return chapter;
+        } catch (SQLException ex) {
+            Logger.getLogger(ChapterDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
+    }
+    // get chapter
     public Chapter getChapterByMangaID(int chapterID) {
         try {
             String sql = "SELECT * FROM [Chapter]"

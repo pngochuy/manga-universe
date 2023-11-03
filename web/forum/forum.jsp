@@ -35,7 +35,6 @@
 
         <!-- Template Main CSS File -->
         <link href="../assetsMain/css/style.css" rel="stylesheet">
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
         <!-- Favicons -->
         <link href="${pageContext.request.contextPath}/assetsMain/img/logo.png" rel="icon">
@@ -87,32 +86,34 @@
                                         ArrayList<Post> postList = (ArrayList<Post>) session.getAttribute("postList");
 
                                         if (postList == null) {
+
                                             int count = postDAO.getTotalPost();
                                             int endPage = count / 4; // each page has 4 posts
 
                                             if (count % 4 != 0) {
                                                 endPage++;
-
+                                                
                                                 postList = postDAO.pagingPostList(1);
                                                 session.setAttribute("postList", postList);
                                                 session.setAttribute("endPage", endPage);
                                                 session.setAttribute("tag", 1);
                                             }
+                                            
+                                            
                                         }
-
                                         ArrayList<User> userListByPost = new ArrayList<>();
                                         for (Post p : postList) {
                                             User user = postDAO.getUserByPost(p.getUserId());
                                             userListByPost.add(user);
                                         }
                                         session.setAttribute("userListByPost", userListByPost);
+
                                     %>
+
                                     <div id="content">
 
                                         <div class="row">
-
                                             <c:if test="${postList != null}">
-
                                                 <c:forEach items="${postList}" var="post" varStatus="loop">
 
                                                     <div class="col-lg-6 col-md-6 col-12 mb-4">
@@ -158,8 +159,7 @@
                                             <h5 class="mb-2 mt-4">Popular Blogs</h5>
                                             <ul class="popular-blogs">
                                                 <div id="postSearchContent">
-                                                    <%
-                                                        ArrayList<Post> threePostlist = postDAO.getThreePost();
+                                                    <%                                                        ArrayList<Post> threePostlist = postDAO.getThreePost();
                                                         session.setAttribute("threePostlist", threePostlist);
 
                                                         ArrayList<User> userListByThreePost = new ArrayList<>();
@@ -210,7 +210,6 @@
                                             </a>
                                         </li>
                                     </c:if>
-
                                     <c:forEach begin="1" end="${endPage}" var="i">
                                         <li class="page-item">
                                             <a href="/MangaUniverse/PostListPagingServlet?index=${i}" class="page-link current">${i}</a>
@@ -368,7 +367,7 @@
         <script src="../assetsMain/vendor/php-email-form/validate.js"></script>
 
         <!-- Template Main JS File -->
-        <script src="../assetsMain/js/main.js"></script>
+        <!--<script src="../assetsMain/js/main.js"></script>-->
     </body>
 
 </html>

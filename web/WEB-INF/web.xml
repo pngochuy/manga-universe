@@ -124,6 +124,18 @@
         <servlet-name>EditChapterServlet</servlet-name>
         <servlet-class>controller.user.chapter.EditChapterServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AcceptReport</servlet-name>
+        <servlet-class>controller.report.AcceptReport</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ManageReport</servlet-name>
+        <servlet-class>controller.report.ManageReport</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>RejectReport</servlet-name>
+        <servlet-class>controller.report.RejectReport</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/LoginServlet</url-pattern>
@@ -251,6 +263,18 @@
     <servlet-mapping>
         <servlet-name>EditChapterServlet</servlet-name>
         <url-pattern>/EditChapterServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AcceptReport</servlet-name>
+        <url-pattern>/AcceptReport</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ManageReport</servlet-name>
+        <url-pattern>/ManageReport</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RejectReport</servlet-name>
+        <url-pattern>/RejectReport</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

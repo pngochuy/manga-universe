@@ -141,7 +141,7 @@
                                                             </td>
                                                             <td>${chapter.getDescription()}</td>
                                                             <td class="text-center">
-                                                                <a href="EditChapterServlet?chapterID=${chapter.getChapterID()}" class="mr10">
+                                                                <a href="EditChapterServlet?mangaID=${mangaToViewChapter.getMangaID()}&chapterID=${chapter.getChapterID()}" class="mr10">
                                                                     <i class="bi bi-pencil-square"></i>
                                                                 </a>
                                                             </td>

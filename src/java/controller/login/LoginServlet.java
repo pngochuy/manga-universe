@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import jdk.nashorn.internal.ir.ContinueNode;
 import model.User;
 import ultils.EncryptPassword;
 
@@ -71,8 +72,8 @@ public class LoginServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {   
-        
+            throws ServletException, IOException {
+
         UserDAO userDAO = new UserDAO();
         String username = request.getParameter("username");
         String password = request.getParameter("password");
@@ -100,7 +101,6 @@ public class LoginServlet extends HttpServlet {
             boolean checkLogin = true;
             PrintWriter out = response.getWriter();
 
-
             // check username in DB
             if (userDAO.isUsernameExists(username) == false) {
                 mySession.setAttribute("status", "failedUsername");
@@ -127,15 +127,19 @@ public class LoginServlet extends HttpServlet {
                 request.setAttribute("errUsername", "");
                 request.setAttribute("errPassword", "");
                 request.setAttribute("status", "success");
-                
+
                 User userSession = userDAO.getUserByUsername(username, password);
                 mySession.setAttribute("userSession", userSession);
+//
+//                if (userSession.getUsername().equals("admin")) {
+//                    response.sendRedirect("viewAdmin.jsp");
+//                    return;
+//                }
 
 //                    request.getRequestDispatcher("UserProfileServlet").forward(request, response);
                 request.getRequestDispatcher("userProfile.jsp").forward(request, response);
                 return;
             }
-
 
         }
 //        response.sendRedirect("login.jsp");

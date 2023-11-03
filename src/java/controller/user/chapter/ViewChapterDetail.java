@@ -94,7 +94,7 @@ public class ViewChapterDetail extends HttpServlet {
         } else if (action.equals("read-chapter")) {
             // ...
             int chapterID = Integer.parseInt(request.getParameter("chapterID"));
-            chapter = chapterDAO.getChapterByMangaID(chapterID);
+            chapter = chapterDAO.getChapter(chapterID);
 
         }
 
@@ -119,7 +119,7 @@ public class ViewChapterDetail extends HttpServlet {
         mySession.setAttribute("chapterToView", chapter);
 //        mySession.setAttribute("imageSourceToView", imageSource);
         
-        response.sendRedirect("chapter/chapter.jsp");
+        response.sendRedirect("chapter/chapter.jsp?mangaID=" + mangaID + "&chapterID=" + chapter.getChapterID());
     }
 
     /**

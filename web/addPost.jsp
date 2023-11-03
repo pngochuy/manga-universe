@@ -480,7 +480,7 @@
         <script src="assetsUser/vendor/php-email-form/validate.js"></script>
 
         <!-- Template Main JS File -->
-        <script src="assetsUser/js/main.js"></script>
+        <!--<script src="assetsUser/js/main.js"></script>-->
 
     </body>
 

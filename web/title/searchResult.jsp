@@ -63,7 +63,7 @@
 
     <body>
 
-<!--        <%@include file="../layouts/layoutsMain/headerMain.jsp" %> 
+        <!--        <%@include file="../layouts/layoutsMain/headerMain.jsp" %> 
         <%@include file="../layouts/layoutsMain/sidebarMain.jsp" %> -->
 
         <main id="main" class="main">
@@ -78,12 +78,12 @@
                                                 class="fa fa-solid fa-list"></i></a> Showing 3 out of 5000
                                         Manga</span></h2>
                             </div>
-                            
+
                             <div class="container">
                                 <div class="row justify-content-center">
                                     <div class="col-12 col-md-10 col-lg-8">
-                                        <form class="card card-sm" action="../SearchController?index=1" method="post">
-                                            
+                                        <form class="card card-sm" action="/MangaUniverse/SearchMangaSevlet?index=1" method="post">
+
                                             <div class="card-body row no-gutters align-items-center" style="padding: 20px;">
                                                 <div class="col-auto">
                                                     <i class="bi bi-search-heart" style="font-size: 30px"></i>
@@ -336,8 +336,8 @@
                             <h2 class="fw-bold">Manga Found</h2>
                             <div class="row mt-2">
 
-                             <c:forEach var="s" items="${listSM}" varStatus="loop"> 
-                                 
+                                <c:forEach var="s" items="${listSM}" varStatus="loop"> 
+
                                     <div class="col-lg-2 col-md-4 col-sm-6">
                                         <a href="mangaSPServlet?id=${s.mangaID}">
                                             <div class="product-card grow-box">
@@ -358,8 +358,8 @@
                                             </div>
                                         </a>
                                     </div>
-                                  </c:forEach> 
-                                
+                                </c:forEach> 
+
 
                             </div>
                         </div>
@@ -368,23 +368,23 @@
                     <div class="pagination-wrape">
                         <ul class="pagination">
                             <c:if test ="${tag > 1}">
-                            <li class="page-item">
-                                <a href="SearchController?index=${tag-1}&txtSearch=${save}" class="page-link arrow" aria-label="Previous">
-                                    <i class="bi bi-caret-left-fill"></i>
-                                </a>
-                            </li>
+                                <li class="page-item">
+                                    <a href="SearchMangaSevlet?index=${tag-1}&txtSearch=${save}" class="page-link arrow" aria-label="Previous">
+                                        <i class="bi bi-caret-left-fill"></i>
+                                    </a>
+                                </li>
                             </c:if>
                             <c:forEach var="j" begin="1" step="1" end="${endS}">  
-                            <li class="page-item">
-                                <a href="SearchController?index=${j}&txtSearch=${save}" class="${tag == j?"active":""} page-link current">${j}</a>
-                            </li>
+                                <li class="page-item">
+                                    <a href="SearchMangaSevlet?index=${j}&txtSearch=${save}" class="${tag == j?"active":""} page-link current">${j}</a>
+                                </li>
                             </c:forEach>
                             <c:if test ="${tag < endS}">
-                            <li class="page-item">
-                                <a href="SearchController?index=${tag+1}&txtSearch=${save}" class=" page-link arrow" aria-label="next">
-                                    <i class="bi bi-caret-right-fill"></i>
-                                </a>
-                            </li>
+                                <li class="page-item">
+                                    <a href="SearchMangaSevlet?index=${tag+1}&txtSearch=${save}" class=" page-link arrow" aria-label="next">
+                                        <i class="bi bi-caret-right-fill"></i>
+                                    </a>
+                                </li>
                             </c:if>
                         </ul>
                     </div>
