@@ -44,22 +44,22 @@
             </a>
             <ul class="nav-content">
                 <li>
-                    <a href="title/advancedSearch.jsp">
+                    <a href="advancedSearch.jsp">
                         <i class="bi bi-circle"></i><span>Advanced Search</span>
                     </a>
                 </li>
                 <li>
-                    <a href="title/recentlyAdded.jsp">
+                    <a href="recentlyAdded.jsp">
                         <i class="bi bi-circle"></i><span>Recently Added</span>
                     </a>
                 </li>
                 <li>
-                    <a href="title/latestUpdates.jsp">
+                    <a href="latestUpdates.jsp">
                         <i class="bi bi-circle"></i><span>Latest Updates</span>
                     </a>
                 </li>
                 <li>
-                    <a href="title/random.jsp">
+                    <a href="random.jsp">
                         <i class="bi bi-circle"></i><span>Random</span>
                     </a>
                 </li>

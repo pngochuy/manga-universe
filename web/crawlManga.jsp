@@ -7,55 +7,11 @@
 <%@page import="java.util.List"%>
 <%@page import="java.sql.Connection"%>
 <%@page import="java.sql.SQLException"%>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Include jQuery library -->
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<script>
-    $(document).ready(function () {
-        // Bắt sự kiện khi nhấn vào liên kết "Free Account," "Premium Account," hoặc "Author Account"
-        $(".filter-link").click(function (e) {
-            e.preventDefault(); // Ngăn chặn mặc định của liên kết
-
-            var filterValue = $(this).data("filter");
-
-            // Ẩn/hiển thị các phần tử dựa trên lớp CSS
-            if (filterValue === "All") {
-                // Hiển thị tất cả các phần tử
-                $(".free-account, .premium-account, .author-account").show();
-            } else {
-                // Ẩn tất cả các phần tử
-                $(".free-account, .premium-account, .author-account").hide();
-
-                // Hiển thị chỉ các phần tử có lớp CSS tương ứng
-                $("." + filterValue.toLowerCase() + "-account").show();
-            }
-        });
-    });
-</script>
-<script>
-    $(document).ready(function () {
-        // Bắt sự kiện khi nhấn vào liên kết "All Account", "Free Account", "Premium Account" hoặc "Author Account"
-        $(".filter-link").click(function (e) {
-            e.preventDefault(); // Ngăn chặn mặc định của liên kết
-
-            var filterValue = $(this).data("filter");
-
-            // Ẩn tất cả các hàng trước khi lọc
-            $("tr").hide();
-
-            if (filterValue === "All") {
-                // Hiển thị tất cả các hàng
-                $("tr").show();
-            } else {
-                // Hiển thị chỉ các hàng có vai trò tương ứng
-                $("tr." + filterValue).show();
-            }
-        });
-    });
-</script>
 <%
 
     if (session.getAttribute("userSession") == null) {
@@ -100,6 +56,7 @@
 
         <!-- Template Main CSS File -->
         <link href="assetsUser/css/style.css" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Include jQuery library -->
     </head>
 
     <body>
@@ -112,8 +69,7 @@
                 <h1>Dashboard</h1>
                 <nav>
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="home.jsp">Home</a></li>
-                        <li class="breadcrumb-item ">Dashboard</li>
+                        <li class="breadcrumb-item "><a href="viewAdmin.jsp">Dashboard</a></li>
                         <li class="breadcrumb-item active">Crawl Manga</li>
                     </ol>
                 </nav>
@@ -129,29 +85,29 @@
                                     <!-- Report -->
                                     <div class="col-12">
                                         <div class="card top-selling overflow-auto">
-
                                             <div class="filter">
                                                 <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
                                                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-
-
                                                 </ul>
                                             </div>
 
                                             <div class="card-body pb-0">
-                                                
+
                                                 <div class="container">
                                                     <h5 class="card-title">Crawl Manga <span></span></h5>
-                                                    <form action="index.jsp" method="post">
+                                                    <form action="CrawlMangaServlet" method="post" class="mb-3">
                                                         <div class="form-group">
                                                             <input type="number" class="form-control" id="number" name="number" placeholder="Enter the number">
+                                                            <c:if test="${errorNumber != null}">
+                                                                <small class="small" style="color: red;">${errorNumber}</small> 
+                                                            </c:if>
+                                                            <c:if test="${successNumber != null}">
+                                                                <small class="small" style="color: green;">${successNumber}</small> 
+                                                            </c:if>
                                                         </div>
                                                         <button type="submit" class="btn btn-primary">Submit</button>
                                                     </form>
                                                 </div>
-
-
-
                                             </div>
 
                                         </div>

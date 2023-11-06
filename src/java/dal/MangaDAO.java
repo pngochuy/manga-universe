@@ -4,6 +4,7 @@
  */
 package dal;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,6 +13,8 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Manga;
@@ -253,23 +256,19 @@ public class MangaDAO extends DBContext {
 
     // Delete
     public String delete(Manga manga) {
-        try ( PreparedStatement ps = connection.prepareStatement("DELETE FROM [MangaCategory] WHERE mangaID = ?")) {
-
+        try {
+            String sql = "DECLARE @mangaID INT;"
+                    + "SET @mangaID = ?;"
+                    + "DELETE FROM [ImageSource] WHERE mangaID = @mangaID;"
+                    + "DELETE FROM [Chapter] WHERE mangaID = @mangaID;"
+                    + "DELETE FROM [MangaCategory] WHERE mangaID = @mangaID;"
+                    + "DELETE FROM [Manga] WHERE mangaID = @mangaID;";
+            PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, manga.getMangaID());
             int rowsDeleted = ps.executeUpdate();
 
             if (rowsDeleted > 0) {
-                try ( PreparedStatement ps2 = connection.prepareStatement("DELETE FROM [Manga] WHERE mangaID = ?")) {
-                    ps2.setInt(1, manga.getMangaID());
-                    int rowsDeleted2 = ps2.executeUpdate();
-
-                    if (rowsDeleted2 > 0) {
-                        return "OKAY ALL!"; // Xóa thành công
-                    } else {
-                        return "failed manga";
-                    }
-
-                }
+                return "OKAY ALL!"; // Xóa thành công
             }
 
             ps.close();
@@ -278,7 +277,7 @@ public class MangaDAO extends DBContext {
             Logger.getLogger(MangaDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        return "failed category"; // Xóa không thành công
+        return "failed ALL"; // Xóa không thành công
     }
 
     public boolean delete2(int mangaID) {
@@ -445,11 +444,148 @@ public class MangaDAO extends DBContext {
             }
             ps.close();
             rs.close();
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(MangaDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return 0;
     }
 
+    public ArrayList<Manga> searchMangaByCategory(ArrayList<String> categories) throws Exception {
+        ArrayList<Manga> mg = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        // Tạo danh sách dấu chấm hỏi, ví dụ: "?, ?, ?, ?" tương ứng với số lượng thẻ
+        String questionMarks = String.join(", ", Collections.nCopies(categories.size(), "?"));
+
+        String query = "SELECT M.* FROM Manga AS M "
+                + "WHERE NOT EXISTS ("
+                + "SELECT C.type "
+                + "FROM Category AS C "
+                + "WHERE C.type IN (" + questionMarks + ") "
+                + "EXCEPT "
+                + "SELECT C.type "
+                + "FROM MangaCategory AS MC "
+                + "INNER JOIN Category AS C ON MC.CategoryID = C.CategoryID "
+                + "WHERE MC.MangaID = M.MangaID"
+                + ")";
+        try {
+            conn = connection;
+            ps = conn.prepareStatement(query);
+
+            // Đặt giá trị cho từng dấu chấm hỏi
+            int parameterIndex = 1;
+            for (String category : categories) {
+                ps.setString(parameterIndex++, category);
+            }
+
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                int mangaID = rs.getInt(1);
+                String title = rs.getString(2);
+                String description = rs.getString(3);
+                int userID = rs.getInt(4);
+
+                LocalDateTime createdAt = rs.getTimestamp(5).toLocalDateTime();
+
+//                Date createDate = rs.getDate(5);
+//                LocalDateTime createAt = rs.getDate(5).toLocalDate().atTime(LocalTime.MIN);
+                boolean isCopyRight = rs.getBoolean(6);
+                boolean isFree = rs.getBoolean(7);
+                String coverImage = rs.getString(8);
+
+                mg.add(new Manga(mangaID, title, description, userID, createdAt, isCopyRight, isFree, coverImage));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return mg;
+    }
+
+    public List<Manga> getMangasDescByDate() {
+        Connection cnt = null;
+        PreparedStatement stm = null;
+        ResultSet res = null;
+        List<Manga> listOfMangas = new ArrayList<>();
+        try {
+            cnt = connection;
+            String sql = "SELECT * FROM MANGA "
+                    + "ORDER BY createAt DESC";
+            stm = cnt.prepareStatement(sql);
+            res = stm.executeQuery();
+            while (res.next()) {
+                Integer id = res.getInt("mangaID");
+                String title = res.getString("title");
+                String description = res.getString("description");
+                Integer userID = res.getInt("userID");
+                
+                LocalDateTime createdAt = res.getTimestamp("createAt").toLocalDateTime();
+                
+//                Date createdAt = res.getDate("createdAt");
+                Boolean isCopyright = res.getBoolean("isCopyright");
+                Boolean isFree = res.getBoolean("isFree");
+                String coverImage = res.getString("coverImage");
+                
+                Manga manga = new Manga(id, title, description, userID, createdAt, isCopyright, isFree, coverImage);
+                listOfMangas.add(manga);
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } finally {
+            try {
+                cnt.close();
+                stm.close();
+                res.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(MangaDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return listOfMangas;
+    }
+    
+    
+    public List<Manga> getRandomMangas() {
+        Connection cnt = null;
+        PreparedStatement stm = null;
+        ResultSet res = null;
+        List<Manga> listOfMangas = new ArrayList<>();
+        try{
+            cnt = connection;
+            String sql = "SELECT * FROM Manga "
+                    + "ORDER BY NEWID()";
+            stm = cnt.prepareStatement(sql);    
+            res = stm.executeQuery();
+            while(res.next()){
+                Integer id = res.getInt("mangaID");
+                String title = res.getString("title");
+                String description = res.getString("description");
+                Integer userID = res.getInt("userID");
+                
+                LocalDateTime createdAt = res.getTimestamp("createAt").toLocalDateTime();
+                
+//                Date createdAt = res.getDate("createdAt");
+                Boolean isCopyright = res.getBoolean("isCopyright");
+                Boolean isFree = res.getBoolean("isFree");
+                String coverImage = res.getString("coverImage");
+                Manga manga = new Manga(id, title, description, userID , createdAt, isCopyright,isFree,coverImage );
+                listOfMangas.add(manga);
+            }
+            
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }finally{
+            try {
+                cnt.close();
+                stm.close();
+                res.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(MangaDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return listOfMangas;    
+    }
 }

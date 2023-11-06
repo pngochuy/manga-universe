@@ -136,6 +136,14 @@
         <servlet-name>RejectReport</servlet-name>
         <servlet-class>controller.report.RejectReport</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CrawlMangaServlet</servlet-name>
+        <servlet-class>controller.admin.CrawlMangaServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SearchController</servlet-name>
+        <servlet-class>controller.user.manga.SearchController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/LoginServlet</url-pattern>
@@ -275,6 +283,14 @@
     <servlet-mapping>
         <servlet-name>RejectReport</servlet-name>
         <url-pattern>/RejectReport</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CrawlMangaServlet</servlet-name>
+        <url-pattern>/CrawlMangaServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchController</servlet-name>
+        <url-pattern>/SearchController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

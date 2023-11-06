@@ -1,3 +1,4 @@
+<%@page import="dal.ChapterDAO"%>
 <%@page import="dal.UserDAO"%>
 <%@page import="dal.CategoryDAO"%>
 <%@page import="dal.MangaDAO"%>
@@ -8,10 +9,14 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
+<%@page import="org.jsoup.select.Elements"%>
+<%@ page import="org.jsoup.Jsoup" %>
+<%@ page import="org.jsoup.nodes.Document" %>
+<%@ page import="org.jsoup.nodes.Element" %>
+
 <%
-    // session.removeAttribute("tokenVerify");
-    String tokenVerify = (String) session.getAttribute("tokenVerify");
-    // out.println(tokenVerify); // 'null' or 'tokenVerify'
+    
+    
 
 %>
 <!DOCTYPE html>
@@ -57,7 +62,7 @@
 
         <%@include file="layouts/layoustOthers/headerOthers.jsp" %> 
         <%@include file="layouts/layoustOthers/sidebarOthers.jsp" %> 
-        
+
         <%
             MangaDAO mangaDAO = new MangaDAO();
             CategoryDAO categoryDAO = new CategoryDAO();
@@ -118,42 +123,47 @@
                                                                                   style="display: block; float: right;"></i></a></h2>
                                 <div class="row mt-2">
                                     <c:forEach items="${mangaListUpdates}" var="manga">
-                                    <div class="col-lg-2 col-md-4 col-sm-6">
-                                        <a href="/MangaUniverse/MangaDetailServlet?id=${manga.getMangaID()}">
-                                            <div class="product-card grow-box">
-                                                <div class="img-con set-bg"
-                                                     style="background-image: url('${manga.getCoverImage()}');"
-                                                     data-setbg="${manga.getCoverImage()}">
-                                                    <!--so chapter => UPDATE!!-->
-                                                    <div class="ep">18/20</div>
-                                                    <div class="comment"><i class="bi bi-chat"></i> 21</div>
-                                                    <div class="view"><i class="bi bi-eye"></i> 7141</div>
-                                                </div>
-                                                <div class="product-card-con">
-                                                    <ul>
+                                        <div class="col-lg-2 col-md-4 col-sm-6">
+                                            <a href="/MangaUniverse/MangaDetailServlet?id=${manga.getMangaID()}">
+                                                <div class="product-card grow-box">
+                                                    <div class="img-con set-bg"
+                                                         style="background-image: url('${manga.getCoverImage()}');"
+                                                         data-setbg="${manga.getCoverImage()}">
+                                                        <!--so chapter => UPDATE!!-->
                                                         <c:set var="manga" value="${manga}" />
                                                         <%
-                                                            Manga manga = (Manga) pageContext.getAttribute("manga");
-                                                            request.setAttribute("cate", categoryDAO.getCategoriesByMangaID(manga.getMangaID()));
+                                                                Manga manga = (Manga) pageContext.getAttribute("manga");
+                                                                ChapterDAO chapterDAO = new ChapterDAO();
+                                                                request.setAttribute("chapters", chapterDAO.getAllChaptersByMangaID(manga.getMangaID()));
 
-                                                        %>
-                                                        <c:forEach items="${cate}" var="category">
-                                                            <li>${category.getType()}</li>
-                                                        </c:forEach>
-                                                        
-                                                    </ul>
-                                                    <h5>${manga.getTitle()}</h5>
+                                                            %>
+                                                        <div class="ep">${chapters.size()} / ?</div>
+                                                       <!-- <div class="comment"><i class="bi bi-chat"></i> 21</div>
+                                                        <div class="view"><i class="bi bi-eye"></i> 7141</div> -->
+                                                    </div>
+                                                    <div class="product-card-con">
+                                                        <ul>
+                                                            <%
+                                                                request.setAttribute("cate", categoryDAO.getCategoriesByMangaID(manga.getMangaID()));
+
+                                                            %>
+                                                            <c:forEach items="${cate}" var="category">
+                                                                <li>${category.getType()}</li>
+                                                            </c:forEach>
+
+                                                        </ul>
+                                                        <h5>${manga.getTitle()}</h5>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                </c:forEach>
+                                            </a>
+                                        </div>
+                                    </c:forEach>
 
 
                                 </div>
                             </div>
                         </div>
-                        
+
 
                     </main>
                     <!-- subscribe section -->
@@ -228,7 +238,7 @@
                     <c:if test="${userSession == null || userSession.getRole().equals('Free')}">
                         <%@include file="layouts/layoustOthers/adsOthers.jsp" %>
                     </c:if>
-                    
+
                     <script src="main.js"></script>
                 </div>
             </section>

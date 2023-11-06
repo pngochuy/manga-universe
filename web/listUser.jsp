@@ -113,6 +113,7 @@
                 <nav>
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="home.jsp">Home</a></li>
+                        <li class="breadcrumb-item ">Dashboard</li>
                         <li class="breadcrumb-item active">List User</li>
                     </ol>
                 </nav>
@@ -168,7 +169,7 @@
                                                             <td><%= a.getCoinQuantity()%></td>
                                                             <td><%= a.getRole()%></td>
                                                             <td>
-                                                                <a href="DeleteUserServlet?userId=<%= a.getUserId()%>">Delete</a>
+                                                                <a class="btn btn-danger" href="DeleteUserServlet?userId=<%= a.getUserId()%>">Delete</a>
                                                             </td>
                                                         </tr>
                                                         <%

@@ -68,21 +68,21 @@ public class ViewChapterDetail extends HttpServlet {
         request.setCharacterEncoding("UTF-8"); // works fine
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
-
+        
         HttpSession mySession = request.getSession();
         MangaDAO mangaDAO = new MangaDAO();
         MangaCategoryDAO mangaCategoryDAO = new MangaCategoryDAO();
         CategoryDAO categoryDAO = new CategoryDAO();
-
+        
         ChapterDAO chapterDAO = new ChapterDAO();
         ImageSourceDAO imageSourceDAO = new ImageSourceDAO();
-
+        
         String action = request.getParameter("action");
         int mangaID = Integer.parseInt(request.getParameter("mangaID"));
-
+        
         Chapter chapter = new Chapter();
         ImageSource imageSource = new ImageSource();
-
+        
         if (action.equals("read-first-chapter")) {
             chapter = chapterDAO.getFirstChapterByMangaID(mangaID);
             imageSource = imageSourceDAO.getFirstImageSourcesByChapterID_MangaID(mangaID, mangaID);
@@ -95,14 +95,14 @@ public class ViewChapterDetail extends HttpServlet {
             // ...
             int chapterID = Integer.parseInt(request.getParameter("chapterID"));
             chapter = chapterDAO.getChapter(chapterID);
-
+            
         }
 
 //        out.println("chapter: " + chapter);
         // get all
         ArrayList<ImageSource> imageSourcelist = imageSourceDAO.getAllImageSourcesByChapterID_MangaID(chapter.getChapterID(), mangaID);
         ArrayList<Chapter> chapterList = chapterDAO.getAllChaptersByMangaID(mangaID);
-        
+
         /*
             - khi click vào sẽ bao gồm:
         + mảng Ảnh từng chapter của manga => imageSourcelist
@@ -111,8 +111,13 @@ public class ViewChapterDetail extends HttpServlet {
         + thông tin Chapter               => 
         + thông tin ImageSource           => imageSource
         
-        */
-        
+         */
+        if (chapterList == null || chapterList.isEmpty()) {
+            
+            response.sendRedirect("mangaSinglePage.jsp?mangaId=" + mangaID);
+            return;
+        }
+
 //        mySession.setAttribute("mangaToView", mangaDAO.getManga(mangaID));
         mySession.setAttribute("imageSourcelistToView", imageSourcelist);
         mySession.setAttribute("chapterListByMangaIDToView", chapterList);

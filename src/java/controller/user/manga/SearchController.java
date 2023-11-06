@@ -8,6 +8,8 @@ import dal.MangaDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +20,7 @@ import model.Manga;
  *
  * @author PC
  */
-public class SearchMangaSevlet extends HttpServlet {
+public class SearchController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,9 +33,15 @@ public class SearchMangaSevlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
         try ( PrintWriter out = response.getWriter()) {
             String txtSearch = request.getParameter("txtSearch");
             String indexString = request.getParameter("index");
+            String[] stringArray = request.getParameterValues("fullControl");
+            ArrayList<String> stringList = new ArrayList<>();
+            for (String string : stringArray) {
+                stringList.add(string);
+            }
 //            out.print(indexString);
             if (indexString == null) {
                 indexString = "1";
@@ -43,25 +51,23 @@ public class SearchMangaSevlet extends HttpServlet {
             MangaDAO dao = new MangaDAO();
             int countSearch = dao.getCountSearch(txtSearch);
 //            out.print(countSearch);
-            int pageSize = 12;
+            int pageSize = 6;
             int endPage = countSearch / pageSize;
             if (countSearch % pageSize != 0) {
                 endPage++;
 
             }
+            ArrayList<Manga> listMbyCate = dao.searchMangaByCategory(stringList);
 
-           ArrayList<Manga> listSearch = dao.searchMangaByTitle(txtSearch,index);
-//            if(listSearch.size() == 0){
-//                out.println("ko có danh sách");
-//            }else out.println("hank DP");
-//            out.print(listSearch);
+
             request.setAttribute("endS", endPage);
-            request.setAttribute("listSM", listSearch);
+            request.setAttribute("listMbyCate", listMbyCate);
             request.setAttribute("save", txtSearch);
             request.setAttribute("tag", index);
-
             request.getRequestDispatcher("advancedSearch.jsp").forward(request, response);
 
+        } catch (Exception ex) {
+            Logger.getLogger(SearchController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

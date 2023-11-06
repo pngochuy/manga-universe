@@ -68,7 +68,7 @@ public class NewMain {
 //        for (Chapter c : chapterDAO.getAllChaptersByMangaID(5)) {
 //            System.out.println(c);
 //        }
-        for (Manga m : mangaDAO.searchMangaByTitle("Ki", 1)) {
+        for (Manga m : mangaDAO.getMangasDescByDate()) {
             System.out.println(m);
         }
     }

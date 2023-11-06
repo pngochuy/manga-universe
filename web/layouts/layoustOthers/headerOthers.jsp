@@ -15,7 +15,7 @@
 
     <div class="d-flex align-items-center justify-content-between">
         <a href="home.jsp" class="logo d-flex align-items-center">
-            <img src="assetsMain/img/logo.png" alt="" width="100">
+            <img src="./assetsMain/img/logo.png" alt="" width="100">
             <span class="d-none d-lg-block" style="color: white">MangaUniverse</span>
         </a>
         <i class="bi bi-list toggle-sidebar-btn" style="color: white"></i>
