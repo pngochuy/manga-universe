@@ -114,7 +114,7 @@ import model.Category;
             }
 
             ArrayList<MangaCrawl> mangaCrawlList = new ArrayList<>();
-            ArrayList<Category> categoryCrawlList = new ArrayList<>();
+            ArrayList<ArrayList<Category>> categoryCrawlList = new ArrayList<>();
             
             for (String mangaUrl : encodedMangaUrlList) {
                 Document doc2 = Jsoup.connect(mangaUrl).get();
@@ -127,7 +127,7 @@ import model.Category;
                 for (Element genre : genresList.select("a")) {
                     String genreText = genre.text();
                     Category category = new Category(genreText, "category_crawl");
-                    categoryCrawlList.add(category);
+//                    categoryCrawlList.add(category);
 //                    genres.append(genreText).append(", ");
                 }
                 Element noidungmDiv = doc2.select("div#noidungm").first();

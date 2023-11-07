@@ -390,7 +390,7 @@ public class UserDAO extends DBContext {
 //-----------------------
     public ArrayList<User> getUsersData() {
         ArrayList<User> userList = new ArrayList<>();
-        String query = "SELECT userId, userName, createAt, role, coinQuantity FROM [MangaUniverse].[dbo].[Users];";
+        String query = "SELECT userId, userName, createAt, role, coinQuantity, email, gender  FROM [MangaUniverse].[dbo].[Users];";
         try {
             PreparedStatement statement = connection.prepareStatement(query);
             ResultSet resultSet = statement.executeQuery();
@@ -400,7 +400,10 @@ public class UserDAO extends DBContext {
                 String userName = resultSet.getString("userName");
                 java.sql.Timestamp createAt = resultSet.getTimestamp("createAt");
                 String role = resultSet.getString("role");
+                String email = resultSet.getString("email");
                 int coinQuantity = resultSet.getInt("coinQuantity");
+                int genderValue = resultSet.getInt("gender");
+                boolean gender = (genderValue == 1);
 
                 User user = new User();
                 user.setUserId(userID);
@@ -408,6 +411,8 @@ public class UserDAO extends DBContext {
                 user.setCreateAt(createAt.toLocalDateTime());
                 user.setCoinQuantity(coinQuantity);
                 user.setRole(role);
+                user.setEmail(email);
+                user.setGender(gender);
 
                 userList.add(user);
             }
@@ -652,4 +657,19 @@ public class UserDAO extends DBContext {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
+    public void deleteReport(int reportID) {
+        try {
+            String sql = "DELETE FROM Report WHERE reportId = ?";
+
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            ps.setInt(1, reportID);
+
+            ps.executeUpdate();
+
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

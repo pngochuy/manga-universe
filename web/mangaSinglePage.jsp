@@ -1,3 +1,6 @@
+<%@page import="model.ChapterCrawl"%>
+<%@page import="model.MangaCrawl"%>
+<%@page import="java.util.List"%>
 <%@page import="dal.ChapterDAO"%>
 <%@page import="model.Chapter"%>
 <%@page import="dal.UserDAO"%>
@@ -10,6 +13,11 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<%@ page import="org.jsoup.select.Elements"%>
+<%@ page import="org.jsoup.Jsoup" %>
+<%@ page import="org.jsoup.nodes.Document" %>
+<%@ page import="org.jsoup.nodes.Element" %>
 <!DOCTYPE html>
 <html lang="en">
     <script>
@@ -116,23 +124,6 @@
 
         <%@include file="layouts/layoustOthers/headerOthers.jsp" %> 
         <%@include file="layouts/layoustOthers/sidebarOthers.jsp" %>
-        <script>
-        document.getElementById("reportForm").addEventListener("submit", function (event) {
-            var mangaIDField = document.getElementById("mangaID");
-            var mangaIDValue = mangaIDField.value;
-
-            // Kiểm tra xem giá trị nhập vào có phải là một số nguyên hay không
-            if (!isInteger(mangaIDValue)) {
-                alert("Vui lòng nhập một số nguyên cho trường mangaID.");
-                event.preventDefault(); // Ngăn chặn việc gửi biểu mẫu nếu giá trị không hợp lệ
-            }
-        });
-
-        function isInteger(value) {
-            return /^\d+$/.test(value);
-        }
-        </script>
-
 
         <%
             MangaDAO mangaDAO = new MangaDAO();
@@ -154,14 +145,90 @@
                 session.setAttribute("categoriesByMangaDetail", categoriesByMangaDetail);
                 session.setAttribute("mangaListTop4", mangaDAO.getTop4MangaList());
                 session.setAttribute("chaptersByMangaDetail", chaptersByMangaDetail);
+                session.setAttribute("isCrawl", false);
 
+            } else {
+                String mangaCrawlID = request.getParameter("mangaCrawlID");
+                String url = "https://ww7.mangakakalot.tv/manga/" + mangaCrawlID;
+
+                ArrayList<Category> categoryCrawlList = new ArrayList<>();
+                if (url != null && !url.isEmpty()) {
+                    Document doc = Jsoup.connect(url).get();
+                    Element mangaInfoTop = doc.select("div.manga-info-top").first();
+                    String cover = mangaInfoTop.select("div.manga-info-pic img").attr("src");
+                    String urlCover = "https://ww7.mangakakalot.tv" + cover;
+                    String title = mangaInfoTop.select("h1").first().text();
+                    Element genresList = mangaInfoTop.select("li:contains(Genres)").first();
+                    StringBuilder genres = new StringBuilder();
+                    for (Element genre : genresList.select("a")) {
+                        String genreText = genre.text();
+                        Category category = new Category(genreText, "category_crawl");
+                        categoryCrawlList.add(category);
+//                    genres.append(genreText).append(", ");
+                    }
+
+                    if (genres.length() > 2) {
+                        genres.setLength(genres.length() - 2);
+                    }
+                    String author = mangaInfoTop.select("li:contains(Author(s)) a").text();
+                    Element chapterList = doc.select("div.chapter-list").first();
+                    List<Element> chapters = chapterList.select("div.row");
+                    Element noidungmDiv = doc.select("div#noidungm").first();
+                    String description = noidungmDiv.text();
+
+                    int chapterNumber = chapters.size(); // Số chương
+                    String chapterUrlFirst = chapterList.select("div.row").last().select("a").attr("href");
+                    String chapterUrlLast = chapterList.select("div.row").first().select("a").attr("href");
+
+                    String[] partsFirst = chapterUrlFirst.split("/");
+                    String chapterIDFirstCrawl = partsFirst[partsFirst.length - 1];
+                    String[] partsLast = chapterUrlLast.split("/");
+                    String chapterIDLastCrawl = partsLast[partsLast.length - 1];
+
+                    session.setAttribute("chapterIDFirstCrawl", chapterIDFirstCrawl);
+                    session.setAttribute("chapterIDLastCrawl", chapterIDLastCrawl);
+
+                    // MangaCrawl: title - urlCover - author 
+                    // CategoryCrawl: genres (categoryList) 
+                    // ChapterCrawl: chapters (chapterList)
+                    // ImageSourceCrawl: chapterContent.select("img") ->bên file khác
+//                    String[] parts = urlCover.split("/");
+//                    String filename = parts[parts.length - 1];
+//                    String[] filenameParts = filename.split("\\.");
+//                    String mangaCrawlID = filenameParts[0];
+                    ArrayList<ChapterCrawl> chaptersByMangaDetail = new ArrayList<>();
+                    for (Element chap : chapters) {
+                        String chapterTitle = chap.select("a").text();
+                        String Url = chap.select("a").attr("href");
+
+                        String[] parts2 = Url.split("/");
+                        String chapterID = parts2[parts2.length - 1];
+
+                        String createdAt = chap.select("span").last().text();
+
+                        ChapterCrawl chapter = new ChapterCrawl(chapterID, chapterTitle, "", mangaCrawlID, createdAt);
+                        chaptersByMangaDetail.add(chapter);
+                        String chapterUrl = "https://ww7.mangakakalot.tv/" + Url;
+//                        String encodedChapterUrl = java.net.URLEncoder.encode(chapterUrl, "UTF-8");
+
+                    }
+
+                    MangaCrawl mangaCrawl = new MangaCrawl(mangaCrawlID, title, description,
+                            author, false, true, urlCover);
+                    session.setAttribute("mangaDetail", mangaCrawl);
+                    session.setAttribute("categoriesByMangaDetail", categoryCrawlList);
+                    session.setAttribute("usernameDetail", author);
+                    session.setAttribute("mangaListTop4", mangaDAO.getTop4MangaList());
+                    session.setAttribute("chaptersByMangaDetail", chaptersByMangaDetail);
+                    session.setAttribute("isCrawl", true);
+                }
             }
-
         %>
 
         <main id="main" class="main">
             <section class="section profile">
                 <div class="row">
+
 
                     <!-- >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
                                          breadcrumb page start
@@ -199,48 +266,8 @@
                                     <img class="w-100 img-fluid" src="${mangaDetail.getCoverImage()}" alt="">
                                 </div>
                                 <div class="col-lg-6">
-                                    <!--                                    <form class="form-1 mb-3 mt-3">
-                                                                            <div class="form-field">
-                                                                                <span class="gl-star-rating gl-star-rating--ltr" data-star-rating="">
-                                                                                    <select id="glsr-ltr" class="star-rating">
-                                                                                        <option value="">Select a rating</option>
-                                                                                        <option value="5">5</option>
-                                                                                        <option value="4" selected="">4</option>
-                                                                                        <option value="3">3</option>
-                                                                                        <option value="2">2</option>
-                                                                                        <option value="1">1</option>
-                                                                                    </select>
-                                                                                </span>
-                                                                                <div class="rating-box">
-                                                                                     <header>Rating manga</header> 
-                                                                                    <div class="stars">
-                                                                                        <i class="bi bi-star-fill"></i>
-                                                                                        <i class="bi bi-star-fill"></i>
-                                                                                        <i class="bi bi-star-fill"></i>
-                                                                                        <i class="bi bi-star-fill"></i>
-                                                                                        <i class="bi bi-star-fill"></i>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <script>
-                                                                                    const stars = document.querySelectorAll(".stars i");
-                                    
-                                                                                    stars.forEach((star, index1) => {
-                                                                                        star.addEventListener("click", () => {
-                                                                                            stars.forEach((star, index2) => {
-                                    
-                                                                                                index1 >= index2 ? star.classList.add("active") : star.classList.remove("active");
-                                                                                            });
-                                                                                        });
-                                                                                    });
-                                                                                </script>
-                                                                            </div>
-                                                                        </form>-->
                                     <div class="manga_info">
                                         <ul>
-                                            <!--                                            <li class="d-flex flex-wrap">
-                                                                                            <h6>Rating</h6>
-                                                                                            <p>Average 4 / 5 out of 87</p>
-                                                                                        </li>-->
                                             <li class="d-flex flex-wrap">
                                                 <h6>Rank </h6>
                                                 <p>N/A, it has 333.4K views </p>
@@ -249,13 +276,12 @@
                                                 <!--alternative keyword-->
                                                 <h6>Alternative </h6> 
                                                 <p>${mangaDetail.getTitle()}</p>
-                                                <!--<p>Boy in A Girls' School ; Nuzi Xueyuan de Nansheng</p>-->
                                             </li>
                                             <li class="d-flex flex-wrap">
                                                 <h6>Category(s) </h6>
                                                 <p>
                                                     <c:forEach items="${categoriesByMangaDetail}" var="category" varStatus="loop">
-                                                        <a href="genres.jsp">${category.getType()}</a>
+                                                        <a href="OneGenreServlet?selectedCategory=${category.type}">${category.type}</a>
                                                         <c:if test="${!loop.last}">,</c:if>
                                                     </c:forEach>
                                                 </p>
@@ -267,12 +293,21 @@
 
                                             <!--KO CHO GUEST SUBMIT-->
                                             <li class="d-flex flex-wrap watch">
-                                                <a class="mr-2" href="ViewChapterDetail?action=read-first-chapter&mangaID=${mangaDetail.getMangaID()}">Read First</a>
-                                                <a  class="mr-2" href="ViewChapterDetail?action=read-last-chapter&mangaID=${mangaDetail.getMangaID()}">Read Last</a>
-                                                <c:if test="${sessionScope.userSession != null}">
-                                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalDialogScrollable">
-                                                        Report
-                                                    </button>
+                                                <c:if test="${isCrawl == true}">
+                                                    <a class="mr-2" href="ViewChapterDetail?action=read-first-chapter&mangaCrawlID=${mangaDetail.getMangaID()}&chapterCrawlID=${chapterIDFirstCrawl}">Read First</a>
+                                                    <a  class="mr-2" href="ViewChapterDetail?action=read-last-chapter&mangaCrawlID=${mangaDetail.getMangaID()}&chapterCrawlID=${chapterIDLastCrawl}">Read Last</a>
+
+                                                </c:if>
+                                                <c:if test="${isCrawl == false}">
+                                                    <a class="mr-2" href="ViewChapterDetail?action=read-first-chapter&mangaID=${mangaDetail.getMangaID()}">Read First</a>
+                                                    <a  class="mr-2" href="ViewChapterDetail?action=read-last-chapter&mangaID=${mangaDetail.getMangaID()}">Read Last</a>
+                                                    <c:if test="${isCrawl == false}">
+                                                    </c:if>
+                                                    <c:if test="${sessionScope.userSession != null}">
+                                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalDialogScrollable">
+                                                            Report
+                                                        </button>
+                                                    </c:if>
                                                 </c:if>
                                             </li>
                                         </ul>
@@ -300,29 +335,7 @@
                                             </div>
                                             <div id="result"></div>
                                         </div>
-                                    </div><!-- 
-                                                                    <div class="col-lg-3">
-                                                                        <div class="manga_info">
-                                                                            <ul>
-                                                                                <li class="d-flex mt-3">
-                                                                                    <h6>Status </h6>
-                                                                                    <p>OnGoing </p>
-                                                                                </li>
-                                    <!--                                            <li class="d-flex justify-content-center align-center">
-                                                                                    <div class="feedback_box">
-                                                                                        <a href="#commentbox">
-                                                                                            <i class="bi bi-chat-dots-fill"></i>
-                                                                                            <h6>12 Comments</h6>
-                                                                                        </a>
-                                                                                    </div>
-                                                                                    <div class="feedback_box">
-                                                                                        <a href="#">
-                                                                                            <i class="bi bi-bookmark-fill"></i>
-                                                                                            <h6>Bookmark
-                                                                                            </h6>
-                                                                                        </a>
-                                                                                    </div>
-                                                                                </li>-->
+                                    </div>
                                     </ul>
                                 </div>
                             </div>
@@ -374,17 +387,55 @@
                                         <h3>LATEST CHAPTER RELEASES</h3>
                                     </div>
                                     <ul class="chapter mb-3">
-                                        <c:forEach items="${chaptersByMangaDetail}" var="chapter" varStatus="loop">
-                                            <c:if test="${loop.index < 2}">
-                                                <li>
-                                                    <a href="ViewChapterDetail?action=read-chapter&mangaID=${mangaDetail.getMangaID()}&chapterID=${chapter.getChapterID()}"
-                                                       class="d-flex flex-wrap justify-content-between">
-                                                        <span>${chapter.getTitle()} - ${chapter.getDescription()}</span><span>${chapter.getCreateAtFormat()} </span>
-                                                    </a>
-                                                </li>
+
+                                        <c:if test="${sessionScope.userSession == null}">
+                                            <c:if test="${isCrawl == false}">
+                                                <c:forEach items="${chaptersByMangaDetail}" var="chapter" varStatus="loop">
+                                                    <c:if test="${loop.index >= (chaptersByMangaDetail.size()-2)}">
+                                                        <li>
+                                                            <a href="ViewChapterDetail?action=read-chapter&mangaID=${mangaDetail.getMangaID()}&chapterID=${chapter.getChapterID()}"
+                                                               class="d-flex flex-wrap justify-content-between">
+                                                                <span>${chapter.getTitle()} - ${chapter.getDescription()}</span><span>${chapter.getCreateAtFormat()} </span>
+                                                            </a>
+                                                        </li>
+                                                    </c:if>
+
+                                                    <c:if test="${loop.index < (chaptersByMangaDetail.size()-2)}">
+                                                        <li>
+                                                            <a href="ViewChapterDetail?action=read-chapter&mangaID=${mangaDetail.getMangaID()}&chapterID=${chapter.getChapterID()}"
+                                                               class="d-flex flex-wrap justify-content-between disabled-link">
+                                                                <span>${chapter.getTitle()} - ${chapter.getDescription()} <i class="bi bi-lock-fill"></i></span><span>${chapter.getCreateAtFormat()} </span>
+                                                            </a>
+                                                        </li>
+                                                    </c:if>
+
+                                                </c:forEach>
                                             </c:if>
 
-                                        </c:forEach>
+                                            <c:if test="${isCrawl == true}">
+                                                <c:forEach items="${chaptersByMangaDetail}" var="chapter" varStatus="loop">
+                                                    <c:if test="${loop.index >= (chaptersByMangaDetail.size()-2)}">
+                                                        <li>
+                                                            <a href="ViewChapterDetail?action=read-chapter&mangaCrawlID=${mangaDetail.getMangaID()}&chapterCrawlID=${chapter.getChapterID()}"
+                                                               class="d-flex flex-wrap justify-content-between">
+                                                                <span>${chapter.getTitle()} - ${chapter.getDescription()}</span><span>${chapter.getCreateAtFormat()} </span>
+                                                            </a>
+                                                        </li>
+                                                    </c:if>
+
+                                                    <c:if test="${loop.index < (chaptersByMangaDetail.size()-2)}">
+                                                        <li>
+                                                            <a href="ViewChapterDetail?action=read-chapter&mangaCrawlID=${mangaDetail.getMangaID()}&chapterCrawlID=${chapter.getChapterID()}"
+                                                               class="d-flex flex-wrap justify-content-between disabled-link">
+                                                                <span>${chapter.getTitle()} - ${chapter.getDescription()} <i class="bi bi-lock-fill"></i></span><span>${chapter.getCreateAtFormat()} </span>
+                                                            </a>
+                                                        </li>
+                                                    </c:if>
+
+                                                </c:forEach>
+                                            </c:if>           
+                                        </c:if>
+
 
 
 
@@ -392,21 +443,55 @@
                                         <c:if test="${sessionScope.userSession != null}">
                                             <% User u4 = (User) session.getAttribute("userSession");%>
                                             <% if (u4.getRole().equalsIgnoreCase("Free")) {%>
-                                            <c:forEach items="${chaptersByMangaDetail}" var="chapter" varStatus="loop">
-                                                <c:if test="${loop.index >= 2}">
-                                                    <li>
-                                                        <a href="ViewChapterDetail?action=read-chapter&mangaID=${mangaDetail.getMangaID()}&chapterID=${chapter.getChapterID()}"
-                                                           class="d-flex flex-wrap justify-content-between disabled-link">
-                                                            <span>${chapter.getTitle()} - ${chapter.getDescription()} <i class="bi bi-lock-fill"></i></span><span>${chapter.getCreateAtFormat()} </span>
-                                                        </a>
-                                                    </li>
-                                                </c:if>
+                                            <c:if test="${isCrawl == false}">
+                                                <c:forEach items="${chaptersByMangaDetail}" var="chapter" varStatus="loop">
+                                                    <c:if test="${loop.index >= (chaptersByMangaDetail.size()-2)}">
+                                                        <li>
+                                                            <a href="ViewChapterDetail?action=read-chapter&mangaID=${mangaDetail.getMangaID()}&chapterID=${chapter.getChapterID()}"
+                                                               class="d-flex flex-wrap justify-content-between">
+                                                                <span>${chapter.getTitle()} - ${chapter.getDescription()}</span><span>${chapter.getCreateAtFormat()} </span>
+                                                            </a>
+                                                        </li>
+                                                    </c:if>
 
-                                            </c:forEach>
+                                                    <c:if test="${loop.index < (chaptersByMangaDetail.size()-2)}">
+                                                        <li>
+                                                            <a href="ViewChapterDetail?action=read-chapter&mangaID=${mangaDetail.getMangaID()}&chapterID=${chapter.getChapterID()}"
+                                                               class="d-flex flex-wrap justify-content-between disabled-link">
+                                                                <span>${chapter.getTitle()} - ${chapter.getDescription()} <i class="bi bi-lock-fill"></i></span><span>${chapter.getCreateAtFormat()} </span>
+                                                            </a>
+                                                        </li>
+                                                    </c:if>
+
+                                                </c:forEach>
+                                            </c:if>
+
+                                            <c:if test="${isCrawl == true}">
+                                                <c:forEach items="${chaptersByMangaDetail}" var="chapter" varStatus="loop">
+                                                    <c:if test="${loop.index >= (chaptersByMangaDetail.size()-2)}">
+                                                        <li>
+                                                            <a href="ViewChapterDetail?action=read-chapter&mangaCrawlID=${mangaDetail.getMangaID()}&chapterCrawlID=${chapter.getChapterID()}"
+                                                               class="d-flex flex-wrap justify-content-between">
+                                                                <span>${chapter.getTitle()} - ${chapter.getDescription()}</span><span>${chapter.getCreateAtFormat()} </span>
+                                                            </a>
+                                                        </li>
+                                                    </c:if>
+
+                                                    <c:if test="${loop.index < (chaptersByMangaDetail.size()-2)}">
+                                                        <li>
+                                                            <a href="ViewChapterDetail?action=read-chapter&mangaCrawlID=${mangaDetail.getMangaID()}&chapterCrawlID=${chapter.getChapterID()}"
+                                                               class="d-flex flex-wrap justify-content-between disabled-link">
+                                                                <span>${chapter.getTitle()} - ${chapter.getDescription()} <i class="bi bi-lock-fill"></i></span><span>${chapter.getCreateAtFormat()} </span>
+                                                            </a>
+                                                        </li>
+                                                    </c:if>
+
+                                                </c:forEach>
+                                            </c:if>    
 
                                             <% } else if (u4.getRole().equalsIgnoreCase("Premium") || u4.getRole().equalsIgnoreCase("Author")) {%>
                                             <c:forEach items="${chaptersByMangaDetail}" var="chapter" varStatus="loop">
-                                                <c:if test="${loop.index >= 2}">
+                                                <c:if test="${isCrawl == false}">
                                                     <li>
                                                         <a href="ViewChapterDetail?action=read-chapter&mangaID=${mangaDetail.getMangaID()}&chapterID=${chapter.getChapterID()}"
                                                            class="d-flex flex-wrap justify-content-between">
@@ -414,23 +499,21 @@
                                                         </a>
                                                     </li>
                                                 </c:if>
+                                                <c:if test="${isCrawl == true}">
 
-                                            </c:forEach>
-                                            <% }%>
-                                        </c:if>
-                                        <c:if test="${sessionScope.userSession == null}">
-                                            <c:forEach items="${chaptersByMangaDetail}" var="chapter" varStatus="loop">
-                                                <c:if test="${loop.index >= 2}">
                                                     <li>
-                                                        <a href="ViewChapterDetail?action=read-chapter&mangaID=${mangaDetail.getMangaID()}&chapterID=${chapter.getChapterID()}"
-                                                           class="d-flex flex-wrap justify-content-between disabled-link">
-                                                            <span>${chapter.getTitle()} - ${chapter.getDescription()} <i class="bi bi-lock-fill"></i></span><span>${chapter.getCreateAtFormat()} </span>
+                                                        <a href="ViewChapterDetail?action=read-chapter&mangaCrawlID=${mangaDetail.getMangaID()}&chapterCrawlID=${chapter.getChapterID()}"
+                                                           class="d-flex flex-wrap justify-content-between">
+                                                            <span>${chapter.getTitle()} - ${chapter.getDescription()}</span><span>${chapter.getCreateAtFormat()} </span>
                                                         </a>
                                                     </li>
                                                 </c:if>
 
+
                                             </c:forEach>
+                                            <% }%>
                                         </c:if>
+
 
                                     </ul>
                                 </div>

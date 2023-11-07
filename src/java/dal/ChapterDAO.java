@@ -168,8 +168,9 @@ public class ChapterDAO extends DBContext {
     // get all chapters by MangaID
     public ArrayList<Chapter> getAllChaptersByMangaID(int mangaID) {
         try {
-            String sql = "SELECT * FROM [Chapter]"
-                    + "WHERE mangaID = ?;";
+            String sql = "SELECT * FROM [Chapter]\n"
+                    + "WHERE mangaID = ?\n" // Co khoang cách moi run dc
+                    + "ORDER BY createAt DESC;";
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, mangaID);
 
@@ -228,6 +229,7 @@ public class ChapterDAO extends DBContext {
 
         return null;
     }
+
     // get chapter
     public Chapter getChapterByMangaID(int chapterID) {
         try {

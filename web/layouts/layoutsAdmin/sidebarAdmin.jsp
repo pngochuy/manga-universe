@@ -21,7 +21,7 @@
 
         </li>
         <li class="nav-item">
-            <a class="nav-link collapsed" href="mangaVerify.jsp">
+            <a class="nav-link collapsed" href="authorVerify.jsp">
                 <i class="fa fa-check"></i><span>Verify </span><i class="bi"></i>
             </a>
         </li>

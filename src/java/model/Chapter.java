@@ -36,6 +36,13 @@ public class Chapter {
         this.createAt = createAt;
     }
 
+    public Chapter(int chapterID, String title, String description, int mangaID) {
+        this.chapterID = chapterID;
+        this.title = title;
+        this.description = description;
+        this.mangaID = mangaID;
+    }
+
     
 
     public int getChapterID() {

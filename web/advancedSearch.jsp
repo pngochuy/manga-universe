@@ -186,7 +186,7 @@
 
                                     <div class="mb-5">
                                         <div class="title">
-                                            <h2 class="fw-bold">Result</h2>
+                                            <h2 class="fw-bold mt-4 mb-5">Result</h2>
                                             <div class="row mt-2">
 
                                                 <c:forEach var="manga" items="${listMbyCate}" varStatus="loop"> 
@@ -211,8 +211,9 @@
                                                                 </div>
                                                                 <div class="product-card-con">
                                                                     <ul>
-                                                                        <%  
-                                                                            request.setAttribute("cate", categoryDAO.getCategoriesByMangaID(manga.getMangaID()));
+                                                                        <% 
+                                                                            CategoryDAO categoryDAO2 = new CategoryDAO();
+                                                                            request.setAttribute("cate", categoryDAO2.getCategoriesByMangaID(manga.getMangaID()));
 
                                                                         %>
                                                                         <c:forEach items="${cate}" var="category">
@@ -237,7 +238,7 @@
                                                                      data-setbg="${manga.getCoverImage()}">
                                                                     <!--so chapter => UPDATE!!-->
                                                                     <c:set var="manga" value="${manga}" />
-                                                                    <%
+                                                                    <%  
                                                                         Manga manga = (Manga) pageContext.getAttribute("manga");
                                                                         ChapterDAO chapterDAO = new ChapterDAO();
                                                                         request.setAttribute("chapters", chapterDAO.getAllChaptersByMangaID(manga.getMangaID()));
@@ -249,8 +250,7 @@
                                                                 </div>
                                                                 <div class="product-card-con">
                                                                     <ul>
-                                                                        <%  
-                                                                            request.setAttribute("cate", categoryDAO.getCategoriesByMangaID(manga.getMangaID()));
+                                                                        <%                                                                            request.setAttribute("cate", categoryDAO.getCategoriesByMangaID(manga.getMangaID()));
 
                                                                         %>
                                                                         <c:forEach items="${cate}" var="category">

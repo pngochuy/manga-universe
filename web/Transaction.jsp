@@ -167,7 +167,7 @@
                                         <td><%= transaction.getBank()%></td>
                                         <td><%= transaction.getPaymentContent()%></td>
                                         <td><%= transaction.getAmount()%></td>
-                                        <td><%= transaction.getDateofpayment()%></td>
+                                        <td><%= transaction.getDateofpaymentFormat()%></td>
                                         <td><%= transaction.getStatus()%></td>
                                     </tr>
                                     <%

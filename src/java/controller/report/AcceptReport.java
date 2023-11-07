@@ -4,13 +4,21 @@
  */
 package controller.report;
 
+import dal.MangaDAO;
+import dal.NotificationDAO;
 import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import model.Manga;
+import model.Notification;
+import model.User;
 
 /**
  *
@@ -35,7 +43,7 @@ public class AcceptReport extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet AcceptReport</title>");            
+            out.println("<title>Servlet AcceptReport</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet AcceptReport at " + request.getContextPath() + "</h1>");
@@ -55,13 +63,31 @@ public class AcceptReport extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       int mangaID = Integer.parseInt(request.getParameter("mangaID"));
+        int mangaID = Integer.parseInt(request.getParameter("mangaID"));
+        int reportID = Integer.parseInt(request.getParameter("reportID"));
+        HttpSession mySession = request.getSession();
+        UserDAO userDAO = new UserDAO();
+        User userSession = (User) mySession.getAttribute("userSession");
+        // Gọi phương thức xóa người dùng từ DAO
+        int id = userSession.getUserId();
+        userDAO.deleteReport(reportID);
 
         // Gọi phương thức xóa người dùng từ DAO
-        UserDAO userDAO = new UserDAO();
-        userDAO.deleteManga(mangaID);
+        MangaDAO mangaDAO = new MangaDAO();
+        Manga m = mangaDAO.getManga(mangaID);
+        mangaDAO.delete(m);
 
         // Redirect hoặc forward tới trang kết quả
+        ///xu ly noti
+        NotificationDAO notificationDAO = new NotificationDAO();
+        List<Notification> notifications = notificationDAO.getAllNotifications();
+        Notification newNotification = new Notification();
+        newNotification.setUserID(Integer.parseInt(request.getParameter("userID")));
+        newNotification.setMessage("Your request to become Author has been approved");
+        newNotification.setNotificationDate(new Date());
+        newNotification.setIsRead(false);
+
+        notificationDAO.insertNotification(newNotification);
         response.sendRedirect("listReport.jsp");
     }
 

@@ -64,7 +64,12 @@
                                         <ol class="breadcrumb">
                                             <li class="breadcrumb-item"><a href="../home.jsp">Home</a></li>
                                             <li class="breadcrumb-item"><a href="../follows/readingHistory.jsp">All Manga</a></li>
-                                            <li class="breadcrumb-item"><a href="../mangaSinglePage.jsp">${mangaDetail.getTitle()} </a></li>
+                                                <c:if test="${isCrawl}">
+                                                <li class="breadcrumb-item"><a href="../mangaSinglePage.jsp?mangaCrawlID=${mangaDetail.getMangaID()}">${mangaDetail.getTitle()} </a></li>
+                                                </c:if>
+                                                <c:if test="${isCrawl == false}">
+                                                <li class="breadcrumb-item"><a href="../mangaSinglePage.jsp?mangaId=${mangaDetail.getMangaID()}">${mangaDetail.getTitle()} </a></li>
+                                                </c:if>
                                             <li class="breadcrumb-item active" aria-current="page">${chapterToView.getTitle()} - ${chapterToView.getDescription()}</li>
                                         </ol> 
                                     </nav>
@@ -98,14 +103,83 @@
                                 <div class="col-lg-6 mb-30 mt-30">
                                     <select class="form-select form-select-sm" aria-label=".form-select-sm example"
                                             onchange="javascript:handleSelect(this)">
-                                        <c:forEach items="${chapterListByMangaIDToView}" var="chapter">
+                                        <c:forEach items="${chapterListByMangaIDToView}" var="chapter" varStatus="loop">
+                                            <c:if test="${isCrawl == false}">
+                                                <c:if test="${sessionScope.userSession != null}">
+                                                    <c:if test="${sessionScope.userSession.getRole().equals('Premium') || sessionScope.userSession.getRole().equals('Author')}">
+                                                        <c:if test="${chapterToView.getChapterID() == chapter.getChapterID()}">
+                                                            <option value="/MangaUniverse/ViewChapterDetail?action=read-chapter&mangaID=${mangaDetail.getMangaID()}&chapterID=${chapter.getChapterID()}" selected="" disabled="">${chapter.getTitle()} - ${chapter.getDescription()}</option>
+                                                        </c:if>
 
-                                            <c:if test="${chapterToView.getChapterID() == chapter.getChapterID()}">
-                                                <option value="/MangaUniverse/ViewChapterDetail?action=read-chapter&mangaID=${mangaDetail.getMangaID()}&chapterID=${chapter.getChapterID()}" selected="" disabled="">${chapter.getTitle()} - ${chapter.getDescription()}</option>
+                                                        <c:if test="${chapterToView.getChapterID() != chapter.getChapterID()}">
+                                                            <option value="/MangaUniverse/ViewChapterDetail?action=read-chapter&mangaID=${mangaDetail.getMangaID()}&chapterID=${chapter.getChapterID()}">${chapter.getTitle()} - ${chapter.getDescription()}</option>
+                                                        </c:if>
+                                                    </c:if>
+
+                                                    <c:if test="${sessionScope.userSession.getRole().equals('Free')}">
+                                                        <c:if test="${loop.index > (chapterListByMangaIDToView.size()-2)}">
+                                                            <c:if test="${chapterToView.getChapterID() == chapter.getChapterID()}">
+                                                                <option value="/MangaUniverse/ViewChapterDetail?action=read-chapter&mangaID=${mangaDetail.getMangaID()}&chapterID=${chapter.getChapterID()}" selected="" disabled="">${chapter.getTitle()} - ${chapter.getDescription()}</option>
+                                                            </c:if>
+                                                        </c:if>
+
+                                                        <c:if test="${loop.index <= (chapterListByMangaIDToView.size()-2)}">
+                                                            <c:if test="${chapterToView.getChapterID() != chapter.getChapterID()}">
+                                                                <option value="/MangaUniverse/ViewChapterDetail?action=read-chapter&mangaID=${mangaDetail.getMangaID()}&chapterID=${chapter.getChapterID()}">${chapter.getTitle()} - ${chapter.getDescription()}</option>
+                                                            </c:if>
+                                                        </c:if>
+                                                    </c:if>
+                                                </c:if>
+                                                <c:if test="${sessionScope.userSession == null}">
+                                                    <c:if test="${chapterToView.getChapterID() == chapter.getChapterID()}">
+                                                        <option value="/MangaUniverse/ViewChapterDetail?action=read-chapter&mangaID=${mangaDetail.getMangaID()}&chapterID=${chapter.getChapterID()}" selected="" disabled="">${chapter.getTitle()} - ${chapter.getDescription()}</option>
+                                                    </c:if>
+
+                                                    <c:if test="${chapterToView.getChapterID() != chapter.getChapterID()}">
+                                                        <option value="/MangaUniverse/ViewChapterDetail?action=read-chapter&mangaID=${mangaDetail.getMangaID()}&chapterID=${chapter.getChapterID()}">${chapter.getTitle()} - ${chapter.getDescription()}</option>
+                                                    </c:if>
+                                                </c:if>
                                             </c:if>
 
-                                            <c:if test="${chapterToView.getChapterID() != chapter.getChapterID()}">
-                                                <option value="/MangaUniverse/ViewChapterDetail?action=read-chapter&mangaID=${mangaDetail.getMangaID()}&chapterID=${chapter.getChapterID()}">${chapter.getTitle()} - ${chapter.getDescription()}</option>
+                                            <c:if test="${isCrawl == true}">
+                                                <c:if test="${sessionScope.userSession != null}">
+                                                    <c:if test="${sessionScope.userSession.getRole().equals('Premium') || sessionScope.userSession.getRole().equals('Author')}">
+                                                        <c:if test="${chapterToView.getChapterID() == chapter.getChapterID()}">
+                                                            <option value="/MangaUniverse/ViewChapterDetail?action=read-chapter&mangaCrawlID=${mangaDetail.getMangaID()}&chapterCrawlID=${chapter.getChapterID()}" selected="" disabled="">${chapter.getTitle()} - ${chapter.getDescription()}</option>
+                                                        </c:if>
+
+                                                        <c:if test="${chapterToView.getChapterID() != chapter.getChapterID()}">
+                                                            <option value="/MangaUniverse/ViewChapterDetail?action=read-chapter&mangaCrawlID=${mangaDetail.getMangaID()}&chapterCrawlID=${chapter.getChapterID()}">${chapter.getTitle()} - ${chapter.getDescription()}</option>
+                                                        </c:if>
+                                                    </c:if>       
+
+                                                    <c:if test="${sessionScope.userSession.getRole().equals('Free')}">
+
+                                                        <c:if test="${loop.index > (chapterListByMangaIDToView.size()-2)}">
+                                                            <c:if test="${chapterToView.getChapterID() == chapter.getChapterID()}">
+                                                                <option value="/MangaUniverse/ViewChapterDetail?action=read-chapter&mangaCrawlID=${mangaDetail.getMangaID()}&chapterCrawlID=${chapter.getChapterID()}" selected="" disabled="">${chapter.getTitle()} - ${chapter.getDescription()}</option>
+                                                            </c:if>
+                                                        </c:if>
+
+                                                        <c:if test="${loop.index <= (chapterListByMangaIDToView.size()-2)}">
+                                                            <c:if test="${chapterToView.getChapterID() != chapter.getChapterID()}">
+                                                                <option disabled="" value="/MangaUniverse/ViewChapterDetail?action=read-chapter&mangaCrawlID=${mangaDetail.getMangaID()}&chapterCrawlID=${chapter.getChapterID()}">${chapter.getTitle()} - ${chapter.getDescription()}</option>
+                                                            </c:if>
+                                                        </c:if>
+                                                    </c:if>
+
+                                                </c:if>
+                                                <c:if test="${sessionScope.userSession == null}">
+                                                    <c:if test="${loop.index > (chapterListByMangaIDToView.size()-2)}">
+                                                        <c:if test="${chapterToView.getChapterID() == chapter.getChapterID()}">
+                                                            <option value="/MangaUniverse/ViewChapterDetail?action=read-chapter&mangaCrawlID=${mangaDetail.getMangaID()}&chapterCrawlID=${chapter.getChapterID()}" selected="" disabled="">${chapter.getTitle()} - ${chapter.getDescription()}</option>
+                                                        </c:if>
+                                                    </c:if>
+
+                                                    <c:if test="${loop.index <= (chapterListByMangaIDToView.size()-2)}">
+                                                        <option disabled="" value="/MangaUniverse/ViewChapterDetail?action=read-chapter&mangaCrawlID=${mangaDetail.getMangaID()}&chapterCrawlID=${chapter.getChapterID()}">${chapter.getTitle()} - ${chapter.getDescription()}</option>
+                                                    </c:if>
+                                                </c:if>
                                             </c:if>
                                         </c:forEach>
 
@@ -116,8 +190,15 @@
                                     <div class="manga_info">
                                         <ul>
                                             <li class="d-flex flex-wrap watch justify-content-end">
-                                                <a class="mr-2" href="javascript:navigateChapters(-1)"><i class="fa-solid fa-arrow-left"></i> Prev</a>
-                                                <a href="javascript:navigateChapters(1)">Next <i class="fa-solid fa-arrow-right"></i></a>
+                                                <c:if test="${isCrawl == false}">
+
+                                                    <a class="mr-2" href="javascript:navigateChapters(1)"><i class="fa-solid fa-arrow-left"></i> Prev</a>
+                                                    <a href="javascript:navigateChapters(-1)">Next <i class="fa-solid fa-arrow-right"></i></a>
+                                                    </c:if>
+                                                    <c:if test="${isCrawl == true}">
+                                                    <a class="mr-2" href="javascript:navigateChapters(1)"><i class="fa-solid fa-arrow-left"></i> Prev</a>
+                                                    <a href="javascript:navigateChapters(-1)">Next <i class="fa-solid fa-arrow-right"></i></a>
+                                                    </c:if>
                                             </li>
                                         </ul>
                                     </div>
@@ -140,13 +221,23 @@
                                     <select class="form-select form-select-sm" aria-label=".form-select-sm example"
                                             onchange="javascript:handleSelect(this)">
                                         <c:forEach items="${chapterListByMangaIDToView}" var="chapter">
+                                            <c:if test="${isCrawl == false}">
+                                                <c:if test="${chapterToView.getChapterID() == chapter.getChapterID()}">
+                                                    <option value="/MangaUniverse/ViewChapterDetail?action=read-chapter&mangaID=${mangaDetail.getMangaID()}&chapterID=${chapter.getChapterID()}" selected="" disabled="">${chapter.getTitle()} - ${chapter.getDescription()}</option>
+                                                </c:if>
 
-                                            <c:if test="${chapterToView.getChapterID() == chapter.getChapterID()}">
-                                                <option value="/MangaUniverse/ViewChapterDetail?action=read-chapter&mangaID=${mangaDetail.getMangaID()}&chapterID=${chapter.getChapterID()}" selected="" disabled="">${chapter.getTitle()} - ${chapter.getDescription()}</option>
+                                                <c:if test="${chapterToView.getChapterID() != chapter.getChapterID()}">
+                                                    <option value="/MangaUniverse/ViewChapterDetail?action=read-chapter&mangaID=${mangaDetail.getMangaID()}&chapterID=${chapter.getChapterID()}">${chapter.getTitle()} - ${chapter.getDescription()}</option>
+                                                </c:if>
                                             </c:if>
+                                            <c:if test="${isCrawl == true}">
+                                                <c:if test="${chapterToView.getChapterID() == chapter.getChapterID()}">
+                                                    <option value="/MangaUniverse/ViewChapterDetail?action=read-chapter&mangaCrawlID=${mangaDetail.getMangaID()}&chapterCrawlID=${chapter.getChapterID()}" selected="" disabled="">${chapter.getTitle()} - ${chapter.getDescription()}</option>
+                                                </c:if>
 
-                                            <c:if test="${chapterToView.getChapterID() != chapter.getChapterID()}">
-                                                <option value="/MangaUniverse/ViewChapterDetail?action=read-chapter&mangaID=${mangaDetail.getMangaID()}&chapterID=${chapter.getChapterID()}">${chapter.getTitle()} - ${chapter.getDescription()}</option>
+                                                <c:if test="${chapterToView.getChapterID() != chapter.getChapterID()}">
+                                                    <option value="/MangaUniverse/ViewChapterDetail?action=read-chapter&mangaCrawlID=${mangaDetail.getMangaID()}&chapterCrawlID=${chapter.getChapterID()}">${chapter.getTitle()} - ${chapter.getDescription()}</option>
+                                                </c:if>
                                             </c:if>
                                         </c:forEach>
 
@@ -157,8 +248,15 @@
                                     <div class="manga_info">
                                         <ul>
                                             <li class="d-flex flex-wrap watch justify-content-end">
-                                                <a class="mr-2" href="javascript:navigateChapters(-1)"><i class="fa-solid fa-arrow-left"></i> Prev</a>
-                                                <a href="javascript:navigateChapters(1)">Next <i class="fa-solid fa-arrow-right"></i></a>
+                                                <c:if test="${isCrawl == false}">
+
+                                                    <a class="mr-2" href="javascript:navigateChapters(1)"><i class="fa-solid fa-arrow-left"></i> Prev</a>
+                                                    <a href="javascript:navigateChapters(-1)">Next <i class="fa-solid fa-arrow-right"></i></a>
+                                                    </c:if>
+                                                    <c:if test="${isCrawl == true}">
+                                                    <a class="mr-2" href="javascript:navigateChapters(1)"><i class="fa-solid fa-arrow-left"></i> Prev</a>
+                                                    <a href="javascript:navigateChapters(-1)">Next <i class="fa-solid fa-arrow-right"></i></a>
+                                                    </c:if>
                                             </li>
                                         </ul>
                                     </div>
@@ -186,8 +284,15 @@
                                         <!--                                        <div class="fb-comments" data-href="https://developers.facebook.com/docs/plugins/comments#configurator" 
                                                                                      data-width="700" data-numposts="5"></div>-->
 
-                                        <div class="fb-comments" data-href="chapter.jsp?mangaID=${mangaDetail.getMangaID()}&chapterID=${chapterToView.getChapterID()}" 
-                                             data-width="700" data-numposts="5"></div>
+
+                                        <c:if test="${isCrawl == false}">
+                                            <div class="fb-comments" data-href="chapter.jsp?mangaID=${mangaDetail.getMangaID()}&chapterID=${chapterToView.getChapterID()}" 
+                                                 data-width="700" data-numposts="5"></div>
+                                        </c:if>
+                                        <c:if test="${isCrawl == true}">
+                                            <div class="fb-comments" data-href="chapter.jsp?mangaCrawlID=${mangaDetail.getMangaID()}&chapterCrawlID=${chapterToView.getChapterID()}" 
+                                                 data-width="700" data-numposts="5"></div>
+                                        </c:if>
 <!--                                        <div class="fb-comments" data-href="http://localhost:8080/MangaUniverse/chapter/chapter.jsp?mangaID=${mangaDetail.getMangaID()}&chapterID=${chapterToView.getChapterID()}" 
                                              data-width="700" data-numposts="5"></div>-->
                                     </div>

@@ -588,4 +588,46 @@ public class MangaDAO extends DBContext {
         }
         return listOfMangas;    
     }
+    
+    // get all Manga by categoryID => advancedSearch.jsp
+    public ArrayList<Manga> getMangasByOneCategory(String categoryTpe) {
+        try {
+            String sql = "SELECT *\n" +
+                    "FROM Manga\n" +
+                    "INNER JOIN MangaCategory ON Manga.MangaID = MangaCategory.MangaID\n" +
+                    "INNER JOIN Category ON MangaCategory.CategoryID = Category.CategoryID\n" +
+                    "WHERE Category.type = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            ps.setString(1, categoryTpe);
+
+            ResultSet res = ps.executeQuery();
+
+            ArrayList<Manga> list = new ArrayList<>();
+            while (res.next()) {
+                Integer id = res.getInt("mangaID");
+                String title = res.getString("title");
+                String description = res.getString("description");
+                Integer userID = res.getInt("userID");
+                LocalDateTime createdAt = res.getTimestamp("createAt").toLocalDateTime();
+                Boolean isCopyright = res.getBoolean("isCopyright");
+                Boolean isFree = res.getBoolean("isFree");
+                String coverImage = res.getString("coverImage");
+                Manga manga = new Manga(id, title, description, userID, createdAt, isCopyright, isFree, coverImage);
+
+                list.add(manga);
+
+            }
+
+            res.close();
+            ps.close();
+
+            return list;
+
+        } catch (SQLException ex) {
+            Logger.getLogger(MangaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
+    }
 }

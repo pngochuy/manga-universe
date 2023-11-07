@@ -4,20 +4,34 @@
  */
 package controller.user;
 
+import dal.DBContext;
+import dal.NotificationDAO;
 import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
+import model.Notification;
 import model.User;
 
 /**
  *
  * @author PC
  */
+@MultipartConfig
 public class UpgradeToAuthorServlet extends HttpServlet {
 
     /**
@@ -37,7 +51,7 @@ public class UpgradeToAuthorServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet UpgradeToAuthorServlet</title>");            
+            out.println("<title>Servlet UpgradeToAuthorServlet</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet UpgradeToAuthorServlet at " + request.getContextPath() + "</h1>");
@@ -71,20 +85,91 @@ public class UpgradeToAuthorServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        PrintWriter out = response.getWriter();
-        out.println(request.getParameter("userID"));
-        
-        
-        UserDAO userDAO = new UserDAO();
-        User u = userDAO.getUserById(Integer.parseInt(request.getParameter("userID")));
-        u.setRole("Author");
-        userDAO.update(u);
-        
-        HttpSession mySession = request.getSession();
-        mySession.removeAttribute("userSession");
-//        mySession.removeAttribute("post");
-        mySession.invalidate();
-        response.sendRedirect("home.jsp");
+        String action = request.getParameter("action");
+        String id = request.getParameter("userID");
+
+        if ("approve".equals(action)) {
+            UserDAO userDAO = new UserDAO();
+            User u = userDAO.getUserById(Integer.parseInt(request.getParameter("userID")));
+            u.setRole("Author");
+            userDAO.update(u);
+
+            Connection con = null;
+            PreparedStatement ps = null;
+            DBContext dbContext = new DBContext();
+            con = dbContext.connection;
+            String deleteSQL = "DELETE FROM [MangaUniverse].[dbo].[VerifyUser] WHERE userID = ?";
+            try {
+                ps = con.prepareStatement(deleteSQL);
+                ps.setInt(1, Integer.parseInt(id));
+                ps.executeUpdate();
+            } catch (SQLException ex) {
+                Logger.getLogger(UpgradeToAuthorServlet.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                try {
+                    if (ps != null) {
+                        ps.close();
+                    }
+                    if (con != null) {
+                        con.close();
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(UpgradeToAuthorServlet.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            ///xu ly noti
+            NotificationDAO notificationDAO = new NotificationDAO();
+            List<Notification> notifications = notificationDAO.getAllNotifications();
+            Notification newNotification = new Notification();
+            newNotification.setUserID(Integer.parseInt(request.getParameter("userID")));
+            newNotification.setMessage("Your request to become Author has been approved");
+            newNotification.setNotificationDate(new Date());
+            newNotification.setIsRead(false);
+
+            notificationDAO.insertNotification(newNotification);
+
+            response.sendRedirect("authorVerify.jsp");
+        } else if ("reject".equals(action)) {
+            Connection con = null;
+            PreparedStatement ps = null;
+            DBContext dbContext = new DBContext();
+            con = dbContext.connection;
+            String deleteSQL = "DELETE FROM [MangaUniverse].[dbo].[VerifyUser] WHERE userID = ?";
+            try {
+                ps = con.prepareStatement(deleteSQL);
+                ps.setInt(1, Integer.parseInt(id));
+                ps.executeUpdate();
+            } catch (SQLException ex) {
+                Logger.getLogger(UpgradeToAuthorServlet.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                try {
+                    if (ps != null) {
+                        ps.close();
+                    }
+                    if (con != null) {
+                        con.close();
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(UpgradeToAuthorServlet.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            
+            ///xu ly noti
+            NotificationDAO notificationDAO = new NotificationDAO();
+            List<Notification> notifications = notificationDAO.getAllNotifications();
+            Notification newNotification = new Notification();
+            newNotification.setUserID(Integer.parseInt(request.getParameter("userID")));
+            newNotification.setMessage("Your request to become Author has been Rejected");
+            newNotification.setNotificationDate(new Date());
+            newNotification.setIsRead(false);
+
+            notificationDAO.insertNotification(newNotification);
+            
+            response.sendRedirect("authorVerify.jsp");
+        } else {
+
+        }
+
     }
 
     /**

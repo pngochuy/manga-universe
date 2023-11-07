@@ -144,6 +144,14 @@
         <servlet-name>SearchController</servlet-name>
         <servlet-class>controller.user.manga.SearchController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>UploadServlet</servlet-name>
+        <servlet-class>controller.file.UploadServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>OneGenreServlet</servlet-name>
+        <servlet-class>controller.user.manga.OneGenreServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/LoginServlet</url-pattern>
@@ -291,6 +299,14 @@
     <servlet-mapping>
         <servlet-name>SearchController</servlet-name>
         <url-pattern>/SearchController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UploadServlet</servlet-name>
+        <url-pattern>/UploadServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>OneGenreServlet</servlet-name>
+        <url-pattern>/OneGenreServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

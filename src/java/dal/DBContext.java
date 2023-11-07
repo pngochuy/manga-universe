@@ -16,7 +16,7 @@ public class DBContext {
      * @param args the command line arguments
      */
     
-    protected Connection connection;
+    public Connection connection;
     
     public DBContext()
     {

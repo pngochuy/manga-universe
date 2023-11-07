@@ -14,7 +14,7 @@
 <header id="header" class="header fixed-top d-flex align-items-center" style="background-color: #191a1c;">
 
     <div class="d-flex align-items-center justify-content-between">
-        <a href="home.jsp" class="logo d-flex align-items-center">
+        <a href="../home.jsp" class="logo d-flex align-items-center">
             <img src="../assetsMain/img/logo.png" alt="" width="100">
             <span class="d-none d-lg-block" style="color: white">MangaUniverse</span>
         </a>

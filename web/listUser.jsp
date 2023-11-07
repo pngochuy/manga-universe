@@ -149,8 +149,8 @@
                                                 <table class="table table-bordered table-striped">
                                                     <thead>
                                                         <tr>
-                                                            <th scope="col">UserName</th>
-                                                            <th scope="col">Create AT</th>
+                                                            <th scope="col">Username</th>
+                                                            <th scope="col">Create at</th>
                                                             <th scope="col">Coin Quantity</th>
                                                             <th scope="col">Role</th>
                                                         </tr>
@@ -165,7 +165,7 @@
                                                         %>
                                                         <tr class="<%= a.getRole()%>">
                                                             <td><%= a.getUsername()%></td>
-                                                            <td><%= a.getCreateAt()%></td>
+                                                            <td><%= a.getCreateAtFormat()%></td>
                                                             <td><%= a.getCoinQuantity()%></td>
                                                             <td><%= a.getRole()%></td>
                                                             <td>

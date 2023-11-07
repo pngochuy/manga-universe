@@ -173,7 +173,6 @@
     <body>
         
         <%@include file="layouts/layoutUser/headerUser.jsp" %> 
-        
         <%@include file="layouts/layoutUser/sidebarUser.jsp" %>
 
         <main id="main" class="main">
@@ -224,9 +223,9 @@
                                     </div>
                                     <%
                                     
-                                        User userSession = (User) session.getAttribute("userSession");
+                                        User userSession2 = (User) session.getAttribute("userSession");
                                     %>
-                                    <a href="vnpay_pay.jsp?userID=${userSession.getUserId()}">Subscribe Now</a>
+                                    <a href="vnpay_pay.jsp?userID=${userSession2.getUserId()}">Subscribe Now</a>
                                 </div>
                             </div>
                             <!--                            <div class="col-sm-4">

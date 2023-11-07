@@ -4,13 +4,19 @@
  */
 package controller.report;
 
+import dal.NotificationDAO;
 import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import model.Notification;
+import model.User;
 
 /**
  *
@@ -35,7 +41,7 @@ public class RejectReport extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet RejectReport</title>");            
+            out.println("<title>Servlet RejectReport</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet RejectReport at " + request.getContextPath() + "</h1>");
@@ -44,7 +50,6 @@ public class RejectReport extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -57,12 +62,24 @@ public class RejectReport extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int reportID = Integer.parseInt(request.getParameter("reportID"));
-
-        // Gọi phương thức xóa người dùng từ DAO
+        HttpSession mySession = request.getSession();
         UserDAO userDAO = new UserDAO();
-        userDAO.deleteRp(reportID);
+        User userSession = (User) mySession.getAttribute("userSession");
+        // Gọi phương thức xóa người dùng từ DAO
+        int id = userSession.getUserId();
+        userDAO.deleteReport(reportID);
 
         // Redirect hoặc forward tới trang kết quả
+        ///xu ly noti
+        NotificationDAO notificationDAO = new NotificationDAO();
+        List<Notification> notifications = notificationDAO.getAllNotifications();
+        Notification newNotification = new Notification();
+        newNotification.setUserID(id);
+        newNotification.setMessage("Your report to has been rejected");
+        newNotification.setNotificationDate(new Date());
+        newNotification.setIsRead(false);
+
+        notificationDAO.insertNotification(newNotification);
         response.sendRedirect("listReport.jsp");
     }
 

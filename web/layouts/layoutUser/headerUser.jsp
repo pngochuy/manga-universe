@@ -4,14 +4,24 @@
     Author     : PC
 --%>
 
+<%@page import="model.Notification"%>
+<%@page import="java.util.List"%>
+<%@page import="dal.NotificationDAO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.time.LocalDateTime"%>
 <%@page import="model.UserRegister"%>
 <%@page import="model.User"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
+
 <!-- ======= Header ======= -->
 <header id="header" class="header fixed-top d-flex align-items-center">
+
+    <%
+        User userSession = (User) session.getAttribute("userSession");
+        NotificationDAO notificationDAO = new NotificationDAO();
+        List<Notification> notifications = notificationDAO.getNotificationsByUserId(userSession.getUserId());
+    %>
 
     <div class="d-flex align-items-center justify-content-between">
         <a href="home.jsp" class="logo d-flex align-items-center">
@@ -32,24 +42,37 @@
             </li><!-- End Search Icon-->
 
             <li class="nav-item dropdown">
-
                 <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
                     <i class="bi bi-bell"></i>
-                    <span class="badge bg-primary badge-number">0</span>
-                </a><!-- End Notification Icon -->
+                    <span class="badge bg-primary badge-number"><%= notifications.size()%></span>
+                </a>
+                <!-- End Notification Icon -->
 
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
                     <li class="dropdown-header">
-                        You have 0 new notifications
+                        You have <%= notifications.size()%> new notifications
                         <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
                     </li>
                     <li>
                         <hr class="dropdown-divider">
                     </li>
 
-                </ul><!-- End Notification Dropdown Items -->
-
-            </li><!-- End Notification Nav -->
+                    <% for (Notification notification : notifications) {%>
+                    <li class="notification-item">
+                        <!-- Display notification content here based on notification object -->
+                        <i class="bi bi-exclamation-circle text-warning"></i>
+                        <div>
+                            <h4><%= notification.getMessage()%></h4>
+                            <p><%= notification.getNotificationDate()%></p>
+                        </div>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <% } %>
+                </ul>
+                <!-- End Notification Dropdown Items -->
+            </li>
 
 
 

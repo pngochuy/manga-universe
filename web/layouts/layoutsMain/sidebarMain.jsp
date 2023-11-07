@@ -15,7 +15,7 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
         <li class="nav-item">
-            <a class="nav-link collapsed" href="home.jsp">
+            <a class="nav-link collapsed" href="../home.jsp">
                 <i class="bi bi-grid"></i>
                 <span>Homepage</span>
             </a>

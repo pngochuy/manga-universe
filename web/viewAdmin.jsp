@@ -1,3 +1,4 @@
+<%@page import="model.Report"%>
 <%@page import="java.time.LocalDateTime"%>
 <%@page import="model.UserRegister"%>
 <%@page import="model.User"%>
@@ -16,6 +17,11 @@
 
     if (session.getAttribute("userSession") == null) {
         response.sendRedirect("login.jsp");
+    } else {
+        User userSession = (User) session.getAttribute("userSession");
+        if (!userSession.getUsername().equals("admin")) {
+            response.sendRedirect("login.jsp");
+        }
     }
 
 
@@ -68,10 +74,8 @@
                 <h1>Dashboard</h1>
                 <nav>
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="home.jsp">Home</a></li>
+                        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
                         <li class="breadcrumb-item active">Dashboard</li>
-                        
-                        <a class="nav-link bi bi-list " href="./listUser.jsp">User List</a>
                     </ol>
                 </nav>
             </div><!-- End Page Title -->
@@ -82,249 +86,170 @@
                     <!-- Left side columns -->
                     <div class="col-lg-8">
                         <div class="row">
-
-
-
-                     
-
-                            <!-- Customers Card -->
-                            <div class="col-xxl-4 col-xl-12">
-
-                                <div class="card info-card customers-card">
-
-                                    <div class="filter">
-                                        <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                            <li class="dropdown-header text-start">
-                                                <h6>Filter</h6>
-                                            </li>
-
-                                            <li><a class="dropdown-item" href="#">Today</a></li>
-                                            <li><a class="dropdown-item" href="#">This Month</a></li>
-                                            <li><a class="dropdown-item" href="#">This Year</a></li>
-                                        </ul>
-                                    </div>
-
-                                    <div class="card-body">
-                                        <h5 class="card-title">Customers <span>| This Year</span></h5>
-
-                                        <div class="d-flex align-items-center">
-                                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                                <i class="bi bi-people"></i>
-                                            </div>
-                                            <div class="ps-3">
-                                                <h6>10</h6>
-                                                <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span>
-
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                            </div><!-- End Customers Card -->
-
-
+                                              
                             <!-- Report -->
                             <div class="col-12">
-                                <div class="card top-selling overflow-auto">
+                            <section class="section dashboard">
+                                <div class="row">
+                                    <!-- Report -->
+                                    <div class="col-12">
+                                        <div class="card top-selling overflow-auto">
 
-                                    <div class="filter">
-                                        <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                            <li class="dropdown-header text-start">
-                                                <h6>Filter</h6>
-                                            </li>
+                                            <div class="filter">
+                                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                                    <li class="dropdown-header text-start">
+                                                        <h6></h6>
+                                                    </li>
+                                                    
+                                                </ul>
+                                            </div>
 
-                                            <li><a class="dropdown-item" href="#">Today</a></li>
-                                            <li><a class="dropdown-item" href="#">This Month</a></li>
-                                            <li><a class="dropdown-item" href="#">This Year</a></li>
-                                        </ul>
-                                    </div>
+                                            <div class="card-body pb-0">
+                                                <h5 class="card-title">List Report <span></span></h5>
 
-                                    <div class="card-body pb-0">
-                                        <h5 class="card-title">Reports <span>| Today</span></h5>
+                                                <table class="table table-bordered table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">User ID</th>
+                                                            <th scope="col">Manga ID</th>
+                                                            <th scope="col">Reason</th>
+                                                            <th scope="col">Time Report</th>
+                                                           
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <%
+                                                            Connection connection = null; // Thiết lập kết nối cơ sở dữ liệu ở đây
+                                                            try {
+                                                                UserDAO userDAO = new UserDAO();
+                                                                List<Report> userrp = userDAO.getReportData();
+                                                                for (Report a : userrp) {
+                                                        %>
+                                                        <tr class="<%= a.getReportID()%>">
+                                                            <td><%= a.getUserID()%></td>
+                                                            <td><%= a.getMangaID()%></td>
+                                                            <td><%= a.getReason()%></td>
+                                                            <td><%= a.getDateofreport()%></td>
+                                                            
+                                                        </tr>
+                                                        <%
+                                                                }
+                                                            } catch (Exception e) {
+                                                                e.printStackTrace();
+                                                            } finally {
+                                                                // Đảm bảo đóng kết nối sau khi hoàn thành
+                                                                try {
+                                                                    if (connection != null) {
+                                                                        connection.close();
+                                                                    }
+                                                                } catch (SQLException e) {
+                                                                    e.printStackTrace();
+                                                                }
+                                                            }
+                                                        %>
+                                                    </tbody>
+                                                </table>
 
-                                        <table class="table table-bordered table-striped">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">Time</th>
-                                                    <th scope="col">Revenue</th>
-                                                    <th scope="col">Customer</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <th scope="row"><a href="#"><img src="assets/img/product-1.jpg" alt=""></a></th>
-                                                    <td class="fw-bold"></td>
-                                                    <td class="fw-bold"></td>
+                                            </div>
 
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row"><a href="#"><img src="assets/img/product-2.jpg" alt=""></a></th>
-                                                    <td class="fw-bold"></td>
-                                                    <td class="fw-bold"></td>
-
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row"><a href="#"><img src="assets/img/product-3.jpg" alt=""></a></th>
-                                                    <td class="fw-bold"></td>
-                                                    <td class="fw-bold"></td>
-
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row"><a href="#"><img src="assets/img/product-4.jpg" alt=""></a></th>
-                                                    <td class="fw-bold"></td>
-                                                    <td class="fw-bold"></td>
-
-                                                </tr>
-                                            </tbody>
-                                        </table>
-
-                                    </div>
-
+                                        </div>
+                                    </div><!-- Report -->
                                 </div>
-                            </div><!-- Report -->
+                            </section>
+                        </div>
 
                             <!-- Account Type -->
-                            <div class="col-12">
-                                <div class="card top-selling overflow-auto">
+                            <section class="section dashboard">
+                <div class="row">
+                    <!-- Report -->
+                    <div class="free-account premium-account author-account">
+                        <div class="col-12">
+                            <section class="section dashboard">
+                                <div class="row">
+                                    <!-- Report -->
+                                    <div class="col-12">
+                                        <div class="card top-selling overflow-auto">
 
-                                    <div class="filter">
-                                        <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                            <li class="dropdown-header text-start">
-                                                <h6>Filter</h6>
-                                            </li>
+                                            <div class="filter">
+                                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                                    <li class="dropdown-header text-start">
+                                                        <h6>Filter</h6>
+                                                    </li>
+                                                    <li><a class="dropdown-item filter-link" href="#" data-filter="All">All Account</a></li>
+                                                    <li><a class="dropdown-item filter-link" href="#" data-filter="Free">Free Account</a></li>
+                                                    <li><a class="dropdown-item filter-link" href="#" data-filter="Premium">Premium Account</a></li>
+                                                    <li><a class="dropdown-item filter-link" href="#" data-filter="Author">Author Account</a></li>
+                                                </ul>
+                                            </div>
 
-                                            <li><a class="dropdown-item" href="#">Normal Account</a></li>
-                                            <li><a class="dropdown-item" href="#">Premium Account</a></li>
-                                            <li><a class="dropdown-item" href="#">Author Account</a></li>
-                                        </ul>
-                                    </div>
+                                            <div class="card-body pb-0">
+                                                <h5 class="card-title">List User <span>| All time</span></h5>
 
-                                    <h1>User List</h1>
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th>User Name</th>
-                                                <th>Create At</th>     
-                                                <th>Coins Quantity</th>
-                                                <th>Role</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <%
-                                                Connection connection = null; // Thiết lập kết nối cơ sở dữ liệu ở đây
-                                                try {
-                                                    UserDAO userDAO = new UserDAO();
-                                                    List<User> userList = userDAO.getUsersData();
-                                                    for (User a : userList) {
-                                            %>
-                                            <tr>
-                                                <td><%= a.getUsername()%></td>
-                                                <td><%= a.getCreateAt()%></td>
-                                                <td><%= a.getCoinQuantity()%></td>
-                                                <td><%= a.getRole()%></td>
-                                            </tr>
-                                        <td>           
-                                            <a href="DeleteUser?Id=<%= a.getUserId()%>">Delete</a>
-                                        </td>
-                                        <%
+                                                <table class="table table-bordered table-striped">
+                                                    <thead>
+                                                        <tr>    
+                                                            <th scope="col">User Id</th>
+                                                            <th scope="col">UserName</th>
+                                                            <th scope="col">Gender</th>
+                                                            <th scope="col">Create AT</th>                                                         
+                                                            <th scope="col">Role</th>
+                                                            <th scope="col">Email</th>
+                                                            
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <%
+                                                            
+                                                            try {
+                                                                UserDAO userDAO = new UserDAO();
+                                                                List<User> userList = userDAO.getUsersData();
+                                                                for (User a : userList) {
+                                                        %>
+                                                        <tr class="<%= a.getRole()%>">
+                                                              <td><%= a.getUserId()%></td>
+                                                            <td><%= a.getUsername()%></td>
+                                                            <td><%= a.getGender()%></td>
+                                                            <td><%= a.getCreateAt()%></td>
+                                                            
+                                                            <td><%= a.getRole()%></td>
+                                                             <td><%= a.getEmail()%></td>
+                                                            
+                                                        </tr>
+                                                        <%
+                                                                }
+                                                            } catch (Exception e) {
+                                                                e.printStackTrace();
+                                                            } finally {
+                                                                // Đảm bảo đóng kết nối sau khi hoàn thành
+                                                                try {
+                                                                    if (connection != null) {
+                                                                        connection.close();
+                                                                    }
+                                                                } catch (SQLException e) {
+                                                                    e.printStackTrace();
+                                                                }
+                                                            }
+                                                        %>
+                                                    </tbody>
+                                                </table>
 
-                                                }
-                                            } catch (Exception e) {
-                                                e.printStackTrace();
-                                            } finally {
-                                                // Đảm bảo đóng kết nối sau khi hoàn thành
-                                                try {
-                                                    if (connection != null) {
-                                                        connection.close();
-                                                    }
-                                                } catch (SQLException e) {
-                                                    e.printStackTrace();
-                                                }
-                                            }
-                                        %>
-                                        </tbody>
+                                            </div>
 
-                                    </table>
-
+                                        </div>
+                                    </div><!-- Report -->
                                 </div>
-                            </div>
+                            </section>
+                        </div>
+                    </div>                                             
+
+                  
+
+
+            </section>
                             <!-- Recent Sales -->
-                            <div class="col-12">
-                                <div class="card recent-sales overflow-auto">
-
-                                    <div class="filter">
-                                        <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                            <li class="dropdown-header text-start">
-                                                <h6>Filter</h6>
-                                            </li>
-
-                                            <li><a class="dropdown-item" href="#">Today</a></li>
-                                            <li><a class="dropdown-item" href="#">This Month</a></li>
-                                            <li><a class="dropdown-item" href="#">This Year</a></li>
-                                        </ul>
-                                    </div>
-
-                                    <div class="card-body">
-                                        <h5 class="card-title">Recent Transaction <span>| Today</span></h5>
-
-                                        <table class="table table-borderless datatable">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">#</th>
-                                                    <th scope="col">Customer</th>
-                                                    <th scope="col">Description</th>
-                                                    <th scope="col">Price</th>
-                                                    <th scope="col">Status</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <th scope="row"><a href="#">#2457</a></th>
-                                                    <td>Huy Ngoc</td>
-                                                    <td><a href="#" class="text-primary">Buy Manga</a></td>
-                                                    <td>$4</td>
-                                                    <td><span class="badge bg-success">Success</span></td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row"><a href="#">#2147</a></th>
-                                                    <td>Van Tin</td>
-                                                    <td><a href="#" class="text-primary">Upgrade Premium Account</a></td>
-                                                    <td>$29.9</td>
-                                                    <td><span class="badge bg-warning">Success</span></td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row"><a href="#">#2049</a></th>
-                                                    <td>Ho Dang</td>
-                                                    <td><a href="#" class="text-primary">Upgrage to Premium</a></td>
-                                                    <td>$29.9</td>
-                                                    <td><span class="badge bg-success">Success</span></td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row"><a href="#">#2644</a></th>
-                                                    <td>Duc Phuong</td>
-                                                    <td><a href="#" class="text-primar">Upgrade to Premium</a></td>
-                                                    <td>$7</td>
-                                                    <td><span class="badge bg-success">Success</span></td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row"><a href="#">#2644</a></th>
-                                                    <td>Phuoc Han</td>
-                                                    <td><a href="#" class="text-primary">Upgarade to Author</a></td>
-                                                    <td></td>
-                                                    <td><span class="badge bg-danger">Failed</span></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-
-                                    </div>
-
-                                </div>
-                            </div><!-- End Recent Sales -->
+                           
 
                           
 
@@ -334,62 +259,7 @@
                     <!-- Right side columns -->
                     <div class="col-lg-4">
 
-                        <!-- Recent Activity -->
-                        <div class="card">
-                            <div class="filter">
-                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                    <li class="dropdown-header text-start">
-                                        <h6>Filter</h6>
-                                    </li>
-
-                                    <li><a class="dropdown-item" href="#">Today</a></li>
-                                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                                </ul>
-                            </div>
-
-                            <div class="card-body">
-                                <h5 class="card-title">Recent Activity <span>| Today</span></h5>
-
-                                <div class="activity">
-
-                                    <div class="activity-item d-flex">
-                                        <div class="activite-label">32 min</div>
-                                        <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
-                                        <div class="activity-content">
-                                            Update Chapter One Piece <a href="#" class="fw-bold text-dark">Chap 12</a> 
-                                        </div>
-                                    </div><!-- End activity item-->
-
-                                    <div class="activity-item d-flex">
-                                        <div class="activite-label">56 min</div>
-                                        <i class='bi bi-circle-fill activity-badge text-danger align-self-start'></i>
-                                        <div class="activity-content">
-                                            User report Manga Jujustu Kaisen
-                                        </div>
-                                    </div><!-- End activity item-->
-
-                                    <div class="activity-item d-flex">
-                                        <div class="activite-label">2 hrs</div>
-                                        <i class='bi bi-circle-fill activity-badge text-primary align-self-start'></i>
-                                        <div class="activity-content">
-                                             User report Manga One Piece
-                                        </div>
-                                    </div><!-- End activity item-->
-                                                                 
-                                    <div class="activity-item d-flex">
-                                        <div class="activite-label">4 weeks</div>
-                                        <i class='bi bi-circle-fill activity-badge text-muted align-self-start'></i>
-                                        <div class="activity-content">
-                                            Accept User upgrade to Author Account
-                                        </div>
-                                    </div><!-- End activity item-->
-
-                                </div>
-
-                            </div>
-                        </div><!-- End Recent Activity -->
+                        
 
 
 
