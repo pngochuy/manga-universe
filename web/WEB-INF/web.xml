@@ -152,6 +152,10 @@
         <servlet-name>OneGenreServlet</servlet-name>
         <servlet-class>controller.user.manga.OneGenreServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>FollowMangaServlet</servlet-name>
+        <servlet-class>controller.user.manga.FollowMangaServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/LoginServlet</url-pattern>
@@ -307,6 +311,10 @@
     <servlet-mapping>
         <servlet-name>OneGenreServlet</servlet-name>
         <url-pattern>/OneGenreServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FollowMangaServlet</servlet-name>
+        <url-pattern>/FollowMangaServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

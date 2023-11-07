@@ -72,7 +72,7 @@ public class ChangePasswordServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-PrintWriter out = response.getWriter();
+        PrintWriter out = response.getWriter();
         HttpSession mySession = request.getSession();
         UserDAO userDAO = new UserDAO();
         String password = request.getParameter("password");
@@ -119,7 +119,7 @@ PrintWriter out = response.getWriter();
 
                 int userId = userDAO.getUserId(userSession.getUsername(), userSession.getPassword(),
                         userSession.getEmail());
-                
+
                 userSession.setPassword(newpassword);
                 userDAO.update(userSession);
             }

@@ -58,7 +58,7 @@
         <div class="container padding-bottom-3x mb-2 mt-5">
             <div class="row justify-content-center">
                 <div class="col-lg-8 col-md-10">
-                    <div class="forgot">
+<!--                    <div class="forgot">
                         <h2 class="mb-4">Forgot your password?</h2>
                         <p>Change your password in three easy steps. This will help you
                             to secure your password!</p>
@@ -70,7 +70,7 @@
                             <li><span class="text-primary text-medium">3. </span>Enter the OTP on the 
                                 next page</li>
                         </ol>
-                    </div>
+                    </div>-->
                     <form class="card mt-4" action="ForgotPasswordServlet" method="POST">
                         <div class="card-body">
                             <div class="form-group">
@@ -83,8 +83,8 @@
                         <div class="card-footer">
                             <button class="btn btn-success" type="submit">Get New
                                 Password</button>
-                            <button class="btn btn-danger" type="submit">Back to
-                                Login</button>
+                            <a href="login.jsp" class="btn btn-danger" type="submit">Back to
+                                Login</a>
                         </div>
                     </form>
                 </div>

@@ -84,7 +84,7 @@
                 <div class="row">
 
                     <!-- Left side columns -->
-                    <div class="col-lg-8">
+                    <div class="col-lg-12">
                         <div class="row">
                                               
                             <!-- Report -->
@@ -130,7 +130,7 @@
                                                             <td><%= a.getUserID()%></td>
                                                             <td><%= a.getMangaID()%></td>
                                                             <td><%= a.getReason()%></td>
-                                                            <td><%= a.getDateofreport()%></td>
+                                                            <td><%= a.getDateofreportFormat()%></td>
                                                             
                                                         </tr>
                                                         <%
@@ -190,10 +190,10 @@
                                                 <table class="table table-bordered table-striped">
                                                     <thead>
                                                         <tr>    
-                                                            <th scope="col">User Id</th>
-                                                            <th scope="col">UserName</th>
+                                                            <th scope="col">User ID</th>
+                                                            <th scope="col">Username</th>
                                                             <th scope="col">Gender</th>
-                                                            <th scope="col">Create AT</th>                                                         
+                                                            <th scope="col">Create At</th>                                                         
                                                             <th scope="col">Role</th>
                                                             <th scope="col">Email</th>
                                                             
@@ -211,7 +211,7 @@
                                                               <td><%= a.getUserId()%></td>
                                                             <td><%= a.getUsername()%></td>
                                                             <td><%= a.getGender()%></td>
-                                                            <td><%= a.getCreateAt()%></td>
+                                                            <td><%= a.getCreateAtFormat()%></td>
                                                             
                                                             <td><%= a.getRole()%></td>
                                                              <td><%= a.getEmail()%></td>

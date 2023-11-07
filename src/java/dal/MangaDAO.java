@@ -100,6 +100,47 @@ public class MangaDAO extends DBContext {
         return null;
     }
 
+    // get all Manga => for updates.jsp (follow)
+    public ArrayList<Manga> getAllByFollow(int uID) {
+        try {
+            String sql = "select * from Manga\n"
+                    + "  join Follow \n"
+                    + "  on Manga.mangaID = Follow.mangaID\n"
+                    + "  where Follow.userID = ?;";
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            ps.setInt(1, uID);
+
+            ResultSet res = ps.executeQuery();
+
+            ArrayList<Manga> list = new ArrayList<>();
+            while (res.next()) {
+                Integer id = res.getInt("mangaID");
+                String title = res.getString("title");
+                String description = res.getString("description");
+                Integer userID = res.getInt("userID");
+                LocalDateTime createdAt = res.getTimestamp("createAt").toLocalDateTime();
+                Boolean isCopyright = res.getBoolean("isCopyright");
+                Boolean isFree = res.getBoolean("isFree");
+                String coverImage = res.getString("coverImage");
+                Manga manga = new Manga(id, title, description, userID, createdAt, isCopyright, isFree, coverImage);
+
+                list.add(manga);
+
+            }
+
+            res.close();
+            ps.close();
+
+            return list;
+
+        } catch (SQLException ex) {
+            Logger.getLogger(MangaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
+    }
+
     // get all Manga by userID => for mangaSinglePage, ...
     public ArrayList<Manga> getAllByUserID(int i) {
         try {
@@ -521,14 +562,14 @@ public class MangaDAO extends DBContext {
                 String title = res.getString("title");
                 String description = res.getString("description");
                 Integer userID = res.getInt("userID");
-                
+
                 LocalDateTime createdAt = res.getTimestamp("createAt").toLocalDateTime();
-                
+
 //                Date createdAt = res.getDate("createdAt");
                 Boolean isCopyright = res.getBoolean("isCopyright");
                 Boolean isFree = res.getBoolean("isFree");
                 String coverImage = res.getString("coverImage");
-                
+
                 Manga manga = new Manga(id, title, description, userID, createdAt, isCopyright, isFree, coverImage);
                 listOfMangas.add(manga);
             }
@@ -546,38 +587,37 @@ public class MangaDAO extends DBContext {
         }
         return listOfMangas;
     }
-    
-    
+
     public List<Manga> getRandomMangas() {
         Connection cnt = null;
         PreparedStatement stm = null;
         ResultSet res = null;
         List<Manga> listOfMangas = new ArrayList<>();
-        try{
+        try {
             cnt = connection;
             String sql = "SELECT * FROM Manga "
                     + "ORDER BY NEWID()";
-            stm = cnt.prepareStatement(sql);    
+            stm = cnt.prepareStatement(sql);
             res = stm.executeQuery();
-            while(res.next()){
+            while (res.next()) {
                 Integer id = res.getInt("mangaID");
                 String title = res.getString("title");
                 String description = res.getString("description");
                 Integer userID = res.getInt("userID");
-                
+
                 LocalDateTime createdAt = res.getTimestamp("createAt").toLocalDateTime();
-                
+
 //                Date createdAt = res.getDate("createdAt");
                 Boolean isCopyright = res.getBoolean("isCopyright");
                 Boolean isFree = res.getBoolean("isFree");
                 String coverImage = res.getString("coverImage");
-                Manga manga = new Manga(id, title, description, userID , createdAt, isCopyright,isFree,coverImage );
+                Manga manga = new Manga(id, title, description, userID, createdAt, isCopyright, isFree, coverImage);
                 listOfMangas.add(manga);
             }
-            
-        }catch(SQLException e){
+
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
-        }finally{
+        } finally {
             try {
                 cnt.close();
                 stm.close();
@@ -586,17 +626,17 @@ public class MangaDAO extends DBContext {
                 Logger.getLogger(MangaDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        return listOfMangas;    
+        return listOfMangas;
     }
-    
+
     // get all Manga by categoryID => advancedSearch.jsp
     public ArrayList<Manga> getMangasByOneCategory(String categoryTpe) {
         try {
-            String sql = "SELECT *\n" +
-                    "FROM Manga\n" +
-                    "INNER JOIN MangaCategory ON Manga.MangaID = MangaCategory.MangaID\n" +
-                    "INNER JOIN Category ON MangaCategory.CategoryID = Category.CategoryID\n" +
-                    "WHERE Category.type = ?";
+            String sql = "SELECT *\n"
+                    + "FROM Manga\n"
+                    + "INNER JOIN MangaCategory ON Manga.MangaID = MangaCategory.MangaID\n"
+                    + "INNER JOIN Category ON MangaCategory.CategoryID = Category.CategoryID\n"
+                    + "WHERE Category.type = ?";
             PreparedStatement ps = connection.prepareStatement(sql);
 
             ps.setString(1, categoryTpe);
@@ -629,5 +669,84 @@ public class MangaDAO extends DBContext {
         }
 
         return null;
+    }
+
+    public int followManga(int userID, int mangaID) {
+        int generatedPostID = -1; // Giá trị mặc định nếu không có postID được tạo
+        try {
+            String sql = "INSERT INTO [Follow] "
+                    + "(userID, mangaID) "
+                    + "VALUES (?, ?);";
+
+            // Sử dụng PreparedStatement với RETURN_GENERATED_KEYS để lấy postID
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+            ps.setInt(1, userID);
+            ps.setInt(2, mangaID);
+
+            // Thực hiện lệnh SQL
+            int affectedRows = ps.executeUpdate();
+
+            if (affectedRows > 0) {
+                // Lấy các giá trị được sinh ra sau khi thêm dữ liệu
+                ResultSet generatedKeys = ps.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    generatedPostID = generatedKeys.getInt(1); // Lấy giá trị postID
+                }
+            }
+
+            ps.close();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(MangaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return generatedPostID;
+    }
+
+    public boolean isExistFollow(int userID, int mangaID) {
+        try {
+            String sql = "select * from Follow\n"
+                    + "  where userID = ? and mangaID = ?;";
+
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            ps.setInt(1, userID);
+            ps.setInt(2, mangaID);
+
+            ResultSet res = ps.executeQuery();
+
+            if (res.next()) {
+                return true;
+            }
+            ps.close();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(MangaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return false;
+    }
+
+    public boolean deleteFollow(int userID, int mangaID) {
+
+        try {
+            String sql = "DELETE FROM [Follow] "
+                    + "WHERE userID = ? and mangaID = ?;";
+
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            ps.setInt(1, userID);
+            ps.setInt(2, mangaID);
+
+            ps.execute();
+
+            ps.close();
+
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(MangaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
     }
 }

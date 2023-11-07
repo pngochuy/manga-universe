@@ -211,7 +211,7 @@
                                         <h2>Premium</h2>
                                     </div>
                                     <div class="price">
-                                        <h4><sup>$</sup>25</h4>
+                                        <h4><sup>$</sup>25/month</h4>
                                     </div>
                                     <div class="option">
                                         <ul>
@@ -224,6 +224,7 @@
                                     <%
                                     
                                         User userSession2 = (User) session.getAttribute("userSession");
+                                        session.setAttribute("userSession2", userSession2);
                                     %>
                                     <a href="vnpay_pay.jsp?userID=${userSession2.getUserId()}">Subscribe Now</a>
                                 </div>

@@ -66,7 +66,8 @@
                                                    class="form-control border-info placeicon">
                                         </div>
                                     </div>
-
+                                    <input type="hidden" class="hide" name="email"
+                                               value="${emailForgotPassword}">
                                     <!-- Log in Button -->
                                     <div class="form-group row justify-content-center">
                                         <div class="col-3 px-3 mt-3">
@@ -87,7 +88,7 @@
                                 <div class="pt-2">
                                     <div class="row justify-content-center">
                                         <h5>
-                                            Don't have an Account?<span><a href="#"
+                                            Don't have an Account?<span><a href="registration.jsp"
                                                                            class="text-danger"> Register Now!</a></span>
                                         </h5>
                                     </div>

@@ -147,6 +147,7 @@ import model.Category;
                 String filename = parts[parts.length - 1];
                 String[] filenameParts = filename.split("\\.");
                 String mangaCrawlID = filenameParts[0];
+                
                 MangaCrawl mangaCrawl = new MangaCrawl(mangaCrawlID, title, description,
                         author, false, true, urlCover);
                 mangaCrawlList.add(mangaCrawl);

@@ -116,8 +116,9 @@ public class AjaxPaymentServlet extends HttpServlet {
         User u = userDAO.getUserById(Integer.parseInt(req.getParameter("userID")));
         HttpSession mySession = req.getSession();
         mySession.setAttribute("userPaymentSuccess", u);
-//        u.setRole("Premium");
-//        userDAO.update(u);
+        u.setExpiredTime(u.getCreateAt().plusMonths(1));
+        u.setRole("Premium");
+        userDAO.update(u);
 
 //        -------------
 //        HttpSession mySession = req.getSession();

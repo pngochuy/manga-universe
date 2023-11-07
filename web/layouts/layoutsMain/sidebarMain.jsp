@@ -31,11 +31,11 @@
                         <i class="bi bi-circle"></i><span>Updates</span>
                     </a>
                 </li>
-                <li>
+<!--                <li>
                     <a href="../follows/readingHistory.jsp">
                         <i class="bi bi-circle"></i><span>Reading History</span>
                     </a>
-                </li>
+                </li>-->
             </ul>
         </li><!-- End Components Nav -->
         <li class="nav-item">

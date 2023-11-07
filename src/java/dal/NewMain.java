@@ -68,9 +68,10 @@ public class NewMain {
 //        for (Chapter c : chapterDAO.getAllChaptersByMangaID(5)) {
 //            System.out.println(c);
 //        }
-        for (Chapter m : chapterDAO.getAllChaptersByMangaID(1)) {
-            System.out.println(m);
-        }
+//        for (Chapter m : chapterDAO.getAllChaptersByMangaID(1)) {
+//            System.out.println(m);
+//        }
+        System.out.println(userDAO.getUserById(1));
     }
-
+    
 }

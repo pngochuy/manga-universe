@@ -57,38 +57,7 @@
             closeOverlay();
         }
     </script>
-    <style>
-        /* CSS cho overlay */
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-        }
 
-        /* CSS cho nội dung trong overlay */
-        .overlay-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        }
-
-        /* CSS cho nút đóng overlay */
-        .close-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            cursor: pointer;
-        }
-    </style>
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -118,6 +87,41 @@
         <!-- Template Main CSS File -->
         <link href="assetsMain/css/style.css" rel="stylesheet">
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <style>
+            /* CSS cho overlay */
+            .overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.7);
+            }
+
+            /* CSS cho nội dung trong overlay */
+            .overlay-content {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: #fff;
+                padding: 20px;
+                border-radius: 5px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            }
+
+            /* CSS cho nút đóng overlay */
+            .close-button {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                cursor: pointer;
+            }
+
+
+        </style>
     </head>
 
     <body>
@@ -140,6 +144,14 @@
                 String username = userDAO.getUserById(userID).getUsername();
                 ArrayList<Chapter> chaptersByMangaDetail = chapterDAO.getAllChaptersByMangaID(mangaID);
 
+                User uFollow = (User) session.getAttribute("userSession");
+//                Manga mFollow = (Manga) session.getAttribute("mangaDetail");
+                boolean check = false;
+                if (uFollow != null) {
+                    check = mangaDAO.isExistFollow(uFollow.getUserId(), m.getMangaID());
+                }
+
+                session.setAttribute("isFollow", check);
                 session.setAttribute("mangaDetail", m);
                 session.setAttribute("usernameDetail", username);
                 session.setAttribute("categoriesByMangaDetail", categoriesByMangaDetail);
@@ -215,6 +227,7 @@
 
                     MangaCrawl mangaCrawl = new MangaCrawl(mangaCrawlID, title, description,
                             author, false, true, urlCover);
+
                     session.setAttribute("mangaDetail", mangaCrawl);
                     session.setAttribute("categoriesByMangaDetail", categoryCrawlList);
                     session.setAttribute("usernameDetail", author);
@@ -304,9 +317,12 @@
                                                     <c:if test="${isCrawl == false}">
                                                     </c:if>
                                                     <c:if test="${sessionScope.userSession != null}">
-                                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalDialogScrollable">
+                                                        <button type="button" class="btn btn-danger mr-2" data-bs-toggle="modal" data-bs-target="#modalDialogScrollable">
                                                             Report
                                                         </button>
+                                                        <c:if test="${isCrawl == false}">
+                                                            <a href="FollowMangaServlet?mangaID=${mangaDetail.getMangaID()}" id="follow-button" class="btn ${isFollow == true ? 'unfollow' : 'follow'}">${isFollow == true ? 'Unfollow' : 'Follow'}</a>	
+                                                        </c:if>
                                                     </c:if>
                                                 </c:if>
                                             </li>
@@ -570,6 +586,26 @@
 <c:if test="${userSession == null || userSession.getRole().equals('Free')}">
     <%@include file="layouts/layoustOthers/adsOthers.jsp" %>
 </c:if>
+<script>
+    const followButton = document.getElementById("follow-button");
+    let isFollowing = false;
+
+    followButton.addEventListener("click", () => {
+        if (isFollowing) {
+            // Khi đã theo dõi, chuyển sang trạng thái "Unfollow"
+            followButton.textContent = "Follow";
+            followButton.classList.remove("unfollow");
+            followButton.classList.add("follow");
+        } else {
+            // Khi chưa theo dõi, chuyển sang trạng thái "Follow"
+            followButton.textContent = "Unfollow";
+            followButton.classList.remove("follow");
+            followButton.classList.add("unfollow");
+        }
+        isFollowing = !isFollowing;
+    });
+
+</script>
 
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
         class="bi bi-arrow-up-short"></i></a>

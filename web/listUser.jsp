@@ -44,7 +44,7 @@
             var filterValue = $(this).data("filter");
 
             // Ẩn tất cả các hàng trước khi lọc
-            $("tr").hide();
+            $("tbody tr").hide();
 
             if (filterValue === "All") {
                 // Hiển thị tất cả các hàng
@@ -151,7 +151,7 @@
                                                         <tr>
                                                             <th scope="col">Username</th>
                                                             <th scope="col">Create at</th>
-                                                            <th scope="col">Coin Quantity</th>
+                                                            <!--<th scope="col">Coin Quantity</th>-->
                                                             <th scope="col">Role</th>
                                                         </tr>
                                                     </thead>
@@ -166,7 +166,7 @@
                                                         <tr class="<%= a.getRole()%>">
                                                             <td><%= a.getUsername()%></td>
                                                             <td><%= a.getCreateAtFormat()%></td>
-                                                            <td><%= a.getCoinQuantity()%></td>
+                                                            <!--<td><%= a.getCoinQuantity()%></td>-->
                                                             <td><%= a.getRole()%></td>
                                                             <td>
                                                                 <a class="btn btn-danger" href="DeleteUserServlet?userId=<%= a.getUserId()%>">Delete</a>

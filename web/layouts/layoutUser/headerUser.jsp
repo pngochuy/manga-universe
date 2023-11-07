@@ -4,6 +4,7 @@
     Author     : PC
 --%>
 
+<%@page import="java.util.ArrayList"%>
 <%@page import="model.Notification"%>
 <%@page import="java.util.List"%>
 <%@page import="dal.NotificationDAO"%>
@@ -20,7 +21,11 @@
     <%
         User userSession = (User) session.getAttribute("userSession");
         NotificationDAO notificationDAO = new NotificationDAO();
-        List<Notification> notifications = notificationDAO.getNotificationsByUserId(userSession.getUserId());
+        List<Notification> notifications = new ArrayList<>();
+
+        if (userSession != null) {
+            notifications = notificationDAO.getNotificationsByUserId(userSession.getUserId());
+        }
     %>
 
     <div class="d-flex align-items-center justify-content-between">

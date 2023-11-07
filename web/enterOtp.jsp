@@ -65,6 +65,8 @@
 
                                         <input type="hidden" class="hide" name="token" id="token"
                                                value="">
+                                        <input type="hidden" class="hide" name="email"
+                                               value="${emailForgotPassword}">
                                     </form>
 
                                 </div>

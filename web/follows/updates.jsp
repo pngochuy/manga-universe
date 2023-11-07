@@ -1,3 +1,8 @@
+<%@page import="dal.ChapterDAO"%>
+<%@page import="model.Manga"%>
+<%@page import="dal.UserDAO"%>
+<%@page import="dal.CategoryDAO"%>
+<%@page import="dal.MangaDAO"%>
 <%@page import="model.User"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -40,7 +45,19 @@
 
         <%@include file="../layouts/layoutsMain/headerMain.jsp" %> 
         <%@include file="../layouts/layoutsMain/sidebarMain.jsp" %>
-        
+
+        <%
+            MangaDAO mangaDAO = new MangaDAO();
+            CategoryDAO categoryDAO = new CategoryDAO();
+            UserDAO userDAO = new UserDAO();
+            User uFollow = (User) session.getAttribute("userSession");
+            if (uFollow != null) {
+                session.setAttribute("mangaListUpdates", mangaDAO.getAllByFollow(uFollow.getUserId()));
+
+            }
+            // tam thoi dung getALL Manga
+        %>
+
         <main id="main" class="main">
             <section class="section profile">
                 <div class="row">
@@ -48,117 +65,46 @@
                         <div class="title">
                             <h2 class="fw-bold">Updates</h2>
                             <div class="row mt-2">
-                                <div class="col-lg-2 col-md-4 col-sm-6">
-                                    <a href="../mangaSinglePage.jsp">
-                                        <div class="product-card grow-box">
-                                            <div class="img-con set-bg"
-                                                 style="background-image: url('../assetsMain/img/manga.jpg');"
-                                                 data-setbg="assetsMain/img/manga.jpg">
-                                                <div class="ep">18/20</div>
-                                                <div class="comment"><i class="bi bi-chat"></i> 21</div>
-                                                <div class="view"><i class="bi bi-eye"></i> 7141</div>
+                                <c:forEach items="${mangaListUpdates}" var="manga">
+                                    <div class="col-lg-2 col-md-4 col-sm-6">
+                                        <a href="/MangaUniverse/MangaDetailServlet?id=${manga.getMangaID()}">
+                                            <div class="product-card grow-box">
+                                                <div class="img-con set-bg"
+                                                     style="background-image: url('${manga.getCoverImage()}');"
+                                                     data-setbg="${manga.getCoverImage()}">
+                                                    <!--so chapter => UPDATE!!-->
+                                                    <c:set var="manga" value="${manga}" />
+                                                    <%
+                                                        Manga manga = (Manga) pageContext.getAttribute("manga");
+                                                        ChapterDAO chapterDAO = new ChapterDAO();
+                                                        request.setAttribute("chapters", chapterDAO.getAllChaptersByMangaID(manga.getMangaID()));
+
+                                                    %>
+                                                    <div class="ep">${chapters.size()} / ?</div>
+                                                    <!-- <div class="comment"><i class="bi bi-chat"></i> 21</div>
+                                                     <div class="view"><i class="bi bi-eye"></i> 7141</div> -->
+                                                </div>
+                                                <div class="product-card-con">
+                                                    <ul>
+                                                        <%                                                                request.setAttribute("cate", categoryDAO.getCategoriesByMangaID(manga.getMangaID()));
+
+                                                        %>
+                                                        <c:forEach items="${cate}" var="category">
+                                                            <li>${category.getType()}</li>
+                                                            </c:forEach>
+
+                                                    </ul>
+                                                    <h5>${manga.getTitle()}</h5>
+                                                </div>
                                             </div>
-                                            <div class="product-card-con">
-                                                <ul>
-                                                    <li>Active</li>
-                                                    <li>Movie</li>
-                                                </ul>
-                                                <h5>Kaguya-sama wa Kokurasetai: First Kiss wa Owaranai</h5>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="col-lg-2 col-md-4 col-sm-6">
-                                    <a href="../mangaSinglePage.jsp">
-                                        <div class="product-card grow-box">
-                                            <div class="img-con set-bg"
-                                                 style="background-image: url('../assetsMain/img/manga.jpg');"
-                                                 data-setbg="../assetsMain/img/manga.jpg">
-                                                <div class="ep">18/20</div>
-                                                <div class="comment"><i class="bi bi-chat"></i> 21</div>
-                                                <div class="view"><i class="bi bi-eye"></i> 7141</div>
-                                            </div>
-                                            <div class="product-card-con">
-                                                <ul>
-                                                    <li>Active</li>
-                                                    <li>Movie</li>
-                                                </ul>
-                                                <h5>Kaguya-sama wa Kokurasetai: First Kiss wa Owaranai</h5>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="col-lg-2 col-md-4 col-sm-6">
-                                    <a href="../mangaSinglePage.jsp">
-                                        <div class="product-card grow-box">
-                                            <div class="img-con set-bg"
-                                                 style="background-image: url('../assetsMain/img/manga.jpg');"
-                                                 data-setbg="../assetsMain/img/manga.jpg">
-                                                <div class="ep">18/20</div>
-                                                <div class="comment"><i class="bi bi-chat"></i> 21</div>
-                                                <div class="view"><i class="bi bi-eye"></i> 7141</div>
-                                            </div>
-                                            <div class="product-card-con">
-                                                <ul>
-                                                    <li>Active</li>
-                                                    <li>Movie</li>
-                                                </ul>
-                                                <h5>Kaguya-sama wa Kokurasetai: First Kiss wa Owaranai</h5>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="col-lg-2 col-md-4 col-sm-6">
-                                    <a href="../mangaSinglePage.jsp">
-                                        <div class="product-card grow-box">
-                                            <div class="img-con set-bg"
-                                                 style="background-image: url('../assetsMain/img/manga.jpg');"
-                                                 data-setbg="../assetsMain/img/manga.jpg">
-                                                <div class="ep">18/20</div>
-                                                <div class="comment"><i class="bi bi-chat"></i> 21</div>
-                                                <div class="view"><i class="bi bi-eye"></i> 7141</div>
-                                            </div>
-                                            <div class="product-card-con">
-                                                <ul>
-                                                    <li>Active</li>
-                                                    <li>Movie</li>
-                                                </ul>
-                                                <h5>Kaguya-sama wa Kokurasetai: First Kiss wa Owaranai</h5>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
+                                        </a>
+                                    </div>
+                                </c:forEach>
 
                             </div>
                         </div>
                     </div>
 
-                    <div class="pagination-wrape">
-                        <ul class="pagination">
-                            <li class="page-item">
-                                <a href="#" class="page-link arrow" aria-label="Previous">
-                                    <i class="bi bi-caret-left-fill"></i>
-                                </a>
-                            </li>
-                            <li class="page-item">
-                                <a href="#" class="page-link current">1</a>
-                            </li>
-                            <li class="page-item">
-                                <a href="#" class="page-link">2</a>
-                            </li>
-                            <li class="page-item">
-                                <a href="#" class="page-link">3</a>
-                            </li>
-                            <li class="page-item">
-                                <a href="#" class="page-link">4</a>
-                            </li>
-                            <li class="page-item">
-                                <a href="#" class="page-link arrow" aria-label="next">
-                                    <i class="bi bi-caret-right-fill"></i>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
                 </div>
             </section>
         </main>

@@ -183,7 +183,7 @@
                                             </c:if>
                                         </div>
 
-                                        <div class="row">
+<!--                                        <div class="row">
                                             <div class="col-lg-3 col-md-4 label">Coin Quantity</div>
                                             <c:if test="${sessionScope.userSession != null}">
                                                 <div class="col-lg-9 col-md-8">${sessionScope.userSession.getCoinQuantity()}</div>
@@ -191,7 +191,7 @@
                                             <c:if test="${sessionScope.userSession == null}">
                                                 <div class="col-lg-9 col-md-8">0</div>
                                             </c:if>
-                                        </div>
+                                        </div>-->
 
                                         <div class="row">
                                             <div class="col-lg-3 col-md-4 label">Create time</div>
@@ -377,12 +377,12 @@
                                                 </div>
                                             </div>
 
-                                            <div class="row mb-3">
+<!--                                            <div class="row mb-3">
                                                 <label for="coin" class="col-md-4 col-lg-3 col-form-label">Coin Quantity</label>
                                                 <div class="col-md-8 col-lg-9">
                                                     <input name="coin" type="text" class="form-control" id="coin" style="background-color: #e9ecef" value="${userSession.getCoinQuantity() != null ? userSession.getCoinQuantity() : '0'}" readonly="">
                                                 </div>
-                                            </div>
+                                            </div>-->
 
                                             <div class="row mb-3">
                                                 <label for="createAt" class="col-md-4 col-lg-3 col-form-label">Create time</label>

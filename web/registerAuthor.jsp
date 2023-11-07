@@ -100,7 +100,7 @@
                                             <!--                                             -------------------------------   -->
 
 
-                                            <div class="row">
+                                            <div class="row mb-3">
                                                 <label for="postImage" class="col-md-4 col-lg-3 col-form-label">Certificate <span class="text-error">(*)</span></label>
                                                 <div class="col-md-8 col-lg-9" id="divSvgContainer">
 

@@ -25,12 +25,15 @@ import javax.servlet.http.HttpSession;
 public class ForgotPasswordServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        
+        
         String email = request.getParameter("email");
+        
         RequestDispatcher dispatcher = null;
         int otpValue = 0;
         HttpSession mySession = request.getSession();
-
+        mySession.setAttribute("emailForgotPassword", email);
+        
         if (email != null || !email.equals("")) {
             // sending otp
             Random rand = new Random();
