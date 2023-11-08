@@ -126,9 +126,12 @@ import model.Category;
                 StringBuilder genres = new StringBuilder();
                 for (Element genre : genresList.select("a")) {
                     String genreText = genre.text();
-                    Category category = new Category(genreText, "category_crawl");
-//                    categoryCrawlList.add(category);
-//                    genres.append(genreText).append(", ");
+                    String selectedCategory = request.getParameter("selectedCategory"); 
+                if (genres.toString().contains(selectedCategory)) {
+                Category category = new Category(genreText, "category_crawl");
+           }
+                  
+
                 }
                 Element noidungmDiv = doc2.select("div#noidungm").first();
                 String description = noidungmDiv.text();
@@ -150,8 +153,7 @@ import model.Category;
                 MangaCrawl mangaCrawl = new MangaCrawl(mangaCrawlID, title, description,
                         author, false, true, urlCover);
                 mangaCrawlList.add(mangaCrawl);
-                
-                
+                out.print(mangaCrawl);
 
                 // MangaCrawl: title - urlCover - author 
                 // CategoryCrawl: genres (categoryList) 
