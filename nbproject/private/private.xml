@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1">
+        <file>
+            <url>src/java/controller/user/manga/AddMangaServlet.java</url>
+            <bookmark id="1">
+                <name/>
+                <line>23</line>
+                <key/>
+            </bookmark>
+        </file>
+    </editor-bookmarks>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/D:/Summary%20FPT/5.%20FALL_2023/SWP391%20-%20Software%20development%20project/MangaUniverse/src/java/controller/login/ForgotPasswordServlet.java</file>
+            <file>file:/D:/Summary%20FPT/5.%20FALL_2023/SWP391%20-%20Software%20development%20project/MangaUniverse/src/java/controller/login/NewPasswordServlet.java</file>
+            <file>file:/D:/Summary%20FPT/5.%20FALL_2023/SWP391%20-%20Software%20development%20project/MangaUniverse/src/java/controller/login/ValidateOtpServlet.java</file>
+            <file>file:/D:/Summary%20FPT/5.%20FALL_2023/SWP391%20-%20Software%20development%20project/MangaUniverse/web/forgotPassword.jsp</file>
+            <file>file:/D:/Summary%20FPT/5.%20FALL_2023/SWP391%20-%20Software%20development%20project/MangaUniverse/web/viewAdmin.jsp</file>
+            <file>file:/D:/Summary%20FPT/5.%20FALL_2023/SWP391%20-%20Software%20development%20project/MangaUniverse/src/java/controller/user/ChangePasswordServlet.java</file>
+            <file>file:/D:/Summary%20FPT/5.%20FALL_2023/SWP391%20-%20Software%20development%20project/MangaUniverse/web/newPassword.jsp</file>
+            <file>file:/D:/Summary%20FPT/5.%20FALL_2023/SWP391%20-%20Software%20development%20project/MangaUniverse/web/home.jsp</file>
+            <file>file:/D:/Summary%20FPT/5.%20FALL_2023/SWP391%20-%20Software%20development%20project/MangaUniverse/web/enterOtp.jsp</file>
+            <file>file:/D:/Summary%20FPT/5.%20FALL_2023/SWP391%20-%20Software%20development%20project/MangaUniverse/web/forum/forum.jsp</file>
+        </group>
+    </open-files>
+</project-private>

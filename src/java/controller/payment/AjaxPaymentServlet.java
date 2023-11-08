@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import dal.Config;
 import dal.UserDAO;
+import java.time.LocalDateTime;
 import javax.servlet.http.HttpSession;
 import model.User;
 
@@ -116,7 +117,9 @@ public class AjaxPaymentServlet extends HttpServlet {
         User u = userDAO.getUserById(Integer.parseInt(req.getParameter("userID")));
         HttpSession mySession = req.getSession();
         mySession.setAttribute("userPaymentSuccess", u);
-        u.setExpiredTime(u.getCreateAt().plusMonths(1));
+        LocalDateTime dateCreated = LocalDateTime.now();
+//        u.setExpiredTime(u.getCreateAt());
+        u.setExpiredTime(dateCreated.plusMonths(1));
         u.setRole("Premium");
         userDAO.update(u);
 

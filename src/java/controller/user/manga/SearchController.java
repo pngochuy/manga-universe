@@ -60,6 +60,7 @@ public class SearchController extends HttpServlet {
             ArrayList<Manga> listMbyCate = dao.searchMangaByCategory(stringList);
 
 
+            request.setAttribute("stringArray", stringArray);
             request.setAttribute("endS", endPage);
             request.setAttribute("listMbyCate", listMbyCate);
             request.setAttribute("save", txtSearch);

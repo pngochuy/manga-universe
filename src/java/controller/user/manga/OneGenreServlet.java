@@ -16,6 +16,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.Manga;
 
+import org.jsoup.select.Elements;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import java.util.List;
+import model.Category;
+import model.MangaCrawl;
+
 /**
  *
  * @author ADMIN
@@ -31,26 +42,29 @@ public class OneGenreServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-  protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    response.setContentType("text/html;charset=UTF-8");
-    try (PrintWriter out = response.getWriter()) {
-        String selectedCategory = request.getParameter("selectedCategory"); // Lấy giá trị tham số
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        try ( PrintWriter out = response.getWriter()) {
+            String selectedCategory = request.getParameter("selectedCategory"); // Lấy giá trị tham số
+            String iCrawl = request.getParameter("isCrawl");
+            if (selectedCategory != null && !selectedCategory.isEmpty()) {
+                boolean isCrawl = Boolean.parseBoolean(iCrawl);
+                MangaDAO dao = new MangaDAO();
+                ArrayList<Manga> listMbyCate = dao.getMangasByOneCategory(selectedCategory);
 
-        if (selectedCategory != null && !selectedCategory.isEmpty()) {
-            MangaDAO dao = new MangaDAO();
-            ArrayList<Manga> listMbyCate = dao.getMangasByOneCategory(selectedCategory);
-
-            // Sử dụng listManga hoặc thực hiện xử lý khác ở đây
-
-            // Forward hoặc gửi dữ liệu về trang JSP
-            request.setAttribute("listMbyCate", listMbyCate);
-            request.getRequestDispatcher("advancedSearch.jsp").forward(request, response);
+                // Sử dụng listManga hoặc thực hiện xử lý khác ở đây
+                // Forward hoặc gửi dữ liệu về trang JSP
+                request.setAttribute("selectedCategory", selectedCategory);
+                request.setAttribute("isCrawl", isCrawl);
+                request.setAttribute("listMbyCate", listMbyCate);
+                request.getRequestDispatcher("advancedSearch.jsp?isCrawl"+isCrawl).forward(request, response);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(OneGenreServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
-    } catch (Exception ex) {
-        Logger.getLogger(OneGenreServlet.class.getName()).log(Level.SEVERE, null, ex);
     }
-}
+
 
 
     /**

@@ -18,7 +18,6 @@ import model.Notification;
  */
 public class NotificationDAO {
 
-
     public List<Notification> getAllNotifications() {
         Connection con = null;
         PreparedStatement ps = null;
@@ -26,7 +25,7 @@ public class NotificationDAO {
         con = dbContext.connection;
         List<Notification> notifications = new ArrayList<>();
         String query = "SELECT * FROM Notification Where userID = ?";
-        
+
         try ( PreparedStatement statement = con.prepareStatement(query);  ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next()) {
                 Notification notification = new Notification();
@@ -42,36 +41,36 @@ public class NotificationDAO {
         }
         return notifications;
 
-        
     }
-    
-    public List<Notification> getNotificationsByUserId(int userId) {
-    Connection con = null;
-    PreparedStatement ps = null;
-    DBContext dbContext = new DBContext();
-    con = dbContext.connection;
-    List<Notification> notifications = new ArrayList<>();
-    String query = "SELECT * FROM Notification WHERE userID = ?";
-    
-    try (PreparedStatement statement = con.prepareStatement(query)) {
-        statement.setInt(1, userId);
-        try (ResultSet resultSet = statement.executeQuery()) {
-            while (resultSet.next()) {
-                Notification notification = new Notification();
-                notification.setNotificationID(resultSet.getInt("notificationID"));
-                notification.setUserID(resultSet.getInt("userID"));
-                notification.setMessage(resultSet.getString("message"));
-                notification.setNotificationDate(resultSet.getDate("notificationDate"));
-                notification.setIsRead(resultSet.getBoolean("isRead"));
-                notifications.add(notification);
-            }
-        }
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }
-    return notifications;
-}
 
+    public List<Notification> getNotificationsByUserId(int userId) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        DBContext dbContext = new DBContext();
+        con = dbContext.connection;
+        List<Notification> notifications = new ArrayList<>();
+        String query = "SELECT * FROM Notification \n"
+                + "  WHERE userID = ?\n"
+                + "  ORDER BY notificationID DESC;";
+
+        try ( PreparedStatement statement = con.prepareStatement(query)) {
+            statement.setInt(1, userId);
+            try ( ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Notification notification = new Notification();
+                    notification.setNotificationID(resultSet.getInt("notificationID"));
+                    notification.setUserID(resultSet.getInt("userID"));
+                    notification.setMessage(resultSet.getString("message"));
+                    notification.setNotificationDate(resultSet.getDate("notificationDate"));
+                    notification.setIsRead(resultSet.getBoolean("isRead"));
+                    notifications.add(notification);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return notifications;
+    }
 
     public boolean insertNotification(Notification notification) {
         Connection con = null;
