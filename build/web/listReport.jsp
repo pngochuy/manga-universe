@@ -125,8 +125,8 @@
                                                             <td><%= a.getReason()%></td>
                                                             <td><%= a.getDateofreportFormat()%></td>
                                                             <td>
-                                                                <a class="btn btn-success" href="AcceptReport?mangaID=<%= a.getReportID()%>">Approve</a>
-                                                                <a class="btn btn-danger" href="RejectReport?reportID=<%= a.getReportID()%>">Reject</a>
+                                                                <a class="btn btn-success" href="AcceptReport?mangaID=<%= a.getMangaID()%>&reportID=<%= a.getReportID()%>">Approve</a>
+                                                                <a class="btn btn-danger" href="RejectReport?mangaID=<%= a.getMangaID()%>&reportID=<%= a.getReportID()%>">Reject</a>
                                                             </td>
                                                         </tr>
                                                         <%

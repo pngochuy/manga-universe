@@ -43,7 +43,7 @@
 
                         <div class="signin-form">
                             <h2 class="form-title">Sign in</h2>
-                            
+
                             <form method="POST" action="LoginServlet" class="register-form"
                                   id="login-form">
                                 <div class="form-group">
@@ -130,14 +130,18 @@
             const password = document.querySelector("#password");
 
             togglePassword.addEventListener("click", function () {
-                // toggle the type attribute
-                const type = password.getAttribute("type") === "password" ? "text" : "password";
-                password.setAttribute("type", type);
-
-                // toggle the icon
-                // i class="zmdi zmdi-eye"></i>
-                this.classList.toggle("zmdi-eye");
+                // Toggle kiểu hiển thị của trường mật khẩu
+                if (password.getAttribute("type") === "password") {
+                    password.setAttribute("type", "text");
+                    togglePassword.classList.remove("zmdi-eye-off");
+                    togglePassword.classList.add("zmdi-eye");
+                } else {
+                    password.setAttribute("type", "password");
+                    togglePassword.classList.remove("zmdi-eye");
+                    togglePassword.classList.add("zmdi-eye-off");
+                }
             });
+
 
         </script>
     </body>

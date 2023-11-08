@@ -63,14 +63,31 @@ public class AcceptReport extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int mangaID = Integer.parseInt(request.getParameter("mangaID"));
-        int reportID = Integer.parseInt(request.getParameter("reportID"));
+
+        String rID = request.getParameter("reportID");
+        String mID = request.getParameter("mangaID");
+        int reportID = -1;
+        int mangaID = -1;
+        if (rID != null || !rID.isEmpty()) {
+            reportID = Integer.parseInt(rID);
+        }
+        if (mID != null || !mID.isEmpty()) {
+            mangaID = Integer.parseInt(mID);
+        }
+
+//        int mangaID = Integer.parseInt(request.getParameter("mangaID"));
+//        int reportID = Integer.parseInt(request.getParameter("reportID"));
         HttpSession mySession = request.getSession();
+        
         UserDAO userDAO = new UserDAO();
         User userSession = (User) mySession.getAttribute("userSession");
         // Gọi phương thức xóa người dùng từ DAO
         int id = userSession.getUserId();
         userDAO.deleteReport(reportID);
+        
+//        // Gọi phương thức xóa người dùng từ DAO
+//        int id = userSession.getUserId();
+//        userDAO.deleteReport(reportID);
 
         // Gọi phương thức xóa người dùng từ DAO
         MangaDAO mangaDAO = new MangaDAO();
@@ -82,7 +99,7 @@ public class AcceptReport extends HttpServlet {
         NotificationDAO notificationDAO = new NotificationDAO();
         List<Notification> notifications = notificationDAO.getAllNotifications();
         Notification newNotification = new Notification();
-        newNotification.setUserID(Integer.parseInt(request.getParameter("userID")));
+        newNotification.setUserID(id);
         newNotification.setMessage("Your request to become Author has been approved");
         newNotification.setNotificationDate(new Date());
         newNotification.setIsRead(false);

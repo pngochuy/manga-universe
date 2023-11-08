@@ -130,6 +130,11 @@ public class UpgradeToAuthorServlet extends HttpServlet {
 
             response.sendRedirect("authorVerify.jsp");
         } else if ("reject".equals(action)) {
+            UserDAO userDAO = new UserDAO();
+            User u = userDAO.getUserById(Integer.parseInt(request.getParameter("userID")));
+            u.setRole("Free");
+            userDAO.update(u);
+            
             Connection con = null;
             PreparedStatement ps = null;
             DBContext dbContext = new DBContext();

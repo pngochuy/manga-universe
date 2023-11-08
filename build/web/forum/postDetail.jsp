@@ -101,8 +101,18 @@
                         <div class="col-12 col-lg-8">
                             <div class="comment_area mb-50 clearfix">
 
-                                <div class="fb-comments" data-href="postDetail.jsp?postID=${postDetail.getPostId()}" 
-                                     data-width="700" data-numposts="5"></div>
+                                <c:if test="${sessionScope.userSession != null}">
+
+                                    <div class="fb-comments" data-href="postDetail.jsp?postID=${postDetail.getPostId()}" 
+                                         data-width="700" data-numposts="5"></div>
+                                </c:if>
+                                <c:if test="${sessionScope.userSession == null}">
+                                    <div class="alert alert-warning alert-dismissible fade show " role="alert" style="background-color: #fff3cd">
+                                        <i class="bi bi-exclamation-triangle me-1"></i>
+                                        You can <a href="../login.jsp">&nbsp;login&nbsp;</a> to view or add your comment here!
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                </c:if>
 
                             </div>
 

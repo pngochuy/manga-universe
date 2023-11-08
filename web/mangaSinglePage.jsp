@@ -318,42 +318,54 @@
                                             <li class="d-flex flex-wrap watch">
                                                 <c:if test="${isCrawl == true}">
                                                     <c:if test="${sessionScope.userSession == null}">
-
-                                                        <a class="mr-2 disabled-link" href="ViewChapterDetail?action=read-first-chapter&mangaCrawlID=${mangaDetail.getMangaID()}&chapterCrawlID=${chapterIDFirstCrawl}">Read First</a>
-                                                        <a  class="mr-2 disabled-link" href="ViewChapterDetail?action=read-last-chapter&mangaCrawlID=${mangaDetail.getMangaID()}&chapterCrawlID=${chapterIDLastCrawl}">Read Last</a>
+                                                        <c:if test="${chaptersByMangaDetail.size() > 0}">
+                                                            
+                                                            <a class="mr-2 disabled-link" href="ViewChapterDetail?action=read-first-chapter&mangaCrawlID=${mangaDetail.getMangaID()}&chapterCrawlID=${chapterIDFirstCrawl}">Read First</a>
+                                                            <a  class="mr-2 disabled-link" href="ViewChapterDetail?action=read-last-chapter&mangaCrawlID=${mangaDetail.getMangaID()}&chapterCrawlID=${chapterIDLastCrawl}">Read Last</a>
+                                                        </c:if>
                                                     </c:if>
 
                                                     <c:if test="${sessionScope.userSession != null}">
-                                                        <c:if test="${sessionScope.userSession.getRole().equals('Premium') || sessionScope.userSession.getRole().equals('Author')}">
-                                                            <a class="mr-2" href="ViewChapterDetail?action=read-first-chapter&mangaCrawlID=${mangaDetail.getMangaID()}&chapterCrawlID=${chapterIDFirstCrawl}">Read First</a>
-                                                            <a  class="mr-2" href="ViewChapterDetail?action=read-last-chapter&mangaCrawlID=${mangaDetail.getMangaID()}&chapterCrawlID=${chapterIDLastCrawl}">Read Last</a>
+                                                        <c:if test="${chaptersByMangaDetail.size() > 0}">
+                                                            
+                                                            <c:if test="${sessionScope.userSession.getRole().equals('Premium') || sessionScope.userSession.getRole().equals('Author')}">
+                                                                <a class="mr-2" href="ViewChapterDetail?action=read-first-chapter&mangaCrawlID=${mangaDetail.getMangaID()}&chapterCrawlID=${chapterIDFirstCrawl}">Read First</a>
+                                                                <a  class="mr-2" href="ViewChapterDetail?action=read-last-chapter&mangaCrawlID=${mangaDetail.getMangaID()}&chapterCrawlID=${chapterIDLastCrawl}">Read Last</a>
 
-                                                        </c:if>
-                                                        <c:if test="${sessionScope.userSession.getRole().equals('Free')}">
-                                                            <a class="mr-2 disabled-link" href="ViewChapterDetail?action=read-first-chapter&mangaCrawlID=${mangaDetail.getMangaID()}&chapterCrawlID=${chapterIDFirstCrawl}">Read First</a>
-                                                            <a  class="mr-2 disabled-link" href="ViewChapterDetail?action=read-last-chapter&mangaCrawlID=${mangaDetail.getMangaID()}&chapterCrawlID=${chapterIDLastCrawl}">Read Last</a>
+                                                            </c:if>
+                                                            <c:if test="${sessionScope.userSession.getRole().equals('Free')}">
+                                                                <a class="mr-2 disabled-link" href="ViewChapterDetail?action=read-first-chapter&mangaCrawlID=${mangaDetail.getMangaID()}&chapterCrawlID=${chapterIDFirstCrawl}">Read First</a>
+                                                                <a  class="mr-2 disabled-link" href="ViewChapterDetail?action=read-last-chapter&mangaCrawlID=${mangaDetail.getMangaID()}&chapterCrawlID=${chapterIDLastCrawl}">Read Last</a>
 
+                                                            </c:if>
                                                         </c:if>
                                                     </c:if>
 
                                                 </c:if>
+                                                
+                                               
                                                 <c:if test="${isCrawl == false}">
                                                     <c:if test="${sessionScope.userSession == null}">
-
-                                                        <a class="mr-2 disabled-link" href="ViewChapterDetail?action=read-first-chapter&mangaID=${mangaDetail.getMangaID()}">Read First</a>
-                                                        <a class="mr-2 disabled-link" href="ViewChapterDetail?action=read-last-chapter&mangaID=${mangaDetail.getMangaID()}">Read Last</a>
+                                                        <c:if test="${chaptersByMangaDetail.size() > 0}">
+                                                            
+                                                            <a class="mr-2 disabled-link" href="ViewChapterDetail?action=read-first-chapter&mangaID=${mangaDetail.getMangaID()}">Read First</a>
+                                                            <a class="mr-2 disabled-link" href="ViewChapterDetail?action=read-last-chapter&mangaID=${mangaDetail.getMangaID()}">Read Last</a>
+                                                        </c:if>
                                                     </c:if>
 
                                                     <c:if test="${sessionScope.userSession != null}">
-                                                        <c:if test="${sessionScope.userSession.getRole().equals('Premium') || sessionScope.userSession.getRole().equals('Author')}">
-                                                            <a class="mr-2" href="ViewChapterDetail?action=read-first-chapter&mangaID=${mangaDetail.getMangaID()}">Read First</a>
-                                                            <a class="mr-2" href="ViewChapterDetail?action=read-last-chapter&mangaID=${mangaDetail.getMangaID()}">Read Last</a>
+                                                        <c:if test="${chaptersByMangaDetail.size() > 0}">
+                                                            
+                                                            <c:if test="${sessionScope.userSession.getRole().equals('Premium') || sessionScope.userSession.getRole().equals('Author')}">
+                                                                <a class="mr-2" href="ViewChapterDetail?action=read-first-chapter&mangaID=${mangaDetail.getMangaID()}">Read First</a>
+                                                                <a class="mr-2" href="ViewChapterDetail?action=read-last-chapter&mangaID=${mangaDetail.getMangaID()}">Read Last</a>
 
-                                                        </c:if>
-                                                        <c:if test="${sessionScope.userSession.getRole().equals('Free')}">
-                                                            <a class="mr-2 disabled-link" href="ViewChapterDetail?action=read-first-chapter&mangaID=${mangaDetail.getMangaID()}">Read First</a>
-                                                            <a class="mr-2 disabled-link" href="ViewChapterDetail?action=read-last-chapter&mangaID=${mangaDetail.getMangaID()}">Read Last</a>
+                                                            </c:if>
+                                                            <c:if test="${sessionScope.userSession.getRole().equals('Free')}">
+                                                                <a class="mr-2 disabled-link" href="ViewChapterDetail?action=read-first-chapter&mangaID=${mangaDetail.getMangaID()}">Read First</a>
+                                                                <a class="mr-2 disabled-link" href="ViewChapterDetail?action=read-last-chapter&mangaID=${mangaDetail.getMangaID()}">Read Last</a>
 
+                                                            </c:if>
                                                         </c:if>
                                                     </c:if>
 

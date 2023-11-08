@@ -15,8 +15,7 @@
 <%@ page import="org.jsoup.nodes.Element" %>
 
 <%
-    
-    
+
 
 %>
 <!DOCTYPE html>
@@ -132,24 +131,23 @@
                                                         <!--so chapter => UPDATE!!-->
                                                         <c:set var="manga" value="${manga}" />
                                                         <%
-                                                                Manga manga = (Manga) pageContext.getAttribute("manga");
-                                                                ChapterDAO chapterDAO = new ChapterDAO();
-                                                                request.setAttribute("chapters", chapterDAO.getAllChaptersByMangaID(manga.getMangaID()));
+                                                            Manga manga = (Manga) pageContext.getAttribute("manga");
+                                                            ChapterDAO chapterDAO = new ChapterDAO();
+                                                            request.setAttribute("chapters", chapterDAO.getAllChaptersByMangaID(manga.getMangaID()));
 
-                                                            %>
+                                                        %>
                                                         <div class="ep">${chapters.size()} / ?</div>
-                                                       <!-- <div class="comment"><i class="bi bi-chat"></i> 21</div>
-                                                        <div class="view"><i class="bi bi-eye"></i> 7141</div> -->
+                                                        <!-- <div class="comment"><i class="bi bi-chat"></i> 21</div>
+                                                         <div class="view"><i class="bi bi-eye"></i> 7141</div> -->
                                                     </div>
                                                     <div class="product-card-con">
                                                         <ul>
-                                                            <%
-                                                                request.setAttribute("cate", categoryDAO.getCategoriesByMangaID(manga.getMangaID()));
+                                                            <%                                                                request.setAttribute("cate", categoryDAO.getCategoriesByMangaID(manga.getMangaID()));
 
                                                             %>
                                                             <c:forEach items="${cate}" var="category">
                                                                 <li>${category.getType()}</li>
-                                                            </c:forEach>
+                                                                </c:forEach>
 
                                                         </ul>
                                                         <h5>${manga.getTitle()}</h5>
@@ -221,14 +219,12 @@
                                 </div>
                                 <div class="col">
                                     <div class="content-details-div">
-                                        <h2 class="text-white mt-0"> 1 Year Free Subscription
+                                        <h2 class="text-white mt-0"> 1 Month Free Subscription
                                             <span class="d-block"> Cashback Upto 50%</span>
                                         </h2>
-                                        <h4 class="text-white">*25<sup>th</sup>May 2023 </h4>
-                                        <p class="text-white col-lg-9"> Lorem Ipsum is simply dummy text of the printing and
-                                            typesetting industry. Lorem Ipsum has been the industry's standard dummy text
-                                            ever since the 1500s, when an unknown printer</p>
-                                        <a href="#" class="btn comon-btn mt-4"> Subcribe Now</a>
+                                        <h4 class="text-white">*25<sup>th</sup>September 2023 </h4>
+                                        <p class="text-white col-lg-9"> Explore the exciting world of online comics with a special offer: 1 Month Free Subscription! With 1 free month, you will have the opportunity to experience thousands of rich comic works, from different genres, from humor to action, romance and many other genres.</p>
+                                        <a href="upgradePremium.jsp" class="btn comon-btn mt-4"> Subcribe Now</a>
                                     </div>
                                 </div>
                             </div>

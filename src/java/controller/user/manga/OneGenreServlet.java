@@ -58,7 +58,7 @@ public class OneGenreServlet extends HttpServlet {
                 request.setAttribute("selectedCategory", selectedCategory);
                 request.setAttribute("isCrawl", isCrawl);
                 request.setAttribute("listMbyCate", listMbyCate);
-                request.getRequestDispatcher("advancedSearch.jsp?isCrawl"+isCrawl).forward(request, response);
+                request.getRequestDispatcher("advancedSearchCrawl.jsp?isCrawl"+isCrawl).forward(request, response);
             }
         } catch (Exception ex) {
             Logger.getLogger(OneGenreServlet.class.getName()).log(Level.SEVERE, null, ex);
