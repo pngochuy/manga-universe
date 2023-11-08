@@ -56,6 +56,80 @@ public class MangaDAO extends DBContext implements mangaInterface  {
         }
         return listOfMangas;    
     }
+    
+    public List<Manga> getMangasDescByDate() {
+        Connection cnt = null;
+        PreparedStatement stm = null;
+        ResultSet res = null;
+        try{
+            cnt = connection;
+            String sql = "SELECT * FROM MANGA "
+                    + "ORDER BY createdAt DESC";
+            stm = cnt.prepareStatement(sql);    
+            res = stm.executeQuery();
+            while(res.next()){
+                Integer id = res.getInt("mangaID");
+                String title = res.getString("title");
+                String description = res.getString("description");
+                Integer userID = res.getInt("userID");
+                Date createdAt = res.getDate("createdAt");
+                Boolean isCopyright = res.getBoolean("isCopyright");
+                Boolean isFree = res.getBoolean("isFree");
+                String coverImage = res.getString("coverImage");
+                Manga manga = new Manga(id, title, description, userID , createdAt, isCopyright,isFree,coverImage );
+                listOfMangas.add(manga);
+            }
+            
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }finally{
+            try {
+                cnt.close();
+                stm.close();
+                res.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(MangaDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return listOfMangas;    
+    }
+    
+    public List<Manga> getRandomMangas() {
+        Connection cnt = null;
+        PreparedStatement stm = null;
+        ResultSet res = null;
+        try{
+            cnt = connection;
+            String sql = "SELECT * FROM Manga "
+                    + "ORDER BY NEWID()";
+            stm = cnt.prepareStatement(sql);    
+            res = stm.executeQuery();
+            while(res.next()){
+                Integer id = res.getInt("mangaID");
+                String title = res.getString("title");
+                String description = res.getString("description");
+                Integer userID = res.getInt("userID");
+                Date createdAt = res.getDate("createdAt");
+                Boolean isCopyright = res.getBoolean("isCopyright");
+                Boolean isFree = res.getBoolean("isFree");
+                String coverImage = res.getString("coverImage");
+                Manga manga = new Manga(id, title, description, userID , createdAt, isCopyright,isFree,coverImage );
+                listOfMangas.add(manga);
+            }
+            
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }finally{
+            try {
+                cnt.close();
+                stm.close();
+                res.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(MangaDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return listOfMangas;    
+    }
 
     @Override
     public void addManga(String title, String description,int userID, 
@@ -174,58 +248,6 @@ public class MangaDAO extends DBContext implements mangaInterface  {
         }
     }
 
-//    @Override
-//    public Manga findManga(Predicate<Manga> p) {
-//        Connection conn = null;
-//        PreparedStatement stmt = null;
-//        ResultSet res = null;
-//        Manga product = null;
-//
-//        try {
-//            conn = connection;
-//            String sql = "SELECT * FROM Manga";
-//            stmt = conn.prepareStatement(sql);
-//            res = stmt.executeQuery();
-//
-//            while (res.next()) {
-//                Integer id = res.getInt("product_id");
-//                String type = res.getString("product_type");
-//                String name = res.getString("product_name");
-//                BigDecimal price = res.getBigDecimal("product_price");
-//                Integer numberof = res.getInt("product_numberof");
-//                Integer available = res.getInt("product_available");
-//                String detail = res.getString("product_detail");
-//                String img = res.getString("product_img");
-//                String brand = res.getString("product_brand");
-//                Integer review = res.getInt("product_review");
-//
-////                Manga currentManga = new Manga(id, type, name, price, numberof, available, detail, img, brand, review);
-//
-////                if (p.test(currentManga)) {
-////                    product = currentManga;
-////                    break;
-////                }
-//            }
-//        } catch (SQLException e) {
-//            System.out.println("Error occurred while searching for product: " + e.getMessage());
-//        } finally {
-//            try {
-//                if (res != null) {
-//                    res.close();
-//                }
-//                if (stmt != null) {
-//                    stmt.close();
-//                }
-//                if (conn != null) {
-//                    conn.close();
-//                }
-//            } catch (SQLException e) {
-//                System.out.println("Error occurred while closing database resources: " + e.getMessage());
-//            }
-//        }
-//
-//        return product;
-//    }
     public int getTotalRows() throws Exception {
         int rows = 0;
         Connection conn = null;
@@ -420,6 +442,8 @@ public class MangaDAO extends DBContext implements mangaInterface  {
           System.out.println(dao.searchCategoryByID(1));
           System.out.println(dao.searchMangaByTitle("Boku", 1, 2));
           System.out.println(dao.searchMangaByCategory("Action"));
+//          System.out.println(dao.getRandomMangas());
+          System.out.println(dao.getMangasDescByDate());
         
 //        System.out.println(encryptPassword.toSHA1("123"));
         

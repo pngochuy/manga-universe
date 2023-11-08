@@ -1,3 +1,6 @@
+<%@page import="model.Manga"%>
+<%@page import="dal.MangaDAO"%>
+<%@page import="java.util.Date"%>
 <%@page import="model.User"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -386,19 +389,41 @@
 
 
         </aside><!-- End Sidebar-->
-
+        
+                
         <main id="main" class="main">
             <section class="section profile">
                 <div class="row">
                     <div class="mb-5">
                         <div class="title">
-                            <h2 class="fw-bold">Random</h2>
+                            <h2 class="fw-bold">Random Manga</h2>
                             <div class="row mt-2">
+                     <% Integer id =0;
+                        String title = "";
+                        String description = "";
+                        Integer userID = 0;
+                        Date createdAt = null;
+                        Boolean isCopyright = null;
+                        Boolean isFree = null;
+                        String coverImage = "";
+                        MangaDAO manageManga = new MangaDAO();
+                        for (Manga manga : manageManga.getRandomMangas()) {
+                                id = manga.getMangaID(); 
+                                coverImage = manga.getCoverImage();
+                                title = manga.getTitle();
+                                description = manga.getDescription();
+                                userID = manga.getUserID();
+                                createdAt = manga.getCreateAt();
+                                isCopyright = manga.isIsCopyRight();
+                                isFree = manga.isIsFree();
+                            %>
+                            
+                      
                                 <div class="col-lg-2 col-md-4 col-sm-6">
-                                    <a href="../mangaSinglePage.jsp">
+                                    <a href="<%= coverImage %>">
                                         <div class="product-card grow-box">
                                             <div class="img-con set-bg"
-                                                 style="background-image: url('../assetsMain/img/manga.jpg');"
+                                                 style="background-image: url('<%= coverImage %>');"
                                                  data-setbg="assetsMain/img/manga.jpg">
                                                 <div class="ep">18/20</div>
                                                 <div class="comment"><i class="bi bi-chat"></i> 21</div>
@@ -414,6 +439,7 @@
                                         </div>
                                     </a>
                                 </div>
+                             <% }%>
                                 <div class="col-lg-2 col-md-4 col-sm-6">
                                     <a href="../mangaSinglePage.jsp">
                                         <div class="product-card grow-box">

@@ -607,7 +607,7 @@
                                     </div>
                                     <div class="manga_info">
                                         <div class="section-tittle mt-30 mb-30">
-                                            <h3>LATEST MANGA RELEASES</h3>
+                                            <h3>Chapter List</h3>
                                         </div>
                                         <ul class="chapter mb-3">
                                             <!<!-- add Chapter nè -->  
@@ -624,7 +624,7 @@
                                             <li>
                                                 <a href="chapter/chapter.jsp"
                                                    class="d-flex flex-wrap justify-content-between">
-                                                    <span>Chapter 1 - The Beginning of Everything </span><span>07/19/2020
+                                                    <span>Chapter 3 - The Beginning of Everything </span><span>07/19/2020
                                                     </span>
                                                 </a>
                                             </li>
@@ -636,7 +636,7 @@
                                                 <li>
                                                     <a href="chapter/chapter.jsp"
                                                        class="d-flex flex-wrap justify-content-between disabled-link">
-                                                        <span>Chapter 2 - Friends and Relatives <i class="bi bi-lock-fill"></i></span><span>07/19/2020 </span>
+                                                        <span>Chapter 4 - Friends and Relatives <i class="bi bi-lock-fill"></i></span><span>07/19/2020 </span>
                                                     </a>  
                                                 </li>
 
@@ -644,7 +644,7 @@
                                                 <li>
                                                     <a href="chapter/chapter.jsp"
                                                        class="d-flex flex-wrap justify-content-between">
-                                                        <span>Chapter 2 - Friends and Relatives</span><span>07/19/2020 </span>
+                                                        <span>Chapter  - Friends and Relatives</span><span>07/19/2020 </span>
                                                     </a>  
                                                 </li>
                                                 <% }%>
@@ -653,7 +653,7 @@
                                                 <li>
                                                     <a href="chapter/chapter.jsp"
                                                        class="d-flex flex-wrap justify-content-between disabled-link">
-                                                        <span>Chapter 2 - Friends and Relatives <i class="bi bi-lock-fill"></i></span><span>07/19/2020 </span>
+                                                        <span>Chapter 4 - Friends and Relatives <i class="bi bi-lock-fill"></i></span><span>07/19/2020 </span>
                                                     </a>  
                                                 </li>
                                             </c:if>
@@ -666,7 +666,7 @@
                                                 <li>
                                                     <a href="chapter/chapter.jsp"
                                                        class="d-flex flex-wrap justify-content-between disabled-link">
-                                                        <span>Chapter 3 - Friends and Relatives <i class="bi bi-lock-fill"></i></span><span>07/19/2020 </span>
+                                                        <span>Chapter 5 - Friends and Relatives <i class="bi bi-lock-fill"></i></span><span>07/19/2020 </span>
                                                     </a>  
                                                 </li>
 
@@ -674,7 +674,7 @@
                                                 <li>
                                                     <a href="chapter/chapter.jsp"
                                                        class="d-flex flex-wrap justify-content-between">
-                                                        <span>Chapter 3 - Friends and Relatives</span><span>07/19/2020 </span>
+                                                        <span>Chapter 5 - Friends and Relatives</span><span>07/19/2020 </span>
                                                     </a>  
                                                 </li>
                                                 <% }%>
@@ -683,7 +683,7 @@
                                                 <li>
                                                     <a href="chapter/chapter.jsp"
                                                        class="d-flex flex-wrap justify-content-between disabled-link">
-                                                        <span>Chapter 3 - Friends and Relatives <i class="bi bi-lock-fill"></i></span><span>07/19/2020 </span>
+                                                        <span>Chapter 5 - Friends and Relatives <i class="bi bi-lock-fill"></i></span><span>07/19/2020 </span>
                                                     </a>  
                                                 </li>
                                             </c:if>
@@ -694,7 +694,7 @@
                                                 <li>
                                                     <a href="chapter/chapter.jsp"
                                                        class="d-flex flex-wrap justify-content-between disabled-link">
-                                                        <span>Chapter 4 - Friends and Relatives <i class="bi bi-lock-fill"></i></span><span>07/19/2020 </span>
+                                                        <span>Chapter 6 - Friends and Relatives <i class="bi bi-lock-fill"></i></span><span>07/19/2020 </span>
                                                     </a>  
                                                 </li>
 
@@ -702,7 +702,7 @@
                                                 <li>
                                                     <a href="chapter/chapter.jsp"
                                                        class="d-flex flex-wrap justify-content-between">
-                                                        <span>Chapter 4 - Friends and Relatives</span><span>07/19/2020 </span>
+                                                        <span>Chapter 6 - Friends and Relatives</span><span>07/19/2020 </span>
                                                     </a>  
                                                 </li>
                                                 <% }%>
@@ -711,7 +711,7 @@
                                                 <li>
                                                     <a href="chapter/chapter.jsp"
                                                        class="d-flex flex-wrap justify-content-between disabled-link">
-                                                        <span>Chapter 4 - Friends and Relatives <i class="bi bi-lock-fill"></i></span><span>07/19/2020 </span>
+                                                        <span>Chapter 6 - Friends and Relatives <i class="bi bi-lock-fill"></i></span><span>07/19/2020 </span>
                                                     </a>  
                                                 </li>
                                             </c:if>
@@ -722,7 +722,7 @@
                                                 <li>
                                                     <a href="chapter/chapter.jsp"
                                                        class="d-flex flex-wrap justify-content-between disabled-link">
-                                                        <span>Chapter 5 - Friends and Relatives <i class="bi bi-lock-fill"></i></span><span>07/19/2020 </span>
+                                                        <span>Chapter 6 - Friends and Relatives <i class="bi bi-lock-fill"></i></span><span>07/19/2020 </span>
                                                     </a>  
                                                 </li>
 
@@ -782,7 +782,7 @@
                                     <a href="#">
                                         <div class="trand-right-single d-flex">
                                             <div class="trand-right-img">
-                                                <img class="play" src="assetsMain/img/manga.jpg"
+                                                <img class="play" src="https://res.cloudinary.com/djytvqlon/image/upload/v1695319321/igzzfbqeajlmm4os2vpv.jpg"
                                                      alt="" style="width: 120px; height: 120px">
                                                 <div class="overlay_play2">
                                                     <i class="fa-solid fa-heart"> 61M</i>
@@ -813,7 +813,7 @@
                                     <a href="#">
                                         <div class="trand-right-single d-flex">
                                             <div class="trand-right-img">
-                                                <img class="play" src="assetsMain/img/manga.jpg"
+                                                <img class="play" src="https://res.cloudinary.com/djytvqlon/image/upload/v1696507667/nzlzwjy9oqlwsmu7ydhj.jpg"
                                                      alt="" style="width: 120px; height: 120px">
                                                 <div class="overlay_play2">
                                                     <i class="fa-solid fa-heart"> 89M</i>
@@ -844,7 +844,7 @@
                                         <div class="trand-right-single d-flex">
                                             <div class="trand-right-img">
                                                 <img class="play"
-                                                     src="assetsMain/img/manga.jpg" alt="" style="width: 120px; height: 120px">
+                                                     src="https://res.cloudinary.com/de41uvd76/image/upload/v1696522721/g9n8mw1kxwwwgpl0ag68.jpg" alt="" style="width: 120px; height: 120px">
                                                 <div class="overlay_play2">
                                                     <i class="fa-solid fa-heart"> 99M</i>
                                                 </div>
