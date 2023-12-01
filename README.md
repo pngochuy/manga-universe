@@ -26,6 +26,7 @@ Manga Universe is an online manga reading platform that allows users to explore 
 - **User Authentication:** Securely log in with your Google account.
 - **Interactive Comments:** Engage in discussions using the Facebook Comment Plugin.
 - **Dynamic Content Updates:** Regularly updated manga content through web crawling.
+- **Monetization for Authors:** Manga authors can earn revenue through a monetization feature. Readers can support their favorite authors through microtransactions, subscriptions, or other revenue models.
 
 ## Getting Started
 
